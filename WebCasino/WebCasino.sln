@@ -11,9 +11,38 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bussiness", "Bussiness", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{13C6E1F6-E12F-4D94-8412-C7112E70A891}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCasino.Web", "WebCasino.Web\WebCasino.Web.csproj", "{E7BD5C32-C848-4CB4-B76B-46CF032150BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCasino.DataContext", "WebCasino.DataContext\WebCasino.DataContext.csproj", "{0D867A44-705B-476E-B899-0510E59A961E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCasino.Entities", "WebCasino.Entities\WebCasino.Entities.csproj", "{9B8B4178-55CF-4C22-81D2-0DE0FE0C3101}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E7BD5C32-C848-4CB4-B76B-46CF032150BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7BD5C32-C848-4CB4-B76B-46CF032150BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7BD5C32-C848-4CB4-B76B-46CF032150BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7BD5C32-C848-4CB4-B76B-46CF032150BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D867A44-705B-476E-B899-0510E59A961E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D867A44-705B-476E-B899-0510E59A961E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D867A44-705B-476E-B899-0510E59A961E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D867A44-705B-476E-B899-0510E59A961E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B8B4178-55CF-4C22-81D2-0DE0FE0C3101}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B8B4178-55CF-4C22-81D2-0DE0FE0C3101}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B8B4178-55CF-4C22-81D2-0DE0FE0C3101}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B8B4178-55CF-4C22-81D2-0DE0FE0C3101}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E7BD5C32-C848-4CB4-B76B-46CF032150BC} = {108FD4D3-1F31-4A01-A485-A49CC7409A37}
+		{0D867A44-705B-476E-B899-0510E59A961E} = {F4B80496-8F53-4979-BA46-1910F89F7412}
+		{9B8B4178-55CF-4C22-81D2-0DE0FE0C3101} = {F4B80496-8F53-4979-BA46-1910F89F7412}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {00B69259-B5AA-4694-BC0B-819FEB2EFCC0}
