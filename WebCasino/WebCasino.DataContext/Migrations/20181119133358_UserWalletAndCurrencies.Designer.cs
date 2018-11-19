@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebCasino.DataContext;
 
 namespace WebCasino.DataContext.Migrations
 {
     [DbContext(typeof(CasinoContext))]
-    partial class CasinoContextModelSnapshot : ModelSnapshot
+    [Migration("20181119133358_UserWalletAndCurrencies")]
+    partial class UserWalletAndCurrencies
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,38 +131,6 @@ namespace WebCasino.DataContext.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("WebCasino.Entities.BankCard", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("CardNumber")
-                        .IsRequired();
-
-                    b.Property<DateTime?>("CreatedOn");
-
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<DateTime>("Expiration");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("ModifiedOn");
-
-                    b.Property<double>("MoneyAdded");
-
-                    b.Property<double>("MoneyRetrieved");
-
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("BankCards");
-                });
-
             modelBuilder.Entity("WebCasino.Entities.Currency", b =>
                 {
                     b.Property<int>("Id")
@@ -180,89 +150,6 @@ namespace WebCasino.DataContext.Migrations
                         new { Id = 3, Name = "EUR" },
                         new { Id = 4, Name = "BGN" }
                     );
-                });
-
-            modelBuilder.Entity("WebCasino.Entities.LoginLog", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Country");
-
-                    b.Property<DateTime?>("CreatedOn");
-
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<string>("Ip");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("ModifiedOn");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("LoginLogs");
-                });
-
-            modelBuilder.Entity("WebCasino.Entities.TransactionType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TransactionType");
-
-                    b.HasData(
-                        new { Id = 1, Name = "Win" },
-                        new { Id = 2, Name = "Stake" },
-                        new { Id = 3, Name = "Deposit" },
-                        new { Id = 4, Name = "Withdraw" }
-                    );
-                });
-
-            modelBuilder.Entity("WebCasino.Entities.Transcation", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("CardId");
-
-                    b.Property<DateTime?>("CreatedOn");
-
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<string>("Description");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("ModifiedOn");
-
-                    b.Property<double>("NormalisedAmount");
-
-                    b.Property<double>("OriginalAmount");
-
-                    b.Property<int>("TransactionTypeId");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CardId");
-
-                    b.HasIndex("TransactionTypeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Transcations");
                 });
 
             modelBuilder.Entity("WebCasino.Entities.User", b =>
@@ -413,40 +300,6 @@ namespace WebCasino.DataContext.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WebCasino.Entities.BankCard", b =>
-                {
-                    b.HasOne("WebCasino.Entities.User", "User")
-                        .WithMany("Cards")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("WebCasino.Entities.LoginLog", b =>
-                {
-                    b.HasOne("WebCasino.Entities.User", "User")
-                        .WithMany("Logs")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("WebCasino.Entities.Transcation", b =>
-                {
-                    b.HasOne("WebCasino.Entities.BankCard", "Card")
-                        .WithMany("Transcations")
-                        .HasForeignKey("CardId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("WebCasino.Entities.TransactionType", "TransactionType")
-                        .WithMany()
-                        .HasForeignKey("TransactionTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WebCasino.Entities.User", "User")
-                        .WithMany("Transcations")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("WebCasino.Entities.Wallet", b =>

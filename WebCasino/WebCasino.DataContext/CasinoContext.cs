@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using WebCasino.Entities;
+using WebCasino.Entities.Base;
 
 namespace WebCasino.DataContext
 {
@@ -15,6 +17,109 @@ namespace WebCasino.DataContext
         public CasinoContext(DbContextOptions<CasinoContext> options) : base(options)
         {
 
+        }
+
+        public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
+
+        public DbSet<BankCard> BankCards { get; set; }
+
+        public DbSet<LoginLog> LoginLogs { get; set; }
+
+        public DbSet<Transcation> Transcations { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Currency>().HasData(this.SeedCurrencies());
+            builder.Entity<TransactionType>().HasData(this.SeedTransactionTypes());
+
+
+            builder.Entity<Wallet>()
+                .HasOne(w => w.User)
+                .WithOne(u => u.Wallet)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<BankCard>()
+                .HasOne(bc => bc.User)
+                .WithMany(u => u.Cards)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<LoginLog>()
+                .HasOne(l => l.User)
+                .WithMany(u => u.Logs)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Transcation>()
+                .HasOne(tr => tr.User)
+                .WithMany(us => us.Transcations)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Transcation>()
+                .HasOne(tr => tr.Card)
+                .WithMany(card => card.Transcations)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            base.OnModelCreating(builder);
+        }
+
+        public override int SaveChanges()
+        {
+            this.ApplyAuditInfoRules();
+            this.ApplyDeletionRules();
+            return base.SaveChanges();
+        }
+
+        private void ApplyDeletionRules()
+        {
+            var entitiesForDeletion = this.ChangeTracker.Entries()
+                .Where(e => e.State == EntityState.Deleted && e.Entity is IDeletable);
+
+            foreach (var entry in entitiesForDeletion)
+            {
+                var entity = (IDeletable)entry.Entity;
+                entity.DeletedOn = DateTime.Now;
+                entity.IsDeleted = true;
+                entry.State = EntityState.Modified;
+            }
+        }
+
+        private void ApplyAuditInfoRules()
+        {
+            var newlyCreatedEntities = this.ChangeTracker.Entries()
+                .Where(e => e.Entity is IModifiable && ((e.State == EntityState.Added) || (e.State == EntityState.Modified)));
+
+            foreach (var entry in newlyCreatedEntities)
+            {
+                var entity = (IModifiable)entry.Entity;
+
+                if (entry.State == EntityState.Added && entity.CreatedOn == null)
+                {
+                    entity.CreatedOn = DateTime.Now;
+                }
+                else
+                {
+                    entity.ModifiedOn = DateTime.Now;
+                }
+            }
+        }
+
+        private Currency[] SeedCurrencies()
+        {
+            var usd = new Currency() { Id = 1, Name = "USD" };
+            var gbp = new Currency() { Id = 2, Name = "GBP" };
+            var euro = new Currency() { Id = 3, Name = "EUR" };
+            var bgn = new Currency() { Id = 4, Name = "BGN" };
+            return new Currency[] { gbp, usd, euro, bgn };
+        }
+
+        private TransactionType[] SeedTransactionTypes()
+        {
+            var win = new TransactionType() { Id = 1, Name = "Win" };
+            var stake = new TransactionType() { Id = 2, Name = "Stake" };
+            var deposit = new TransactionType() { Id = 3, Name = "Deposit" };
+            var withdraw = new TransactionType() { Id = 4, Name = "Withdraw" };
+
+            return new TransactionType[] { win, stake, deposit, withdraw };
         }
     }
 }
