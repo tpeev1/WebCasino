@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using WebCasino.Entities;
 
 namespace WebCasino.Service.Abstract
 {
-    public interface ICardService
+	public interface ICardService
     {
 		BankCard AddCard(string cardNumber, string userId, DateTime Expiration);
 
