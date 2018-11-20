@@ -19,19 +19,14 @@ namespace WebCasino.Service
 			this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
 		}
 
-		public async Task<Transaction> AddTransaction(string userId, double originalAmount, string cardId,
+		public async Task<Transaction> AddTransaction(string userId, double originalAmount, BankCard bankCard,
 								int transactionTypeId, string description)
 		{
 			if (string.IsNullOrWhiteSpace(userId))
 			{
 				throw new ArgumentNullException();
 			}
-
-			if (string.IsNullOrWhiteSpace(cardId))
-			{
-				throw new ArgumentNullException();
-			}
-
+			
 			if (originalAmount < 0)
 			{
 				throw new ArgumentOutOfRangeException();
@@ -47,13 +42,20 @@ namespace WebCasino.Service
 				throw new ArgumentNullException();
 			}
 
+			var card = this.dbContext.BankCards.Where(c => c.Id == bankCard.Id).First();
+
+			if (card == null)
+			{
+				throw new ArgumentNullException();
+			}
+
 			var newTransaction = new Transaction()
 			{
 				 UserId = userId,
 				 OriginalAmount = originalAmount,
 				 Description = description,
 				 TransactionTypeId  = transactionTypeId,
-				 CardId = cardId	  
+				 Card = card	  
 			};
 
 			await this.dbContext.Transactions.AddAsync(newTransaction);
@@ -90,7 +92,6 @@ namespace WebCasino.Service
 			{
 				throw new ArgumentNullException();
 			}
-
 
 			return transactionsQuery;
 		}
