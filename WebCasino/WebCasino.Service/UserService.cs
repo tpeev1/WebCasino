@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using WebCasino.DataContext;
 using WebCasino.Entities;
 using WebCasino.Service.Abstract;
+using WebCasino.Service.Exceptions;
 
 namespace WebCasino.Service
 {
@@ -15,32 +18,33 @@ namespace WebCasino.Service
         {
             this.context = context;
         }
-        public User EditUser(User user)
-        {
 
-        }
-
-        public IEnumerable<User> GetAllUsers()
+        public Task<User> EditUser(User user)
         {
             throw new NotImplementedException();
         }
 
-        public User LockUser(string id)
+        public async Task<IEnumerable<User>> GetAllUsers()
+        {
+            return await this.context.Users.Where(us => !us.Locked).ToListAsync();
+        }
+
+        public Task<User> LockUser(string id)
         {
             throw new NotImplementedException();
         }
 
-        public User PromoteUser(string id)
+        public Task<User> PromoteUser(string id)
         {
             throw new NotImplementedException();
         }
 
-        public User RetrieveUser(string id)
+        public async Task<User> RetrieveUser(string id)
         {
-            var user = this.context.Users.FirstOrDefault(us => us.Id == id && !us.Locked);
+            var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.Locked);
             if(user == null)
             {
-
+                throw new EntityNotFoundException("User not found");
             }
             return user;
         }
