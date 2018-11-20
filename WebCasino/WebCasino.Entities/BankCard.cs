@@ -27,7 +27,7 @@ namespace WebCasino.Entities
         [Range(0, double.MaxValue)]
         public double MoneyRetrieved { get; set; }
 
-        public IEnumerable<Transcation> Transcations { get; set; }
+        public IEnumerable<Transaction> Transcations { get; set; }
 
     }
 }

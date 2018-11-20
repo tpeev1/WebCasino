@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WebCasino.Entities\WebCasino.Entities.csproj" />
+  </ItemGroup>
+
 </Project>

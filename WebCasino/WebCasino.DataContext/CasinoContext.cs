@@ -26,7 +26,7 @@ namespace WebCasino.DataContext
 
         public DbSet<LoginLog> LoginLogs { get; set; }
 
-        public DbSet<Transcation> Transcations { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -49,12 +49,12 @@ namespace WebCasino.DataContext
                 .WithMany(u => u.Logs)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<Transcation>()
+            builder.Entity<Transaction>()
                 .HasOne(tr => tr.User)
-                .WithMany(us => us.Transcations)
+                .WithMany(us => us.Transactions)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<Transcation>()
+            builder.Entity<Transaction>()
                 .HasOne(tr => tr.Card)
                 .WithMany(card => card.Transcations)
                 .OnDelete(DeleteBehavior.Restrict);

@@ -37,7 +37,7 @@ namespace WebCasino.Entities
 
         public IEnumerable<LoginLog> Logs { get; set; }
 
-        public IEnumerable<Transcation> Transcations { get; set; }
+        public IEnumerable<Transaction> Transactions { get; set; }
 
     }
 }
