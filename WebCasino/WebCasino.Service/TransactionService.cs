@@ -19,16 +19,25 @@ namespace WebCasino.Service
 			this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
 		}
 
-		//TODO: Chofexx - use TransactionType - type or set it up 
-		public async Task<Transaction> AddTransaction(string userId, double originalAmount, 
-								TransactionType transactionType, string description)
+		public async Task<Transaction> AddTransaction(string userId, double originalAmount, string cardId,
+								int transactionTypeId, string description)
 		{
 			if (string.IsNullOrWhiteSpace(userId))
 			{
 				throw new ArgumentNullException();
 			}
 
+			if (string.IsNullOrWhiteSpace(cardId))
+			{
+				throw new ArgumentNullException();
+			}
+
 			if (originalAmount < 0)
+			{
+				throw new ArgumentOutOfRangeException();
+			}
+
+			if (transactionTypeId <= 0)
 			{
 				throw new ArgumentOutOfRangeException();
 			}
@@ -42,7 +51,9 @@ namespace WebCasino.Service
 			{
 				 UserId = userId,
 				 OriginalAmount = originalAmount,
-				 Description = description
+				 Description = description,
+				 TransactionTypeId  = transactionTypeId,
+				 CardId = cardId	  
 			};
 
 			await this.dbContext.Transactions.AddAsync(newTransaction);
@@ -53,8 +64,12 @@ namespace WebCasino.Service
 
 		public async Task<IEnumerable<Transaction>> GetAllTransactions()
 		{
-
 			var transactionsQuery = await dbContext.Transactions.ToListAsync();
+
+			if (transactionsQuery == null)
+			{
+				throw new ArgumentNullException();
+			}
 
 			return transactionsQuery;
 		}
@@ -70,7 +85,12 @@ namespace WebCasino.Service
 				.Transactions
 				.Where(t => t.TransactionType.Name == transactionTypeName)
 				.ToListAsync();
-				
+
+			if (transactionsQuery == null)
+			{
+				throw new ArgumentNullException();
+			}
+
 
 			return transactionsQuery;
 		}
@@ -86,6 +106,11 @@ namespace WebCasino.Service
 				.Transactions
 				.Where(t => t.UserId == userId)
 				.ToListAsync();
+
+			if (transactionsQuery == null)
+			{
+				throw new ArgumentNullException();
+			}
 
 			return transactionsQuery;
 		}
