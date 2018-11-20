@@ -4,6 +4,7 @@ using WebCasino.Entities;
 
 namespace WebCasino.Service.Abstract
 {
+	//TODO:CHOFEXX- FIX TO ASYNC
 	public interface ICardService
     {
 		BankCard AddCard(string cardNumber, string userId, DateTime Expiration);
