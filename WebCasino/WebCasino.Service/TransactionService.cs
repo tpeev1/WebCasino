@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WebCasino.DataContext;
 using WebCasino.Entities;
 using WebCasino.Service.Abstract;
 
 namespace WebCasino.Service
 {
-	public class TransactionService : ITransactionService
+	//TODO: CHOFEXX- Fix Validation
+	//TODO: CHOFEXX - MAKE IT ASYNK
+	public class TransactionService //: ITransactionService
 	{
 		private readonly CasinoContext dbContext;
 
@@ -16,9 +19,8 @@ namespace WebCasino.Service
 			this.dbContext = dbContext;
 		}
 
-		//TODO: CHOFEXX- Fix Validation
-		//TODO: CHOFEXX - MAKE IT ASYNK
-		public Transaction AddTransaction(string userId, double originalAmount, 
+		
+		public async Task<Transaction> AddTransaction(string userId, double originalAmount, 
 								TransactionType transactionType, string description)
 		{
 			if (string.IsNullOrWhiteSpace(userId))
@@ -34,9 +36,9 @@ namespace WebCasino.Service
 			throw new System.NotImplementedException();
 		}
 
-		public IEnumerable<Transaction> GetAllTransactions()
+		public  IEnumerable<Transaction> GetAllTransactions()
 		{
-			var transactionsQuery = this.dbContext.Transactions;
+			var transactionsQuery =  this.dbContext.Transactions;
 
 			return transactionsQuery;
 		}

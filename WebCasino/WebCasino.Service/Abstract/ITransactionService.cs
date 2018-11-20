@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebCasino.Entities;
 
 namespace WebCasino.Service.Abstract
 {
-	//TODO:CHOFEXX- FIX TO ASYNC
 	public interface ITransactionService
     {
-		 IEnumerable<Transaction> GetAllTransactions();
+		Task<IEnumerable<Transaction>> GetAllTransactions();
 
-		IEnumerable<Transaction> GetUserTransactions(string userId);
+		Task<IEnumerable<Transaction>> GetUserTransactions(string userId);
 
-		IEnumerable<Transaction> GetTransactionByType(string transactionTypeName);
+		Task<IEnumerable<Transaction>> GetTransactionByType(string transactionTypeName);
 
-		Transaction AddTransaction(string userId, double originalAmount, TransactionType transactionType,string description);
+		Task<Transaction> AddTransaction(string userId, double originalAmount, TransactionType transactionType,string description);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebCasino.Entities;
 
 namespace WebCasino.Service.Abstract
@@ -7,14 +8,14 @@ namespace WebCasino.Service.Abstract
 	//TODO:CHOFEXX- FIX TO ASYNC
 	public interface ICardService
     {
-		BankCard AddCard(string cardNumber, string userId, DateTime Expiration);
+		Task<BankCard> AddCard(string cardNumber, string userId, DateTime Expiration);
 
-		IEnumerable<BankCard> GetAllCards(int userId);
+		Task<IEnumerable<BankCard>> GetAllCards(int userId);
 
-		BankCard GetCard(string cardNumber);
+		Task<BankCard> GetCard(string cardNumber);
 
-		double Withdraw(string cardNumber);
+		Task<double> Withdraw(string cardNumber);
 
-		BankCard RemoveCard(string cardNumber);
+		Task<BankCard> RemoveCard(string cardNumber);
 	}
 }
