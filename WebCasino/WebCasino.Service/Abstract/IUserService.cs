@@ -6,5 +6,6 @@ namespace WebCasino.Service.Abstract
 {
     public interface IUserService
     {
+
     }
 }
