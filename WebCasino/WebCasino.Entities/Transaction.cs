@@ -6,7 +6,7 @@ using WebCasino.Entities.Base;
 
 namespace WebCasino.Entities
 {
-    public class Transcation : Entity
+    public class Transaction : Entity
     {
         public User User { get; set; }
         public string UserId { get; set; }

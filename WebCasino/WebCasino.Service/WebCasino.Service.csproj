@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Exceptions\" />
+    <ProjectReference Include="..\WebCasino.Entities\WebCasino.Entities.csproj" />
   </ItemGroup>
 
 </Project>
