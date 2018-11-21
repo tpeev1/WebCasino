@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebCasino.DataContext;
 using WebCasino.Entities;
 using WebCasino.Service.Abstract;
+using WebCasino.Service.Utility.Validator;
 
 namespace WebCasino.Service
 {
@@ -22,32 +23,14 @@ namespace WebCasino.Service
 		public async Task<Transaction> AddTransaction(string userId, double originalAmount, BankCard bankCard,
 								int transactionTypeId, string description)
 		{
-			if (string.IsNullOrWhiteSpace(userId))
-			{
-				throw new ArgumentNullException();
-			}
-			
-			if (originalAmount < 0)
-			{
-				throw new ArgumentOutOfRangeException();
-			}
-
-			if (transactionTypeId <= 0)
-			{
-				throw new ArgumentOutOfRangeException();
-			}
-
-			if (string.IsNullOrWhiteSpace(description))
-			{
-				throw new ArgumentNullException();
-			}
-
+			ServiceValidator.IsInputStringEmptyOrNull(userId);
+			ServiceValidator.IsInputStringEmptyOrNull(description);
+			ServiceValidator.ValueNotEqualZero(transactionTypeId);
+			ServiceValidator.ValueIsBetween(originalAmount, 0, double.MaxValue);
+		
 			var card = this.dbContext.BankCards.Where(c => c.Id == bankCard.Id).First();
 
-			if (card == null)
-			{
-				throw new ArgumentNullException();
-			}
+			ServiceValidator.ObjectIsNotEqualNull(card);
 
 			var newTransaction = new Transaction()
 			{
@@ -68,50 +51,35 @@ namespace WebCasino.Service
 		{
 			var transactionsQuery = await dbContext.Transactions.ToListAsync();
 
-			if (transactionsQuery == null)
-			{
-				throw new ArgumentNullException();
-			}
+			ServiceValidator.ObjectIsNotEqualNull(transactionsQuery);
 
 			return transactionsQuery;
 		}
 
 		public async Task<IEnumerable<Transaction>> GetTransactionByType(string transactionTypeName)
 		{
-			if (string.IsNullOrWhiteSpace(transactionTypeName))
-			{
-				throw new ArgumentNullException();
-			}
+			ServiceValidator.IsInputStringEmptyOrNull(transactionTypeName));			
 
 			var transactionsQuery = await this.dbContext
 				.Transactions
 				.Where(t => t.TransactionType.Name == transactionTypeName)
 				.ToListAsync();
 
-			if (transactionsQuery == null)
-			{
-				throw new ArgumentNullException();
-			}
+			ServiceValidator.ObjectIsNotEqualNull(transactionsQuery);
 
 			return transactionsQuery;
 		}
 
 		public async Task<IEnumerable<Transaction>> GetUserTransactions(string userId)
 		{
-			if (string.IsNullOrWhiteSpace(userId))
-			{
-				throw new ArgumentNullException();
-			}
+			ServiceValidator.IsInputStringEmptyOrNull(userId);
 
 			var transactionsQuery = await this.dbContext
 				.Transactions
 				.Where(t => t.UserId == userId)
 				.ToListAsync();
 
-			if (transactionsQuery == null)
-			{
-				throw new ArgumentNullException();
-			}
+			ServiceValidator.ObjectIsNotEqualNull(transactionsQuery);
 
 			return transactionsQuery;
 		}
