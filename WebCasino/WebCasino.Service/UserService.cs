@@ -29,9 +29,10 @@ namespace WebCasino.Service
             return await this.context.Users.Where(us => !us.Locked).ToListAsync();
         }
 
-        public Task<User> LockUser(string id)
+        public async Task<User> LockUser(string id)
         {
-            throw new NotImplementedException();
+            var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.IsDeleted);
+            
         }
 
         public Task<User> PromoteUser(string id)
