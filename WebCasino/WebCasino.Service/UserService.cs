@@ -8,6 +8,7 @@ using WebCasino.DataContext;
 using WebCasino.Entities;
 using WebCasino.Service.Abstract;
 using WebCasino.Service.Exceptions;
+using WebCasino.Service.Utility.Validator;
 
 namespace WebCasino.Service
 {
@@ -32,11 +33,17 @@ namespace WebCasino.Service
         public async Task<User> LockUser(string id)
         {
             var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.IsDeleted);
-            
+            ServiceValidator.ObjectIsNotEqualNull(user);
+            user.Locked = true;
+            await this.context.SaveChangesAsync();
+            return user;
         }
 
-        public Task<User> PromoteUser(string id)
+        public async Task<User> PromoteUser(string id)
         {
+            //var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.IsDeleted);
+            //ServiceValidator.ObjectIsNotEqualNull(user);
+            ////var userRole = this.context.Role
             throw new NotImplementedException();
         }
 
