@@ -21,16 +21,25 @@ namespace WebCasino.Service
 			this.dbContext = dbContext;
 		}
 
-		public async Task<Transaction> AddTransaction(string userId, double originalAmount, BankCard bankCard,
-								int transactionTypeId, string description)
+		public async Task<Transaction> AddTransaction(string userId, 
+								double originalAmount,
+								BankCard bankCard,
+								int transactionTypeId, 
+								string description)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(userId);
 			ServiceValidator.IsInputStringEmptyOrNull(description);
 			ServiceValidator.CheckStringLength(description, 10, 100);
 			ServiceValidator.ValueNotEqualZero(transactionTypeId);
+			ServiceValidator.ObjectIsNotEqualNull(bankCard);
+			//TODO: CHOFEXX - WHAT IS MAX VALUE
 			ServiceValidator.ValueIsBetween(originalAmount, 0, double.MaxValue);
 		
-			var card = this.dbContext.BankCards.Where(c => c.Id == bankCard.Id).First();
+			var allCards = this.dbContext.BankCards;
+
+			//TODO: CHOFEXX - IF THER ISN'T A BANK CARD IN DB ?
+			ServiceValidator.ValueNotEqualZero(allCards.Count());
+			var card = allCards.Select(c => c).Where(c => c.Id == bankCard.Id).First();
 
 			ServiceValidator.ObjectIsNotEqualNull(card);
 
