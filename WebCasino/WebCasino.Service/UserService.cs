@@ -20,9 +20,15 @@ namespace WebCasino.Service
             this.context = context;
         }
 
-        public Task<User> EditUser(User user)
+        public async Task<User> EditUserAlias(string alias, string id)
         {
-            throw new NotImplementedException();
+            ServiceValidator.IsInputStringEmptyOrNull(alias);
+            var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.IsDeleted);
+            ServiceValidator.ObjectIsNotEqualNull(user);
+            user.Alias = alias;
+            await this.context.SaveChangesAsync();
+            return user;
+
         }
 
         public async Task<IEnumerable<User>> GetAllUsers()
@@ -41,10 +47,16 @@ namespace WebCasino.Service
 
         public async Task<User> PromoteUser(string id)
         {
-            //var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.IsDeleted);
-            //ServiceValidator.ObjectIsNotEqualNull(user);
-            ////var userRole = this.context.Role
-            throw new NotImplementedException();
+            var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.IsDeleted);
+            var userRole = await this.context.UserRoles.FirstOrDefaultAsync(ur => ur.UserId == id);
+
+            ServiceValidator.ObjectIsNotEqualNull(user);
+            ServiceValidator.ObjectIsNotEqualNull(userRole);
+
+            userRole.RoleId = "1";
+            await this.context.SaveChangesAsync();
+            return user;
+
         }
 
         public async Task<User> RetrieveUser(string id)

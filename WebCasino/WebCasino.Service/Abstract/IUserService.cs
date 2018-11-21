@@ -12,6 +12,6 @@ namespace WebCasino.Service.Abstract
         Task<IEnumerable<User>> GetAllUsers();
         Task<User> PromoteUser(string id);
         Task<User> LockUser(string id);
-        Task<User> EditUser(User user);
+        Task<User> EditUserAlias(string alias, string id);
     }
 }
