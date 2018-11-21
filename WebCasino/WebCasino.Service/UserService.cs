@@ -33,7 +33,7 @@ namespace WebCasino.Service
 
         public async Task<IEnumerable<User>> GetAllUsers()
         {
-            return await this.context.Users.Where(us => !us.Locked).ToListAsync();
+            return await this.context.Users.Where(us => !us.IsDeleted).ToListAsync();
         }
 
         public async Task<User> LockUser(string id)
