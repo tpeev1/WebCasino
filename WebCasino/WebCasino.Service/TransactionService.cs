@@ -9,15 +9,16 @@ using WebCasino.Service.Abstract;
 using WebCasino.Service.Utility.Validator;
 
 namespace WebCasino.Service
-{
-	
+{	
 	public class TransactionService : ITransactionService
 	{
 		private readonly CasinoContext dbContext;
 
 		public TransactionService(CasinoContext dbContext)
 		{
-			this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+			ServiceValidator.ObjectIsNotEqualNull(dbContext);
+
+			this.dbContext = dbContext;
 		}
 
 		public async Task<Transaction> AddTransaction(string userId, double originalAmount, BankCard bankCard,
@@ -25,6 +26,7 @@ namespace WebCasino.Service
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(userId);
 			ServiceValidator.IsInputStringEmptyOrNull(description);
+			ServiceValidator.CheckStringLength(description, 10, 100);
 			ServiceValidator.ValueNotEqualZero(transactionTypeId);
 			ServiceValidator.ValueIsBetween(originalAmount, 0, double.MaxValue);
 		
@@ -58,7 +60,8 @@ namespace WebCasino.Service
 
 		public async Task<IEnumerable<Transaction>> GetTransactionByType(string transactionTypeName)
 		{
-			ServiceValidator.IsInputStringEmptyOrNull(transactionTypeName));			
+			ServiceValidator.IsInputStringEmptyOrNull(transactionTypeName);	
+			ServiceValidator.CheckStringLength(transactionTypeName, 3, 20);
 
 			var transactionsQuery = await this.dbContext
 				.Transactions
