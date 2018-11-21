@@ -5,6 +5,6 @@ using System.Text;
 namespace WebCasino.Service.Abstract
 {
     public interface IGameService
-    {
+    { 
     }
 }
