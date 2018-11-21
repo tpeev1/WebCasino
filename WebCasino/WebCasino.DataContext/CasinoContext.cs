@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace WebCasino.DataContext
         {
             builder.Entity<Currency>().HasData(this.SeedCurrencies());
             builder.Entity<TransactionType>().HasData(this.SeedTransactionTypes());
+            builder.Entity<IdentityRole>().HasData(this.SeedDefaultRoles());
 
 
             builder.Entity<Wallet>()
@@ -120,6 +122,14 @@ namespace WebCasino.DataContext
             var withdraw = new TransactionType() { Id = 4, Name = "Withdraw" };
 
             return new TransactionType[] { win, stake, deposit, withdraw };
+        }
+
+        private IdentityRole[] SeedDefaultRoles()
+        {
+            var administrator = new IdentityRole() { Id = "1", Name = "Administrator", NormalizedName = "ADMINISTRATOR" };
+            var player = new IdentityRole() { Id = "2", Name = "Player", NormalizedName="PLAYER" };
+
+            return new IdentityRole[] { administrator, player };
         }
     }
 }
