@@ -1,5 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WebCasino.DataContext;
 using WebCasino.Service;
 using WebCasino.Service.Exceptions;
@@ -11,17 +11,23 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 	{
 		[TestMethod]
 		public void ThrowEntityNotFoundException_WhenNullParameterIsPassed()
-		{ 		
+		{
 			Assert.ThrowsException<EntityNotFoundException>(() => new TransactionService(null));
 		}
 
 		[TestMethod]
 		public void CreateInstance_WhenCorrectParametersArePassed()
 		{
-			var db = new Mock<CasinoContext>();
-			var service = new TransactionService(db.Object);
+			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
+				.UseInMemoryDatabase(databaseName: "CreateInstance_WhenCorrectParametersArePassed")
+				.Options;
 
-			Assert.IsInstanceOfType(service, typeof(TransactionService));
+			using (var context = new CasinoContext(contextOptions))
+			{
+				var service = new TransactionService(context);
+
+				Assert.IsInstanceOfType(service, typeof(TransactionService));
+			}
 		}
 	}
 }

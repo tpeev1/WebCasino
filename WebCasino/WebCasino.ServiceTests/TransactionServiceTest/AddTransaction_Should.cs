@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using WebCasino.DataContext;
 using WebCasino.Entities;
@@ -175,21 +176,18 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 		}
 
 		[TestMethod]
-		public async Task ThrowEntityNotFoundException_When_CardIsNullInDb()
+		public async Task CucessfullyCreatedTransaction()
 		{
 			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-				.UseInMemoryDatabase(databaseName: "ThrowEntityNotFoundException_When_CardIsNullInDb")
-				.Options;
+			.UseInMemoryDatabase(databaseName: "ThrowEntityNotFoundException_When_CardIsNullInDb")
+			.Options;
 
 			string userId = "id";
 			double originalAmount = 1;
-
 			var newBankCard = new BankCard()
 			{
-				   Id = "id1"
+				Id = "id1",
 			};
-
-			BankCard nullBankCard = null;
 
 			int transactionTypeId = 1;
 			string description = "1234567890";
@@ -198,45 +196,14 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 			{
 				context.BankCards.Add(newBankCard);
 
+				context.SaveChanges();
+
 				var transactionService = new TransactionService(context);
 
-				await Assert.ThrowsExceptionAsync<EntityNotFoundException>(
-					() => transactionService.AddTransaction(userId, originalAmount, nullBankCard, transactionTypeId, description)
-					);
+				await transactionService.AddTransaction(userId, originalAmount, newBankCard, transactionTypeId, description);
+
+				Assert.AreEqual(1, context.Transactions.Count());
 			}
 		}
-
-		//[TestMethod]
-		//public async Task CucessfullyCreatedTransaction()
-		//{
-		//	var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-		//	.UseInMemoryDatabase(databaseName: "ThrowEntityNotFoundException_When_CardIsNullInDb")
-		//	.Options;
-
-		//	string userId = "id";
-		//	double originalAmount = 1;
-
-		//	var newBankCard = new BankCard()
-		//	{
-		//		Id = "id1",
-				  
-		//	};
-
-		//	int transactionTypeId = 1;
-		//	string description = "1234567890";
-
-		//	using (var context = new CasinoContext(contextOptions))
-		//	{
-		//		context.BankCards.Add(newBankCard);
-
-		//		context.SaveChanges();
-
-		//		var transactionService = new TransactionService(context);
-
-		//		await transactionService.AddTransaction(userId, originalAmount, newBankCard, transactionTypeId, description);
-
-		//		 Assert.AreEqual(1, context.Transactions.CountAsync().);				
-		//	}
-		//}
 	}
 }
