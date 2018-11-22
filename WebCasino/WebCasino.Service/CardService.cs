@@ -18,6 +18,7 @@ namespace WebCasino.Service
 			ServiceValidator.ObjectIsNotEqualNull(dbContext);
 
 			this.dbContext = dbContext;
+
 		}
 
 		public Task<BankCard> AddCard(string cardNumber, string userId, DateTime Expiration)
