@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ using WebCasino.Service.Abstract;
 using WebCasino.Service.Utility.Validator;
 
 namespace WebCasino.Service
-{	
+{
 	public class TransactionService : ITransactionService
 	{
 		private readonly CasinoContext dbContext;
@@ -21,10 +20,10 @@ namespace WebCasino.Service
 			this.dbContext = dbContext;
 		}
 
-		public async Task<Transaction> AddTransaction(string userId, 
+		public async Task<Transaction> AddTransaction(string userId,
 								double originalAmount,
 								BankCard bankCard,
-								int transactionTypeId, 
+								int transactionTypeId,
 								string description)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(userId);
@@ -34,7 +33,7 @@ namespace WebCasino.Service
 			ServiceValidator.ObjectIsNotEqualNull(bankCard);
 			//TODO: CHOFEXX - WHAT IS MAX VALUE
 			ServiceValidator.ValueIsBetween(originalAmount, 0, double.MaxValue);
-		
+
 			var allCards = this.dbContext.BankCards;
 
 			//TODO: CHOFEXX - IF THER ISN'T A BANK CARD IN DB ?
@@ -45,11 +44,11 @@ namespace WebCasino.Service
 
 			var newTransaction = new Transaction()
 			{
-				 UserId = userId,
-				 OriginalAmount = originalAmount,
-				 Description = description,
-				 TransactionTypeId  = transactionTypeId,
-				 Card = card	  
+				UserId = userId,
+				OriginalAmount = originalAmount,
+				Description = description,
+				TransactionTypeId = transactionTypeId,
+				Card = card
 			};
 
 			await this.dbContext.Transactions.AddAsync(newTransaction);
@@ -61,15 +60,15 @@ namespace WebCasino.Service
 		public async Task<IEnumerable<Transaction>> GetAllTransactions()
 		{
 			var transactionsQuery = await dbContext.Transactions.ToListAsync();
-
-			ServiceValidator.ObjectIsNotEqualNull(transactionsQuery);
+			//TODO: 0 transaction ? this check is useless?
+			ServiceValidator.ValueNotEqualZero(transactionsQuery.Count());
 
 			return transactionsQuery;
 		}
 
 		public async Task<IEnumerable<Transaction>> GetTransactionByType(string transactionTypeName)
 		{
-			ServiceValidator.IsInputStringEmptyOrNull(transactionTypeName);	
+			ServiceValidator.IsInputStringEmptyOrNull(transactionTypeName);
 			ServiceValidator.CheckStringLength(transactionTypeName, 3, 20);
 
 			var transactionsQuery = await this.dbContext
