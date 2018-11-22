@@ -59,7 +59,7 @@ namespace WebCasino.Service
 				.Where(u => u.UserId == userId)
 				.ToListAsync();
 
-			ServiceValidator.ObjectIsNotEqualNull(bankCardQuery);
+			ServiceValidator.ValueNotEqualZero(bankCardQuery.Count);
 
 			return bankCardQuery;
 		}
