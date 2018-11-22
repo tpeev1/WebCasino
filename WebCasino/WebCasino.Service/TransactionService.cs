@@ -90,7 +90,7 @@ namespace WebCasino.Service
 				.Where(t => t.UserId == userId)
 				.ToListAsync();
 
-			ServiceValidator.ObjectIsNotEqualNull(transactionsQuery);
+			ServiceValidator.ValueNotEqualZero(transactionsQuery.Count);
 
 			return transactionsQuery;
 		}
