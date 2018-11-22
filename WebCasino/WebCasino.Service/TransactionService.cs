@@ -76,7 +76,7 @@ namespace WebCasino.Service
 				.Where(t => t.TransactionType.Name == transactionTypeName)
 				.ToListAsync();
 
-			ServiceValidator.ObjectIsNotEqualNull(transactionsQuery);
+			ServiceValidator.ValueNotEqualZero(transactionsQuery.Count());
 
 			return transactionsQuery;
 		}
