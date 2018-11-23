@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,12 @@ namespace WebCasino.Service
         {
             var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.IsDeleted);
             ServiceValidator.ObjectIsNotEqualNull(user);
+            var role = context.UserRoles.FirstOrDefault(ur => ur.UserId == id);
+            ServiceValidator.ObjectIsNotEqualNull(role);
+            if(role.RoleId == "1")
+            {
+                throw new InvalidAdministratorOperationException("You cannot lock other administrators");
+            }
             user.Locked = true;
             await this.context.SaveChangesAsync();
             return user;
@@ -53,7 +60,9 @@ namespace WebCasino.Service
             ServiceValidator.ObjectIsNotEqualNull(user);
             ServiceValidator.ObjectIsNotEqualNull(userRole);
 
-            userRole.RoleId = "1";
+            this.context.UserRoles.Remove(userRole);
+            this.context.UserRoles.Add(new IdentityUserRole<string>() { UserId = id, RoleId = "1" });
+
             await this.context.SaveChangesAsync();
             return user;
 
@@ -62,10 +71,7 @@ namespace WebCasino.Service
         public async Task<User> RetrieveUser(string id)
         {
             var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.Locked);
-            if(user == null)
-            {
-                throw new EntityNotFoundException("User not found");
-            }
+            ServiceValidator.ObjectIsNotEqualNull(user);
             return user;
         }
     }
