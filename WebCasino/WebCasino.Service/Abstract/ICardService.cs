@@ -9,11 +9,11 @@ namespace WebCasino.Service.Abstract
     {
 		Task<BankCard> AddCard(string cardNumber, string userId, DateTime Expiration);
 
-		Task<IEnumerable<BankCard>> GetAllCards(int userId);
+		Task<IEnumerable<BankCard>> GetAllCards(string userId);
 
 		Task<BankCard> GetCard(string cardNumber);
 
-		Task<double> Withdraw(string cardNumber);
+		Task<double> Withdraw(string cardNumber, double amount);
 
 		Task<BankCard> RemoveCard(string cardNumber);
 	}

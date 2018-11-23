@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using WebCasino.Service.Exceptions;
 
 namespace WebCasino.Service.Utility.Validator
@@ -52,6 +53,24 @@ namespace WebCasino.Service.Utility.Validator
             {
                 throw new ArgumentOutOfRangeException("", "String length not in the given values");
             }
+		}
+
+		public static void CheckCardExpirationDate(DateTime currentDate)
+		{
+			if (currentDate <= DateTime.Now)
+			{
+				throw new CardExpirationException("Card is expired!");
+			}
+		}
+
+		public static void ValidateCardNumber(string cardNumber)
+		{
+			var rgx = new Regex("^[0-9]{16}$");
+
+			if (!rgx.IsMatch(cardNumber))
+			{
+				throw new CardNumberException("Invalid card number");
+			}
 		}
 	}
 }
