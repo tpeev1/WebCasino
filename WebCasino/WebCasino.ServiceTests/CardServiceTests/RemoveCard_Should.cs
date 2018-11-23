@@ -32,6 +32,28 @@ namespace WebCasino.ServiceTests.CardServiceTests
 		}
 
 		[TestMethod]
+		public async Task ThrowCardNumberException_WhenRemoveCardCardNumberIsNull()
+		{
+			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
+				.UseInMemoryDatabase(databaseName: "ThrowCardNumberException_WhenGetCardCardNumberIsNull")
+				.Options;
+
+			string cardNumber = "a00000000b000000";
+
+			DateTime expiration = new DateTime(2017, 11, 10);
+
+			using (var context = new CasinoContext(contextOptions))
+			{
+				var transactionService = new CardService(context);
+
+				await Assert.ThrowsExceptionAsync<CardNumberException>(
+					() => transactionService.RemoveCard(cardNumber)
+				);
+			}
+		}
+
+
+		[TestMethod]
 		public async Task ThrowArgumentNullException_WhenRemoveCardNumberNotFoundInDb()
 		{
 			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()

@@ -25,16 +25,10 @@ namespace WebCasino.Service
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(cardNumber);
 			ServiceValidator.CheckStringLength(cardNumber, 16, 16);
+			ServiceValidator.ValidateCardNumber(cardNumber);
 			ServiceValidator.IsInputStringEmptyOrNull(userId);
-
-			//TODO: CHOFEXX (1)- Add custom exception for bank card exp.
-			if (expiration.Year <= DateTime.Now.Year &&
-			expiration.Day <= DateTime.Now.Day)
-			{
-				throw new ArgumentException();
-			}
-
-			//TODO: CHOFEXX - ADD CREATED ON -> AND TRANSACTION
+			ServiceValidator.CheckCardExpirationDate(expiration);
+			
 			var bankCard = new BankCard()
 			{
 				CardNumber = cardNumber,
@@ -49,15 +43,16 @@ namespace WebCasino.Service
 			return bankCard;
 		}
 
-		//TODO: CHOFEXX - FIx validator method ValueNotEqualZero to return <= 0
 		public async Task<IEnumerable<BankCard>> GetAllCards(string userId)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(userId);
 
 			var bankCardQuery = await this.dbContext.BankCards
-				.Where(u => u.UserId == userId)
+				.Where(u => u.UserId == userId && u.IsDeleted == false)
 				.ToListAsync();
 
+			//TODO: CHOFEXX -> check if card isDeleted
+			//TODO: CHOFEXX -> Think for this !!
 			ServiceValidator.ValueNotEqualZero(bankCardQuery.Count);
 
 			return bankCardQuery;
@@ -67,22 +62,24 @@ namespace WebCasino.Service
 		public async Task<BankCard> GetCard(string cardNumber)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(cardNumber);
+			ServiceValidator.ValidateCardNumber(cardNumber);
 
 			var bankCardQuery = await this.dbContext.BankCards
-				.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
+				.FirstOrDefaultAsync(c => c.CardNumber == cardNumber && c.IsDeleted == false);
 
 			ServiceValidator.ObjectIsNotEqualNull(bankCardQuery);
 
 			return bankCardQuery;
 		}
 
-		//TODO: CHOFEXX - When card is removed - create transaction to note this remove ?
+
 		public async Task<BankCard> RemoveCard(string cardNumber)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(cardNumber);
+			ServiceValidator.ValidateCardNumber(cardNumber);
 
 			var bankCardQuery = await this.dbContext.BankCards
-				.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
+				.FirstOrDefaultAsync(c => c.CardNumber == cardNumber && c.IsDeleted == false);
 
 			ServiceValidator.ObjectIsNotEqualNull(bankCardQuery);
 
@@ -97,23 +94,18 @@ namespace WebCasino.Service
 		public async Task<double> Withdraw(string cardNumber, double amount)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(cardNumber);
+			ServiceValidator.ValidateCardNumber(cardNumber);
 			ServiceValidator.ValueIsBetween(amount, 0, double.MaxValue);
 
 			var bankCardQuery = await this.dbContext.BankCards
-				.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
+				.FirstOrDefaultAsync(c => c.CardNumber == cardNumber && c.IsDeleted == false);
 
 			ServiceValidator.ObjectIsNotEqualNull(bankCardQuery);
-
-			if (bankCardQuery.Expiration > DateTime.Now)
-			{
-				bankCardQuery.MoneyRetrieved += amount;
-				await this.dbContext.SaveChangesAsync();
-			}
-			else
-			{
-				//TODO: CHOFEXX (1)- Add custom exception for bank card exp.
-				throw new ArgumentNullException();
-			}
+			ServiceValidator.CheckCardExpirationDate(bankCardQuery.Expiration);
+			
+			bankCardQuery.MoneyRetrieved += amount;
+			await this.dbContext.SaveChangesAsync();
+			
 
 			return amount;
 		}

@@ -33,6 +33,29 @@ namespace WebCasino.ServiceTests.CardServiceTests
 		}
 
 		[TestMethod]
+		public async Task ThrowCardNumberException_WhenWidthdrawdNumberIsNull()
+		{
+			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
+				.UseInMemoryDatabase(databaseName: "ThrowCardNumberException_WhenWidthdrawdNumberIsNull")
+				.Options;
+
+			string cardNumber = "a00000000b000000";
+			double amount = 100.2;
+
+			DateTime expiration = new DateTime(2017, 11, 10);
+
+			using (var context = new CasinoContext(contextOptions))
+			{
+				var transactionService = new CardService(context);
+
+				await Assert.ThrowsExceptionAsync<CardNumberException>(
+					() => transactionService.Withdraw(cardNumber, amount)
+				);
+			}
+		}
+
+
+		[TestMethod]
 		public async Task ThrowArgumentNullException_WhenWithdrawAmountIsLessThenZero()
 		{
 			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
@@ -95,7 +118,7 @@ namespace WebCasino.ServiceTests.CardServiceTests
 				await context.BankCards.AddAsync(newBankCard);
 				await context.SaveChangesAsync();
 
-				await Assert.ThrowsExceptionAsync<ArgumentNullException>(
+				await Assert.ThrowsExceptionAsync<CardExpirationException>(
 					() => cardService.Withdraw(cardNumber, amount)
 					);
 			}

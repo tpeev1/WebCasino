@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebCasino.DataContext;
 using WebCasino.Service;
+using WebCasino.Service.Exceptions;
 
 namespace WebCasino.ServiceTests.CardServiceTests
 {
@@ -17,7 +18,7 @@ namespace WebCasino.ServiceTests.CardServiceTests
 		public async Task ThrowArgumentNullException_WhenCardNumberIsNull()
 		{
 			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-				.UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenTransactionTypeNameIsNull")
+				.UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenCardNumberIsNull")
 				.Options;
 
 			string cardNumber = null;
@@ -35,13 +36,34 @@ namespace WebCasino.ServiceTests.CardServiceTests
 		}
 
 		[TestMethod]
+		public async Task ThrowCardNumberException_WhenCardNumberIsNull()
+		{
+			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
+				.UseInMemoryDatabase(databaseName: "ThrowCardNumberException_WhenCardNumberIsNull")
+				.Options;
+
+			string cardNumber = "a00000000b000000";
+			string userId = "userId";
+			DateTime expiration = new DateTime(2017, 11, 10);
+
+			using (var context = new CasinoContext(contextOptions))
+			{
+				var transactionService = new CardService(context);
+
+				await Assert.ThrowsExceptionAsync<CardNumberException>(
+					() => transactionService.AddCard(cardNumber, userId, expiration)
+				);
+			}
+		}
+
+		[TestMethod]
 		public async Task ThrowArgumentNullException_WhenUserIdIsNull()
 		{
 			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-				.UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenTransactionTypeNameIsNull")
+				.UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenUserIdIsNull")
 				.Options;
 
-			string cardNumber = new string('-',16);
+			string cardNumber = new string('0',16);
 			string userId = null;
 
 			DateTime expiration = new DateTime();
@@ -60,10 +82,10 @@ namespace WebCasino.ServiceTests.CardServiceTests
 		public async Task ThrowArgumentException_WhenDateIsInvalid()
 		{
 			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-				.UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenTransactionTypeNameIsNull")
+				.UseInMemoryDatabase(databaseName: "ThrowArgumentException_WhenDateIsInvalid")
 				.Options;
 
-			string cardNumber = new string('-', 16);
+			string cardNumber = new string('0', 16);
 			string userId = "userId";
 
 			DateTime expiration = new DateTime(2017,11,10);
@@ -72,7 +94,7 @@ namespace WebCasino.ServiceTests.CardServiceTests
 			{
 				var transactionService = new CardService(context);
 
-				await Assert.ThrowsExceptionAsync<ArgumentException>(
+				await Assert.ThrowsExceptionAsync<CardExpirationException>(
 					() => transactionService.AddCard(cardNumber, userId, expiration)
 				);
 			}
@@ -85,7 +107,7 @@ namespace WebCasino.ServiceTests.CardServiceTests
 			.UseInMemoryDatabase(databaseName: "AddCardSucessfull")
 			.Options;
 
-			string cardNumber = new string('-', 16);
+			string cardNumber = new string('0', 16);
 			string userId = "userId";
 
 			DateTime expiration = new DateTime(2019, 11, 10);
