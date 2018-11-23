@@ -51,14 +51,12 @@ namespace WebCasino.Service
 				.Where(u => u.UserId == userId && u.IsDeleted == false)
 				.ToListAsync();
 
-			//TODO: CHOFEXX -> check if card isDeleted
 			//TODO: CHOFEXX -> Think for this !!
 			ServiceValidator.ValueNotEqualZero(bankCardQuery.Count);
 
 			return bankCardQuery;
 		}
-
-		//TODO: Create ValidateCardNumber in validator with regex
+		
 		public async Task<BankCard> GetCard(string cardNumber)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(cardNumber);
