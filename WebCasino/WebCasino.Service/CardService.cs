@@ -19,7 +19,6 @@ namespace WebCasino.Service
 			ServiceValidator.ObjectIsNotEqualNull(dbContext);
 
 			this.dbContext = dbContext;
-
 		}
 
 		public async Task<BankCard> AddCard(string cardNumber, string userId, DateTime expiration)
@@ -38,10 +37,10 @@ namespace WebCasino.Service
 			//TODO: CHOFEXX - ADD CREATED ON -> AND TRANSACTION
 			var bankCard = new BankCard()
 			{
-				 CardNumber = cardNumber,
-				  UserId = userId,
-				   Expiration = expiration,
-				   IsDeleted = false,			  
+				CardNumber = cardNumber,
+				UserId = userId,
+				Expiration = expiration,
+				IsDeleted = false,
 			};
 
 			await this.dbContext.BankCards.AddAsync(bankCard);
@@ -71,7 +70,7 @@ namespace WebCasino.Service
 
 			var bankCardQuery = await this.dbContext.BankCards
 				.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
-				
+
 			ServiceValidator.ObjectIsNotEqualNull(bankCardQuery);
 
 			return bankCardQuery;
@@ -98,14 +97,14 @@ namespace WebCasino.Service
 		public async Task<double> Withdraw(string cardNumber, double amount)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(cardNumber);
+			ServiceValidator.ValueIsBetween(amount, 0, double.MaxValue);
 
 			var bankCardQuery = await this.dbContext.BankCards
 				.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
-				
+
 			ServiceValidator.ObjectIsNotEqualNull(bankCardQuery);
 
-			if (bankCardQuery.Expiration.Year >= DateTime.Now.Year &&
-				bankCardQuery.Expiration.Day >= DateTime.Now.Day)
+			if (bankCardQuery.Expiration > DateTime.Now)
 			{
 				bankCardQuery.MoneyRetrieved += amount;
 				await this.dbContext.SaveChangesAsync();
@@ -118,7 +117,5 @@ namespace WebCasino.Service
 
 			return amount;
 		}
-
-		
 	}
 }

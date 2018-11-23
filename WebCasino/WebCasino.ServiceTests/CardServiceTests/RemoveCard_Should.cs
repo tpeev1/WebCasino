@@ -10,13 +10,13 @@ using WebCasino.Service.Exceptions;
 namespace WebCasino.ServiceTests.CardServiceTests
 {
 	[TestClass]
-	public class GetCard_Should
+	public class RemoveCard_Should
 	{
 		[TestMethod]
-		public async Task ThrowArgumentNullException_WhenCardNumberIsNull()
+		public async Task ThrowArgumentNullException_WhenRemoveCardNumberIsNull()
 		{
 			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-				.UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenUserIDIsNull")
+				.UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenRemoveCardNumberIsNull")
 				.Options;
 
 			string cardNumber = null;
@@ -26,16 +26,16 @@ namespace WebCasino.ServiceTests.CardServiceTests
 				var transactionService = new CardService(context);
 
 				await Assert.ThrowsExceptionAsync<ArgumentNullException>(
-					() => transactionService.GetCard(cardNumber)
+					() => transactionService.RemoveCard(cardNumber)
 				);
 			}
 		}
 
 		[TestMethod]
-		public async Task ThrowArgumentNullException_WhenCardNumberNotFoundInDb()
+		public async Task ThrowArgumentNullException_WhenRemoveCardNumberNotFoundInDb()
 		{
 			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-				.UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenCardNumberNotFoundInDb")
+				.UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenRemoveCardNumberNotFoundInDb")
 				.Options;
 
 			string cardNumber = "0000000000000000";
@@ -45,13 +45,13 @@ namespace WebCasino.ServiceTests.CardServiceTests
 				var transactionService = new CardService(context);
 
 				await Assert.ThrowsExceptionAsync<EntityNotFoundException>(
-					() => transactionService.GetCard(cardNumber)
+					() => transactionService.RemoveCard(cardNumber)
 				);
 			}
 		}
 
 		[TestMethod]
-		public async Task SucesGetACard()
+		public async Task SucesRemoveingCard()
 		{
 			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
 			.UseInMemoryDatabase(databaseName: "SucesGetAllCard")
@@ -72,10 +72,11 @@ namespace WebCasino.ServiceTests.CardServiceTests
 				await context.BankCards.AddAsync(newBankCard);
 				await context.SaveChangesAsync();
 
-				var card = await cardService.GetCard(cardNumber);
+				var card = await cardService.RemoveCard(cardNumber);
 
 				Assert.IsInstanceOfType(card, typeof(BankCard));
 				Assert.IsTrue(card.CardNumber == cardNumber);
+				Assert.IsTrue(card.IsDeleted == true);
 			}
 		}
 	}
