@@ -109,7 +109,7 @@ namespace WebCasino.DataContext
                 }
                 else
                 {
-                    entity.ModifiedOn = DateTime.Now;
+                    entity.ModifiedOn = DateTime.Now; 
                 }
             }
         }
