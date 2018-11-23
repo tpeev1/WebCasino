@@ -48,6 +48,7 @@ namespace WebCasino.Service
 				OriginalAmount = originalAmount,
 				Description = description,
 				TransactionTypeId = transactionTypeId,
+			
 				Card = card
 			};
 

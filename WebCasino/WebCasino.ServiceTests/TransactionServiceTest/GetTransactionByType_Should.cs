@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using WebCasino.DataContext;
+using WebCasino.Entities;
 using WebCasino.Service;
 
 namespace WebCasino.ServiceTests.TransactionServiceTest
@@ -84,40 +86,46 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 			}
 		}
 
-		//TODO: CHOFEXX - Consult here !! Method for adding Transactions !!
-		//[TestMethod]
-		//public async Task ReturnTransactionByType()
-		//{
-		//	var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-		//	.UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenTransactionTypeTypeCountAreEqualZero")
-		//	.Options;
 
-		//	string userId = "id";
-		//	double originalAmount = 1;
-		//	var newBankCard = new BankCard()
-		//	{
-		//		Id = "id1",
-		//	};
+		[TestMethod]
+		public async Task ReturnTransactionByType()
+		{
+			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
+			.UseInMemoryDatabase(databaseName: "ReturnTransactionByType")
+			.Options;
 
-		//	int transactionTypeId = 1;
-		//	string description = "1234567890";
-		//	var transactionType = "Win";
+			string userId = "id";
+			double originalAmount = 1;
+			var newBankCard = new BankCard()
+			{
+				Id = "id1",
+			};
 
-		//	using (var context = new CasinoContext(contextOptions))
-		//	{
-		//		var transactionService = new TransactionService(context);
-		//		context.BankCards.Add(newBankCard);
-		//		context.SaveChanges();
+			string description = "1234567890";
+			var transactionTypeTest = new TransactionType() { Id = 1, Name = "Win" };
+			var newTransaction = new Transaction()
+			{
+				UserId = userId,
+				OriginalAmount = originalAmount,
+				Description = description,
+				TransactionType = transactionTypeTest,
+				Card = newBankCard
+			};
 
-		//		await transactionService.AddTransaction(userId, originalAmount, newBankCard, transactionTypeId, description);
+			using (var context = new CasinoContext(contextOptions))
+			{
+				var transactionService = new TransactionService(context);
+				await context.Transactions.AddAsync(newTransaction);
+				context.BankCards.Add(newBankCard);
+				context.SaveChanges();
 
-		//		var transActionTypeCount = await transactionService
-		//			.GetTransactionByType(transactionType)
-		//			.ToAsyncEnumerable()
-		//			.Count();
+				var transActionTypeCount = await transactionService
+					.GetTransactionByType("Win")
+					.ToAsyncEnumerable()
+					.Count();
 
-		//		Assert.AreEqual(1, transActionTypeCount);
-		//	}
-		//}
+				Assert.AreEqual(1, transActionTypeCount);
+			}
+		}
 	}
 }
