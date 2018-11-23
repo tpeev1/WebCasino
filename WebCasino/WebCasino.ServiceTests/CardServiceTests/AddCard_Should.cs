@@ -73,7 +73,7 @@ namespace WebCasino.ServiceTests.CardServiceTests
 				var transactionService = new CardService(context);
 
 				await Assert.ThrowsExceptionAsync<ArgumentNullException>(
-					() => transactionService.AddCard(cardNumber, userId, expiration)
+					() =>  transactionService.AddCard(cardNumber, userId, expiration)
 				);
 			}
 		}
