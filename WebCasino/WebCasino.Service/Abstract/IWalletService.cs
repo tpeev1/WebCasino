@@ -10,8 +10,6 @@ namespace WebCasino.Service.Abstract
     {
         Task<Wallet> CreateWallet(string userId, int currencyId);
         Task<Wallet> RetrieveWallet(string userId);
-        IEnumerable<double> RetrieveWins(string userId);
-        IEnumerable<double> RetrieveDeposits(string userId);
-        IEnumerable<double> RetrieveStakes(string userId);
+
     }
 }
