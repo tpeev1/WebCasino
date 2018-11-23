@@ -44,24 +44,13 @@ namespace WebCasino.Service
             return newWallet;
         }
 
-        public IEnumerable<double> RetrieveDeposits(string userId)
+
+        public async Task<Wallet> RetrieveWallet(string userId)
         {
-            throw new NotImplementedException();
+            var wallet = await this.context.Wallets.FirstOrDefaultAsync(wa => wa.UserId == userId);
+            ServiceValidator.ObjectIsNotEqualNull(wallet);
+            return wallet;
         }
 
-        public IEnumerable<double> RetrieveStakes(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Wallet> RetrieveWallet(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<double> RetrieveWins(string userId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

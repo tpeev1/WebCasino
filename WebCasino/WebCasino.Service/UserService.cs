@@ -18,7 +18,7 @@ namespace WebCasino.Service
         private readonly CasinoContext context;
         public UserService(CasinoContext context)
         {
-            this.context = context;
+            this.context = context ?? throw new NullReferenceException();
         }
 
         public async Task<User> EditUserAlias(string alias, string id)
