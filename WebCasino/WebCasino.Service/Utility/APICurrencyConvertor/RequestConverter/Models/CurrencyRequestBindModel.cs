@@ -1,16 +1,16 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace WebCasino.Service.Utility.APICurrencyGetter.Models
+namespace WebCasino.Service.Utility.APICurrencyConvertor.RequestConverter.Models
 {
-	public class CurrencyBindModel
+	public class CurrencyRequestBindModel
 	{
 		[JsonProperty("base")]
 		public string Base { get; set; }
+
 		[JsonProperty("date")]
 		public string Date { get; set; }
+
 		[JsonProperty("rates")]
 		public Dictionary<string, decimal> Rates { get; set; }
 
