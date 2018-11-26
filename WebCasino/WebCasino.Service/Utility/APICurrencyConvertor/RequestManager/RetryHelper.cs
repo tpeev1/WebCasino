@@ -4,15 +4,15 @@ using WebCasino.Service.Utility.APICurrencyConvertor.Exceptions;
 
 namespace WebCasino.Service.Utility.APICurrencyConvertor.RequestManager
 {
-	public static class RetryHelper
+	public class RetryHelper
 	{
-		public static async Task RetryOnExceptionAsync(
+		public async Task RetryOnExceptionAsync(
 			int times, TimeSpan delay, Func<Task> operation)
 		{
 			await RetryOnExceptionAsync<Exception>(times, delay, operation);
 		}
 
-		public static async Task RetryOnExceptionAsync<TException>(
+		public async Task RetryOnExceptionAsync<TException>(
 			int times, TimeSpan delay, Func<Task> operation)
 			where TException : Exception
 		{

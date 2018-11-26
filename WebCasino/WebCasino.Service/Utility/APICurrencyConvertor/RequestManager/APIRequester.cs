@@ -9,10 +9,12 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor.RequestManager
 	public class APIRequester
 	{
 		private readonly HttpClient client;
+		private readonly RetryHelper retryHelper;
 
-		public APIRequester(HttpClient client)
+		public APIRequester(HttpClient client, RetryHelper retryHelper)
 		{
-			this.client = client;
+			this.client = client ?? throw new ArgumentNullException(nameof(client));
+			this.retryHelper = retryHelper ?? throw new ArgumentNullException(nameof(retryHelper));
 		}
 
 		public async Task<string> Request(string connections)
@@ -20,7 +22,7 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor.RequestManager
 			var pauseBetweenFailuer = TimeSpan.FromSeconds(2);
 			var resultBuilder = new StringBuilder();
 
-			await RetryHelper.RetryOnExceptionAsync<HttpRequestException>(RequestConfig.MaxRetryAttempts, pauseBetweenFailuer,
+			await retryHelper.RetryOnExceptionAsync<HttpRequestException>(RequestConfig.MaxRetryAttempts, pauseBetweenFailuer,
 				async () =>
 				{
 					var response = await client.GetStringAsync(
