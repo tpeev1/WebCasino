@@ -1,1 +1,27 @@
-﻿<h1>HISTORY BOOOM</h1>
+﻿@model WebCasino.Web.Areas.Administration.Models.TransactionHistoryViewModel
+<div class="container">
+	<h1>TRANSACTIONS HISTORY</h1>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Date</th>
+				<th>Type</th>
+				<th>Amount</th>
+				<th>Description</th>
+				<th>User</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var transaction in Model.transactionHistory)
+			{
+				<tr>
+					<td>@transaction.Date</td>
+					<td>@transaction.TransactionType</td>
+					<td>@transaction.NormalisedAmount</td>
+					<td>@transaction.Description</td>
+					<td>@transaction.User</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

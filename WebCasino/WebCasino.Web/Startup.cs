@@ -31,6 +31,8 @@ namespace WebCasino.Web
 				.AddEntityFrameworkStores<CasinoContext>()
 				.AddDefaultTokenProviders();
 
+			services.AddScoped<IUserService, UserService>();
+			services.AddScoped<ITransactionService, TransactionService>();
 			services.AddScoped<IWalletService, WalletService>();
 			services.AddScoped<IUserWrapper, UserWrapper>();
 

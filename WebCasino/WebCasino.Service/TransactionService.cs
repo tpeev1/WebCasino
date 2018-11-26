@@ -48,7 +48,7 @@ namespace WebCasino.Service
 				OriginalAmount = originalAmount,
 				Description = description,
 				TransactionTypeId = transactionTypeId,
-			
+
 				Card = card
 			};
 
@@ -60,9 +60,11 @@ namespace WebCasino.Service
 
 		public async Task<IEnumerable<Transaction>> GetAllTransactions()
 		{
-			var transactionsQuery = await dbContext.Transactions.ToListAsync();
-			//TODO: 0 transaction ? this check is useless?
-			ServiceValidator.ValueNotEqualZero(transactionsQuery.Count());
+			var transactionsQuery = await dbContext
+				.Transactions
+				.Include(x => x.TransactionType)
+				.Include(u => u.User)
+				.ToListAsync();
 
 			return transactionsQuery;
 		}

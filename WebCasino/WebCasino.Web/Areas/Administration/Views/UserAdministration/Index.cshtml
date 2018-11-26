@@ -1,1 +1,23 @@
-﻿<h1>USER ADMINISTRATION BOOM</h1>
+﻿@model WebCasino.Web.Areas.Administration.Models.UsersIndexViewModel
+<div class="container">
+	<h1>USERS</h1>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Date</th>
+				<th>Type</th>
+				<th>Amount</th>
+				<th>Description</th>
+				<th>User</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var user in Model.users)
+			{
+				<tr>
+					<td>@user.Alias</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

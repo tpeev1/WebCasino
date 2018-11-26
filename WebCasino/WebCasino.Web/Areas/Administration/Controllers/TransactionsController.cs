@@ -1,13 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using WebCasino.Service.Abstract;
+using WebCasino.Web.Areas.Administration.Models;
 
 namespace WebCasino.Web.Areas.Administration.Controllers
 {
 	[Area("Administration")]
 	public class TransactionsController : Controller
 	{
-		public IActionResult History()
+		private readonly ITransactionService service;
+
+		public TransactionsController(ITransactionService service)
 		{
-			return View();
+			this.service = service ?? throw new System.ArgumentNullException(nameof(service));
+		}
+
+		public async Task<IActionResult> History()
+		{
+			var allTransactionsQuery = await this.service.GetAllTransactions();
+
+			var viewModel = new TransactionHistoryViewModel(allTransactionsQuery);
+
+			return View(viewModel);
 		}
 	}
 }
