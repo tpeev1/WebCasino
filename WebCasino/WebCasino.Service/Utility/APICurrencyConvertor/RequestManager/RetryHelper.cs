@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using WebCasino.Service.Utility.APICurrencyConvertor.Exceptions;
+using WebCasino.Service.Utility.Validator;
 
 namespace WebCasino.Service.Utility.APICurrencyConvertor.RequestManager
 {
@@ -16,10 +17,9 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor.RequestManager
 			int times, TimeSpan delay, Func<Task> operation)
 			where TException : Exception
 		{
-			if (times <= 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(times));
-			}
+			ServiceValidator.ValueNotEqualZero(times);
+			ServiceValidator.ObjectIsEqualNull(delay);
+			ServiceValidator.ObjectIsEqualNull(operation);
 
 			var attempts = 0;
 
@@ -29,6 +29,7 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor.RequestManager
 				{
 					attempts++;
 					await operation();
+					await Task.Delay(delay);
 					break;
 				}
 				catch (TException ex)

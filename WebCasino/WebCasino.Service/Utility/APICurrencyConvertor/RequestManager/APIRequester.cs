@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using WebCasino.Service.Utility.APICurrencyConvertor.Configurations;
+using WebCasino.Service.Utility.Validator;
 
 namespace WebCasino.Service.Utility.APICurrencyConvertor.RequestManager
 {
@@ -19,6 +20,8 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor.RequestManager
 
 		public async Task<string> Request(string connections)
 		{
+			ServiceValidator.IsInputStringEmptyOrNull(connections);
+
 			var pauseBetweenFailuer = TimeSpan.FromSeconds(2);
 			var resultBuilder = new StringBuilder();
 
@@ -31,10 +34,7 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor.RequestManager
 					resultBuilder.Append(response);
 				});
 
-			if (resultBuilder.Length == 0)
-			{
-				throw new ArgumentException("NOTHING IN BUILDER");
-			}
+			ServiceValidator.IsInputStringEmptyOrNull(resultBuilder.ToString());
 
 			return resultBuilder.ToString();
 		}
