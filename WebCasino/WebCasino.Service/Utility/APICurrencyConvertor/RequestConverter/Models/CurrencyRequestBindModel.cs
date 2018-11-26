@@ -12,7 +12,7 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor.RequestConverter.Models
 		public string Date { get; set; }
 
 		[JsonProperty("rates")]
-		public Dictionary<string, decimal> Rates { get; set; }
+		public Dictionary<string, double> Rates { get; set; }
 
 		[JsonProperty("error")]
 		public string Error { get; set; }

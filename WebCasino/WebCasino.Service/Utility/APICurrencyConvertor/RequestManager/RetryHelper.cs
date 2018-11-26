@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using WebCasino.Service.Utility.APICurrencyConvertor.Exceptions;
+using WebCasino.Service.Utility.APICurrencyConvertor.RequestManager.Contracts;
 using WebCasino.Service.Utility.Validator;
 
 namespace WebCasino.Service.Utility.APICurrencyConvertor.RequestManager
 {
-	public class RetryHelper
+	public class RetryHelper : IRetryHelper
 	{
 		public async Task RetryOnExceptionAsync(
 			int times, TimeSpan delay, Func<Task> operation)

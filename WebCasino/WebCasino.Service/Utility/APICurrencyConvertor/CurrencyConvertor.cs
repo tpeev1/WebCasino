@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using WebCasino.Service.Utility.APICurrencyConvertor.Configurations;
+using WebCasino.Service.Utility.APICurrencyConvertor.Exceptions;
 using WebCasino.Service.Utility.APICurrencyConvertor.RequestConverter;
 using WebCasino.Service.Utility.APICurrencyConvertor.RequestConverter.Models;
 using WebCasino.Service.Utility.APICurrencyConvertor.RequestManager;
+using WebCasino.Service.Utility.Validator;
 
 namespace WebCasino.Service.Utility.APICurrencyConvertor
 {
@@ -13,7 +15,7 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor
 
 		public CurrencyConvertor(APIRequester requester)
 		{
-			this.requester = requester;
+			this.requester = requester ?? throw new ArgumentNullException(nameof(requester));
 		}
 
 		/// <summary>
@@ -22,9 +24,14 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor
 		/// <param name="userCurrency">User currency to find</param>
 		/// <param name="amount">amount of money</param>
 		/// <returns></returns>
-		public async Task<decimal> ConvertFromBaseToUser(string userCurrency, decimal amount)
+		public async Task<double> ConvertFromBaseToUser(string userCurrency, double amount, int secondsPauseBetweenFailure)
 		{
-			CurrencyRequestBindModel currencyModel = await CallApiWithCurrencyBase();
+			ServiceValidator.IsInputStringEmptyOrNull(userCurrency);
+			ServiceValidator.CheckStringLength(userCurrency, 3, 3);
+			ServiceValidator.ValueIsBetween(amount, 0, double.MaxValue);
+			ServiceValidator.ValueNotEqualZero(secondsPauseBetweenFailure);
+
+			CurrencyRequestBindModel currencyModel = await CallApiWithCurrencyBase(secondsPauseBetweenFailure);
 
 			if (currencyModel.Rates.ContainsKey(userCurrency))
 			{
@@ -40,9 +47,14 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor
 		/// <param name="currencyBase">user currency to transform in USD</param>
 		/// <param name="amount">amount of user money</param>
 		/// <returns></returns>
-		public async Task<decimal> ConvertFromUserToBase(string userCurrencyBase, decimal amount)
+		public async Task<double> ConvertFromUserToBase(string userCurrencyBase, double amount, int secondsPauseBetweenFailure)
 		{
-			CurrencyRequestBindModel currencyModel = await CallApiWithCurrencyBase(userCurrencyBase);
+			ServiceValidator.IsInputStringEmptyOrNull(userCurrencyBase);
+			ServiceValidator.CheckStringLength(userCurrencyBase, 3, 3);
+			ServiceValidator.ValueIsBetween(amount, 0, double.MaxValue);
+			ServiceValidator.ValueNotEqualZero(secondsPauseBetweenFailure);
+
+			CurrencyRequestBindModel currencyModel = await CallApiWithCurrencyBase(secondsPauseBetweenFailure, userCurrencyBase);
 
 			if (currencyModel.Rates.ContainsKey(RequestConfig.BaseCurrency))
 			{
@@ -52,11 +64,25 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor
 			throw new ArgumentException();
 		}
 
-		private async Task<CurrencyRequestBindModel> CallApiWithCurrencyBase(string currencyBase = RequestConfig.BaseCurrency)
+		private async Task<CurrencyRequestBindModel> CallApiWithCurrencyBase(int secondsPauseBetweenFailure, string currencyBase = RequestConfig.BaseCurrency)
 		{
+			ServiceValidator.IsInputStringEmptyOrNull(currencyBase);
+			ServiceValidator.CheckStringLength(currencyBase, 3, 3);
+			ServiceValidator.ValueNotEqualZero(secondsPauseBetweenFailure);
+
 			var queryString = RequestConfig.API_URI + RequestConfig.QueryParameters.API_QUERY_LATEST_BASE + currencyBase;
 
-			var callResult = await this.requester.Request(queryString);
+			string callResult;
+
+			try
+			{
+				callResult = await this.requester.Request(queryString, secondsPauseBetweenFailure);
+			}
+			catch (ApiServiceNotFoundException ex)
+			{
+				throw new ArgumentException(ex.Message);
+			}
+
 			var jsonCreator = new JsonModelCreator();
 
 			CurrencyRequestBindModel result = jsonCreator.JsonToModelDeserializer(callResult);
@@ -66,7 +92,7 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor
 				return result;
 			}
 
-			throw new ArgumentNullException();
+			throw new ArgumentNullException(result.Error);
 		}
 	}
 }

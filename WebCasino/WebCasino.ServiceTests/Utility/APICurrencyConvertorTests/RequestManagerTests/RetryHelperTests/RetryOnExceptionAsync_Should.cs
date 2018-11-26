@@ -2,6 +2,7 @@
 using System;
 using System.Text;
 using System.Threading.Tasks;
+using WebCasino.Service.Utility.APICurrencyConvertor.Exceptions;
 using WebCasino.Service.Utility.APICurrencyConvertor.RequestManager;
 
 namespace WebCasino.ServiceTests.Utility.APICurrencyConvertorTests.RequestManagerTests.RetryHelperTests
@@ -33,6 +34,21 @@ namespace WebCasino.ServiceTests.Utility.APICurrencyConvertorTests.RequestManage
 			Func<Task> operation = () => Task.CompletedTask;
 
 			await Assert.ThrowsExceptionAsync<ArgumentNullException>(
+				() => retryHelper.RetryOnExceptionAsync(times,
+						delay, operation
+				));
+		}
+
+		[TestMethod]
+		public async Task ThrowApiServiceNotFoundExceptionn_WhenAttemptsAreEqualTimes()
+		{
+			var retryHelper = new RetryHelper();
+
+			var times = 2;
+			TimeSpan delay = TimeSpan.FromSeconds(1);
+			Func<Task> operation = () => throw new ArgumentException();
+
+			await Assert.ThrowsExceptionAsync<ApiServiceNotFoundException>(
 				() => retryHelper.RetryOnExceptionAsync(times,
 						delay, operation
 				));
