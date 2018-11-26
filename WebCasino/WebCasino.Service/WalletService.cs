@@ -34,7 +34,7 @@ namespace WebCasino.Service
 
             var newWallet = new Wallet()
             {
-                Id = new Guid().ToString(),
+                Id = Guid.NewGuid().ToString(),
                 UserId = userId,
                 Currency = currency
             };

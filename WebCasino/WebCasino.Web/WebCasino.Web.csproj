@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\WebCasino.DataContext\WebCasino.DataContext.csproj" />
     <ProjectReference Include="..\WebCasino.Entities\WebCasino.Entities.csproj" />
+    <ProjectReference Include="..\WebCasino.Service\WebCasino.Service.csproj" />
   </ItemGroup>
 
 </Project>

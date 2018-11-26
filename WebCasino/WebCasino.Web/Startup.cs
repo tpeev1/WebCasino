@@ -6,6 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebCasino.DataContext;
 using WebCasino.Entities;
+using WebCasino.Service;
+using WebCasino.Service.Abstract;
+using WebCasino.Web.Utilities.Wrappers;
 
 namespace WebCasino.Web
 {
@@ -27,6 +30,9 @@ namespace WebCasino.Web
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<CasinoContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IWalletService, WalletService>();
+            services.AddScoped<IUserWrapper, UserWrapper>();
 
             // Add application services.
 
