@@ -18,8 +18,7 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor.RequestManager
 			where TException : Exception
 		{
 			ServiceValidator.ValueNotEqualZero(times);
-			ServiceValidator.ObjectIsEqualNull(delay);
-			ServiceValidator.ObjectIsEqualNull(operation);
+			ServiceValidator.ValueNotEqualZero(delay.Seconds);
 
 			var attempts = 0;
 
