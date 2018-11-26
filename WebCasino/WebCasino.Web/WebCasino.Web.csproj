@@ -15,6 +15,19 @@
     <ProjectReference Include="..\WebCasino.DataContext\WebCasino.DataContext.csproj" />
     <ProjectReference Include="..\WebCasino.Entities\WebCasino.Entities.csproj" />
     <ProjectReference Include="..\WebCasino.Service\WebCasino.Service.csproj" />
+  </ItemGroup> 
+
+  <ItemGroup>
+    <Folder Include="Areas\Administration\Models\" />
+  </ItemGroup> 
+
+  <ItemGroup>
+    <Content Update="Areas\Administration\Views\_ViewImports.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Administration\Views\_ViewStart.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>
