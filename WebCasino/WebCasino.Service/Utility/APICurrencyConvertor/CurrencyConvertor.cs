@@ -64,7 +64,7 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor
 			throw new ArgumentException();
 		}
 
-		private async Task<CurrencyRequestBindModel> CallApiWithCurrencyBase(int secondsPauseBetweenFailure, string currencyBase = RequestConfig.BaseCurrency)
+		public async Task<CurrencyRequestBindModel> CallApiWithCurrencyBase(int secondsPauseBetweenFailure, string currencyBase = RequestConfig.BaseCurrency)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(currencyBase);
 			ServiceValidator.CheckStringLength(currencyBase, 3, 3);
