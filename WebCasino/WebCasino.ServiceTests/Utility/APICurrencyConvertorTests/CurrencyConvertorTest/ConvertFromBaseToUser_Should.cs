@@ -95,6 +95,7 @@ namespace WebCasino.ServiceTests.Utility.APICurrencyConvertorTests.CurrencyConve
 
 		public async Task ReturnConvertedFromBaseToUserCurrency()
 		{
+
 		}
 	}
 }

@@ -69,15 +69,10 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor
 			ServiceValidator.IsInputStringEmptyOrNull(currencyBase);
 			ServiceValidator.CheckStringLength(currencyBase, 3, 3);
 
-
 			var queryString = RequestConfig.API_URI + RequestConfig.QueryParameters.API_QUERY_LATEST_BASE + currencyBase;
 
-			string callResult;
-
+			string callResult = await this.requester.Request(queryString);
 			
-			callResult = await this.requester.Request(queryString);
-			
-
 			var jsonCreator = new JsonModelCreator();
 
 			CurrencyRequestBindModel result = jsonCreator.JsonToModelDeserializer(callResult);
