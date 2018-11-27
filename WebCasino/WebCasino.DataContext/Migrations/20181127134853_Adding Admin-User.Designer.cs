@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebCasino.DataContext;
 
 namespace WebCasino.DataContext.Migrations
 {
     [DbContext(typeof(CasinoContext))]
-    partial class CasinoContextModelSnapshot : ModelSnapshot
+    [Migration("20181127134853_Adding Admin-User")]
+    partial class AddingAdminUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,8 +45,8 @@ namespace WebCasino.DataContext.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "1", ConcurrencyStamp = "1d5ceff1-46f6-487d-b123-cbbb695b747d", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
-                        new { Id = "2", ConcurrencyStamp = "9a79bf90-d06c-4edd-827a-096178dc7fef", Name = "Player", NormalizedName = "PLAYER" }
+                        new { Id = "1", ConcurrencyStamp = "fd2b2a3c-98bf-499c-8b8a-ce084d38829f", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
+                        new { Id = "2", ConcurrencyStamp = "4ff56ac1-aee6-47f4-975a-e3edd0dd3758", Name = "Player", NormalizedName = "PLAYER" }
                     );
                 });
 
@@ -119,7 +121,7 @@ namespace WebCasino.DataContext.Migrations
                     b.ToTable("AspNetUserRoles");
 
                     b.HasData(
-                        new { UserId = "043b1fa8-8f8d-4b37-bc88-d1c1f1fc25ee", RoleId = "1" }
+                        new { UserId = "b5f076ac-15c0-4b78-9ffe-912a687fbec9", RoleId = "1" }
                     );
                 });
 
@@ -341,7 +343,7 @@ namespace WebCasino.DataContext.Migrations
                     b.ToTable("AspNetUsers");
 
                     b.HasData(
-                        new { Id = "043b1fa8-8f8d-4b37-bc88-d1c1f1fc25ee", AccessFailedCount = 0, Alias = "Boss", ConcurrencyStamp = "4f2f16ab-9bfb-4a5b-b2a5-d40ea97152e6", DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), Email = "admin@mail.com", EmailConfirmed = true, IsDeleted = false, Locked = false, LockoutEnabled = false, ModifiedOn = new DateTime(2018, 11, 27, 16, 57, 1, 139, DateTimeKind.Local), NormalizedEmail = "ADMIN@MAIL.COM", NormalizedUserName = "ADMIN@MAIL.COM", PasswordHash = "AQAAAAEAACcQAAAAEBlbzKsNuicT5C5fpJAUN7SzjS6QC44L1Sh7jMH+YZru37ec3FcA+z4WI4bnCnRbwQ==", PhoneNumber = "+359359", PhoneNumberConfirmed = true, SecurityStamp = "8461492d-ebdf-413a-a59f-e6976bd014f5", TwoFactorEnabled = false, UserName = "Admin" }
+                        new { Id = "b5f076ac-15c0-4b78-9ffe-912a687fbec9", AccessFailedCount = 0, Alias = "Boss", ConcurrencyStamp = "7b703308-d123-42ef-b3be-8a4b9c851d7b", DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), Email = "admin@mail.com", EmailConfirmed = true, IsDeleted = false, Locked = false, LockoutEnabled = false, ModifiedOn = new DateTime(2018, 11, 27, 15, 48, 51, 921, DateTimeKind.Local), NormalizedEmail = "ADMIN@MAIL.COM", NormalizedUserName = "ADMIN", PasswordHash = "AQAAAAEAACcQAAAAEH+KjrZFostz6LJb1EJ0GyOcidwi9j4GxsHQpUK5VYILH5oPzMe4/KNWJJh6QULmOQ==", PhoneNumber = "+359359", PhoneNumberConfirmed = true, SecurityStamp = "9cf37ad9-d517-4db1-8cd2-1f9bade72e48", TwoFactorEnabled = false, UserName = "Admin" }
                     );
                 });
 

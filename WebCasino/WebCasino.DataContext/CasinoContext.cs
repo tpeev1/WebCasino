@@ -146,14 +146,20 @@ namespace WebCasino.DataContext
 			{
 				Id = Guid.NewGuid().ToString(),
 				UserName = "Admin",
-				NormalizedUserName = "Admin".ToUpper(),
+				NormalizedUserName = "admin@mail.com".ToUpper(),
 				Email = "admin@mail.com",
+				TwoFactorEnabled = false,
 				NormalizedEmail = "admin@mail.com".ToUpper(),
 				EmailConfirmed = true,
 				PhoneNumber = "+359359",
 				PhoneNumberConfirmed = true,
 				SecurityStamp = Guid.NewGuid().ToString("D"),
-				Alias = "Boss"
+				Alias = "Boss",
+				ModifiedOn = DateTime.Now,
+				Locked = false,
+				IsDeleted = false,
+				AccessFailedCount = 0,
+				LockoutEnabled = false
 			};
 
 			var hashePass = new PasswordHasher<User>().HashPassword(adminUser, "!Aa12345678");
