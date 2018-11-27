@@ -11,33 +11,21 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor.RequestManager
 	public class APIRequester
 	{
 		private readonly HttpClient client;
-		private readonly IRetryHelper retryHelper;
-
-		public APIRequester(HttpClient client, IRetryHelper retryHelper)
+		
+		public APIRequester(HttpClient client)
 		{
-			this.client = client ?? throw new ArgumentNullException(nameof(client));
-			this.retryHelper = retryHelper ?? throw new ArgumentNullException(nameof(retryHelper));
+			this.client = client ?? throw new ArgumentNullException(nameof(client));			
 		}
 
-		public async Task<string> Request(string connections, int secondsPauseBetweenFailure)
+		public async Task<string> Request(string connections)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(connections);
 
-			var pauseBetweenFailuer = TimeSpan.FromSeconds(secondsPauseBetweenFailure);
-			var resultBuilder = new StringBuilder();
+			var response = await client.GetStringAsync(connections);
 
-			await retryHelper.RetryOnExceptionAsync<HttpRequestException>(RequestConfig.MaxRetryAttempts, pauseBetweenFailuer,
-				async () =>
-				{
-					var response = await client.GetStringAsync(
-						connections);
+			ServiceValidator.IsInputStringEmptyOrNull(response);
 
-					resultBuilder.Append(response);
-				});
-
-			ServiceValidator.IsInputStringEmptyOrNull(resultBuilder.ToString());
-
-			return resultBuilder.ToString();
+			return response;
 		}
 	}
 }

@@ -12,26 +12,17 @@ namespace WebCasino.ServiceTests.Utility.APICurrencyConvertorTests.RequestManage
 		[TestMethod]
 		public void ThrowArgumentNullException_WhenClientIsNull()
 		{
-			var retryHelperMock = new Mock<RetryHelper>();
-
-			Assert.ThrowsException<ArgumentNullException>(() => new APIRequester(null, retryHelperMock.Object));
+			Assert.ThrowsException<ArgumentNullException>(() => new APIRequester(null));
 		}
 
-		[TestMethod]
-		public void ThrowArgumentNullException_WhenRetryHelperIsNull()
-		{
-			var httpClientMock = new Mock<HttpClient>();
-
-			Assert.ThrowsException<ArgumentNullException>(() => new APIRequester(httpClientMock.Object, null));
-		}
-
+		
 		[TestMethod]
 		public void CreateInstanceOfAPIRequester_WhenCorrectParametersArePassed()
 		{
 			var httpClientMock = new Mock<HttpClient>();
-			var retryHelperMock = new Mock<RetryHelper>();
+			
 
-			Assert.IsInstanceOfType(new APIRequester(httpClientMock.Object, retryHelperMock.Object), typeof(APIRequester));
+			Assert.IsInstanceOfType(new APIRequester(httpClientMock.Object), typeof(APIRequester));
 		}
 	}
 }

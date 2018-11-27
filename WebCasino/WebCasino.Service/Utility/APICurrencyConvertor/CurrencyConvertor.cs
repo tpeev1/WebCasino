@@ -24,14 +24,14 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor
 		/// <param name="userCurrency">User currency to find</param>
 		/// <param name="amount">amount of money</param>
 		/// <returns></returns>
-		public async Task<double> ConvertFromBaseToUser(string userCurrency, double amount, int secondsPauseBetweenFailure)
+		public async Task<double> ConvertFromBaseToUser(string userCurrency, double amount)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(userCurrency);
 			ServiceValidator.CheckStringLength(userCurrency, 3, 3);
 			ServiceValidator.ValueIsBetween(amount, 0, double.MaxValue);
-			ServiceValidator.ValueNotEqualZero(secondsPauseBetweenFailure);
+		
 
-			CurrencyRequestBindModel currencyModel = await CallApiWithCurrencyBase(secondsPauseBetweenFailure);
+			CurrencyRequestBindModel currencyModel = await CallApiWithCurrencyBase();
 
 			if (currencyModel.Rates.ContainsKey(userCurrency))
 			{
@@ -47,14 +47,14 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor
 		/// <param name="currencyBase">user currency to transform in USD</param>
 		/// <param name="amount">amount of user money</param>
 		/// <returns></returns>
-		public async Task<double> ConvertFromUserToBase(string userCurrencyBase, double amount, int secondsPauseBetweenFailure)
+		public async Task<double> ConvertFromUserToBase(string userCurrencyBase, double amount)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(userCurrencyBase);
 			ServiceValidator.CheckStringLength(userCurrencyBase, 3, 3);
 			ServiceValidator.ValueIsBetween(amount, 0, double.MaxValue);
-			ServiceValidator.ValueNotEqualZero(secondsPauseBetweenFailure);
+		
 
-			CurrencyRequestBindModel currencyModel = await CallApiWithCurrencyBase(secondsPauseBetweenFailure, userCurrencyBase);
+			CurrencyRequestBindModel currencyModel = await CallApiWithCurrencyBase( userCurrencyBase);
 
 			if (currencyModel.Rates.ContainsKey(RequestConfig.BaseCurrency))
 			{
@@ -64,24 +64,19 @@ namespace WebCasino.Service.Utility.APICurrencyConvertor
 			throw new ArgumentException();
 		}
 
-		public async Task<CurrencyRequestBindModel> CallApiWithCurrencyBase(int secondsPauseBetweenFailure, string currencyBase = RequestConfig.BaseCurrency)
+		public async Task<CurrencyRequestBindModel> CallApiWithCurrencyBase(string currencyBase = RequestConfig.BaseCurrency)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(currencyBase);
 			ServiceValidator.CheckStringLength(currencyBase, 3, 3);
-			ServiceValidator.ValueNotEqualZero(secondsPauseBetweenFailure);
+
 
 			var queryString = RequestConfig.API_URI + RequestConfig.QueryParameters.API_QUERY_LATEST_BASE + currencyBase;
 
 			string callResult;
 
-			try
-			{
-				callResult = await this.requester.Request(queryString, secondsPauseBetweenFailure);
-			}
-			catch (ApiServiceNotFoundException ex)
-			{
-				throw new ArgumentException(ex.Message);
-			}
+			
+			callResult = await this.requester.Request(queryString);
+			
 
 			var jsonCreator = new JsonModelCreator();
 
