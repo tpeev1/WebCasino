@@ -6,6 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebCasino.DataContext;
 using WebCasino.Entities;
+using WebCasino.Service;
+using WebCasino.Service.Abstract;
+using WebCasino.Service.Utility.APICurrencyConvertor.RequestManager;
 
 namespace WebCasino.Web
 {
@@ -28,6 +31,12 @@ namespace WebCasino.Web
                 .AddEntityFrameworkStores<CasinoContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddHttpClient<IHttpWrapper, HttpWrapper>();
+
+            services.AddScoped<IAPIRequester, APIRequester>();
+
+            services.AddScoped<ICurrencyRateApiService, CurrencyRateApiService>();
+            
             // Add application services.
 
             services.AddMvc();
