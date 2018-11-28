@@ -33,6 +33,7 @@ namespace WebCasino.Web
 
             services.AddScoped<IWalletService, WalletService>();
             services.AddScoped<IUserWrapper, UserWrapper>();
+            services.AddScoped<IUserService, UserService>();
 
             // Add application services.
 

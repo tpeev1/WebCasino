@@ -47,7 +47,12 @@ namespace WebCasino.Service
 
         public async Task<Wallet> RetrieveWallet(string userId)
         {
-            var wallet = await this.context.Wallets.FirstOrDefaultAsync(wa => wa.UserId == userId);
+            var wallet = await this.context.Wallets
+                .Include(wa => wa.User)
+                    .ThenInclude(us => us.Cards)
+                        .ThenInclude(ca => ca.Transcations)
+                .FirstOrDefaultAsync(wa => wa.UserId == userId);
+
             ServiceValidator.ObjectIsNotEqualNull(wallet);
             return wallet;
         }

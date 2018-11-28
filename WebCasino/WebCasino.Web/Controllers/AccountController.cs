@@ -117,9 +117,12 @@ namespace WebCasino.Web.Controllers
                     Alias = model.Alias,
                     DateOfBirth = model.DateOfBirth
                 };
+                
+                
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await this._userManager.AddToRoleAsync(user, "Player");
                     await this.walletService.CreateWallet(guidId, model.Currency);
                     _logger.LogInformation("User created a new account with password.");
                     await _signInManager.SignInAsync(user, isPersistent: false);
