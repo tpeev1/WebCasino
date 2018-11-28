@@ -31,6 +31,8 @@ namespace WebCasino.DataContext
 
         public DbSet<Transaction> Transactions { get; set; }
 
+        public DbSet<CurrencyExchangeRate> ExchangeRates { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Currency>().HasData(this.SeedCurrencies());

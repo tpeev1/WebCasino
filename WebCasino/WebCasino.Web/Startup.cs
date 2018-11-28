@@ -33,9 +33,9 @@ namespace WebCasino.Web
 
             services.AddHttpClient<IHttpWrapper, HttpWrapper>();
 
-            services.AddScoped<IAPIRequester, APIRequester>();
+            services.AddSingleton<IAPIRequester, APIRequester>();
 
-            services.AddScoped<ICurrencyRateApiService, CurrencyRateApiService>();
+            services.AddSingleton<ICurrencyRateApiService, CurrencyRateApiService>();
             
             // Add application services.
 

@@ -20,7 +20,7 @@ namespace WebCasino.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var dic = await this.currencyService.RefreshRates();
+            var dic = await this.currencyService.GetRatesAsync();
             return View(dic);
         }
 
