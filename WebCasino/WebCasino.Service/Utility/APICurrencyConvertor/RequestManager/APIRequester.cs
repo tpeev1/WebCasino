@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using WebCasino.Service.Utility.APICurrencyConvertor.Configurations;
-using WebCasino.Service.Utility.APICurrencyConvertor.RequestManager.Contracts;
+
 using WebCasino.Service.Utility.Validator;
 
 namespace WebCasino.Service.Utility.APICurrencyConvertor.RequestManager

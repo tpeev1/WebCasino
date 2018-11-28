@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using WebCasino.Service.Utility.APICurrencyConvertor.RequestManager;
-using WebCasino.Service.Utility.APICurrencyConvertor.RequestManager.Contracts;
+
 using WebCasino.ServiceTests.Utility.APICurrencyConvertorTests.RequestManagerTests.APIRequesterTests.Fakes;
 
 namespace WebCasino.ServiceTests.Utility.APICurrencyConvertorTests.RequestManagerTests.APIRequesterTests
