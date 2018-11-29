@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WebCasino.Entities;
+using WebCasino.Service.Abstract;
 using WebCasino.Web.Models;
 using WebCasino.Web.Models.AccountViewModels;
 
@@ -24,15 +25,18 @@ namespace WebCasino.Web.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger _logger;
+        private readonly IWalletService walletService;
 
         public AccountController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IWalletService walletService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            this.walletService = walletService;
         }
 
         [TempData]
@@ -92,8 +96,9 @@ namespace WebCasino.Web.Controllers
         [AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
         {
+            var model = new RegisterViewModel();
             ViewData["ReturnUrl"] = returnUrl;
-            return View();
+            return View(model);
         }
 
         [HttpPost]
@@ -104,14 +109,22 @@ namespace WebCasino.Web.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = model.Email, Email = model.Email };
+                var guidId = Guid.NewGuid().ToString();
+                var user = new User
+                { Id = guidId,
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Alias = model.Alias,
+                    DateOfBirth = model.DateOfBirth
+                };
+                
+                
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await this._userManager.AddToRoleAsync(user, "Player");
+                    await this.walletService.CreateWallet(guidId, model.Currency);
                     _logger.LogInformation("User created a new account with password.");
-
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
                     return RedirectToLocal(returnUrl);

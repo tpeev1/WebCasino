@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WebCasino.DataContext;
 using WebCasino.Entities;
@@ -70,7 +69,11 @@ namespace WebCasino.Service
 
         public async Task<User> RetrieveUser(string id)
         {
-            var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.Locked);
+            var user = await this.context.Users
+                .Include(us => us.Wallet)
+                .ThenInclude(wa => wa.Currency)
+                .FirstOrDefaultAsync(us => us.Id == id && !us.Locked);
+
             ServiceValidator.ObjectIsNotEqualNull(user);
             return user;
         }

@@ -43,8 +43,8 @@ namespace WebCasino.DataContext.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "1", ConcurrencyStamp = "24e34c1c-8c6d-4b72-bb4f-7e6ab1f8b62d", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
-                        new { Id = "2", ConcurrencyStamp = "2664ff07-05cc-4711-96fe-dbce2afa4698", Name = "Player", NormalizedName = "PLAYER" }
+                        new { Id = "1", ConcurrencyStamp = "ef73ca0f-da91-4d66-b283-0e6ce2ea4e78", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
+                        new { Id = "2", ConcurrencyStamp = "d9fb06aa-5fd8-456d-abe5-1321b738b0f5", Name = "Player", NormalizedName = "PLAYER" }
                     );
                 });
 
@@ -185,6 +185,30 @@ namespace WebCasino.DataContext.Migrations
                         new { Id = 3, Name = "EUR" },
                         new { Id = 4, Name = "BGN" }
                     );
+                });
+
+            modelBuilder.Entity("WebCasino.Entities.CurrencyExchangeRate", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("CreatedOn");
+
+                    b.Property<int>("CurrencyId");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<double>("ExchangeRate");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("ModifiedOn");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.ToTable("ExchangeRates");
                 });
 
             modelBuilder.Entity("WebCasino.Entities.LoginLog", b =>
@@ -426,6 +450,14 @@ namespace WebCasino.DataContext.Migrations
                         .WithMany("Cards")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("WebCasino.Entities.CurrencyExchangeRate", b =>
+                {
+                    b.HasOne("WebCasino.Entities.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WebCasino.Entities.LoginLog", b =>
