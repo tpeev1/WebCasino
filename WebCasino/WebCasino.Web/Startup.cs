@@ -8,6 +8,7 @@ using WebCasino.DataContext;
 using WebCasino.Entities;
 using WebCasino.Service;
 using WebCasino.Service.Abstract;
+using WebCasino.Service.Utility.APICurrencyConvertor.RequestManager;
 using WebCasino.Web.Utilities.Wrappers;
 
 namespace WebCasino.Web
@@ -34,6 +35,12 @@ namespace WebCasino.Web
             services.AddScoped<IWalletService, WalletService>();
             services.AddScoped<IUserWrapper, UserWrapper>();
             services.AddScoped<IUserService, UserService>();
+
+            services.AddHttpClient<IHttpWrapper, HttpWrapper>();
+
+            services.AddSingleton<IAPIRequester, APIRequester>();
+
+            services.AddSingleton<ICurrencyRateApiService, CurrencyRateApiService>();
 
             // Add application services.
 
