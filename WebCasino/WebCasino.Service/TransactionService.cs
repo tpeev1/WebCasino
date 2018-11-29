@@ -20,27 +20,17 @@ namespace WebCasino.Service
 			this.dbContext = dbContext;
 		}
 
-		public async Task<Transaction> AddTransaction(string userId,
-								double originalAmount,
-								BankCard bankCard,
-								int transactionTypeId,
-								string description)
+		public async Task<Transaction> AddDepositTransaction(
+			string userId,
+			double originalAmount,
+			int transactionTypeId,
+			string description)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(userId);
 			ServiceValidator.IsInputStringEmptyOrNull(description);
 			ServiceValidator.CheckStringLength(description, 10, 100);
 			ServiceValidator.ValueNotEqualZero(transactionTypeId);
-			ServiceValidator.ObjectIsNotEqualNull(bankCard);
-			//TODO: CHOFEXX - WHAT IS MAX VALUE
 			ServiceValidator.ValueIsBetween(originalAmount, 0, double.MaxValue);
-
-			var allCards = this.dbContext.BankCards;
-
-			//TODO: CHOFEXX - IF THER ISN'T A BANK CARD IN DB ?
-			ServiceValidator.ValueNotEqualZero(allCards.Count());
-			var card = allCards.Select(c => c).Where(c => c.Id == bankCard.Id).First();
-
-			ServiceValidator.ObjectIsNotEqualNull(card);
 
 			var newTransaction = new Transaction()
 			{
@@ -48,9 +38,16 @@ namespace WebCasino.Service
 				OriginalAmount = originalAmount,
 				Description = description,
 				TransactionTypeId = transactionTypeId,
-			
-				Card = card
 			};
+
+
+			var userWin = await this.dbContext.Users
+				.Include(w => w.Wallet)
+				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
+
+			ServiceValidator.ObjectIsEqualNull(userWin);
+
+			 userWin.Wallet.NormalisedBalance += originalAmount;
 
 			await this.dbContext.Transactions.AddAsync(newTransaction);
 			await this.dbContext.SaveChangesAsync();
@@ -58,12 +55,115 @@ namespace WebCasino.Service
 			return newTransaction;
 		}
 
+		public async Task<Transaction> AddStakeTransaction(
+			string userId, 
+			double originalAmount,
+			int transactionTypeId, 
+			string description)
+		{
+			ServiceValidator.IsInputStringEmptyOrNull(userId);
+			ServiceValidator.IsInputStringEmptyOrNull(description);
+			ServiceValidator.CheckStringLength(description, 10, 100);
+			ServiceValidator.ValueNotEqualZero(transactionTypeId);
+			ServiceValidator.ValueIsBetween(originalAmount, 0, double.MaxValue);
+
+			var newTransaction = new Transaction()
+			{
+				UserId = userId,
+				OriginalAmount = originalAmount,
+				Description = description,
+				TransactionTypeId = transactionTypeId,
+			};
+
+
+			var userWin =await this.dbContext.Users
+				.Include(w => w.Wallet)
+				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
+				
+			ServiceValidator.ObjectIsEqualNull(userWin);
+
+			userWin.Wallet.NormalisedBalance -= originalAmount;
+
+			await this.dbContext.Transactions.AddAsync(newTransaction);
+			await this.dbContext.SaveChangesAsync();
+
+			return newTransaction;
+		}
+
+		public async Task<Transaction> AddWinTransaction(
+			string userId,
+			double originalAmount, 
+			int transactionTypeId,
+			string description)
+		{
+			ServiceValidator.IsInputStringEmptyOrNull(userId);
+			ServiceValidator.IsInputStringEmptyOrNull(description);
+			ServiceValidator.CheckStringLength(description, 10, 100);
+			ServiceValidator.ValueNotEqualZero(transactionTypeId);
+			ServiceValidator.ValueIsBetween(originalAmount, 0, double.MaxValue);
+
+			var newTransaction = new Transaction()
+			{
+				UserId = userId,
+				OriginalAmount = originalAmount,
+				Description = description,
+				TransactionTypeId = transactionTypeId,				
+			};
+
+			var userWin = await this.dbContext.Users
+				.Include(w => w.Wallet)
+				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
+
+			ServiceValidator.ObjectIsEqualNull(userWin);
+
+			userWin.Wallet.NormalisedBalance += originalAmount;
+
+			await this.dbContext.Transactions.AddAsync(newTransaction);
+			await this.dbContext.SaveChangesAsync();
+
+			return newTransaction;
+		}
+
+		public async Task<Transaction> AddWithdrawTransaction(
+			string userId, 
+			double originalAmount, 
+			int transactionTypeId,
+			string description)
+		{
+			ServiceValidator.IsInputStringEmptyOrNull(userId);
+			ServiceValidator.IsInputStringEmptyOrNull(description);
+			ServiceValidator.CheckStringLength(description, 10, 100);
+			ServiceValidator.ValueNotEqualZero(transactionTypeId);
+			ServiceValidator.ValueIsBetween(originalAmount, 0, double.MaxValue);
+
+			var newTransaction = new Transaction()
+			{
+				UserId = userId,
+				OriginalAmount = originalAmount,
+				Description = description,
+				TransactionTypeId = transactionTypeId,
+			};
+
+
+			var userWin = await this.dbContext.Users
+				.Include(w => w.Wallet)
+				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
+
+			ServiceValidator.ObjectIsEqualNull(userWin);
+
+			userWin.Wallet.NormalisedBalance -= originalAmount;
+
+			await this.dbContext.Transactions.AddAsync(newTransaction);
+			await this.dbContext.SaveChangesAsync();
+
+			return newTransaction;
+		}
+
+		
 		public async Task<IEnumerable<Transaction>> GetAllTransactions()
 		{
 			var transactionsQuery = await dbContext.Transactions.ToListAsync();
-			//TODO: 0 transaction ? this check is useless?
-			ServiceValidator.ValueNotEqualZero(transactionsQuery.Count());
-
+			
 			return transactionsQuery;
 		}
 
@@ -74,9 +174,9 @@ namespace WebCasino.Service
 
 			var transactionsQuery = await this.dbContext
 				.Transactions
-				.Where(t => t.TransactionType.Name == transactionTypeName)
+				.Where(t => t.TransactionType.Name == transactionTypeName && t.IsDeleted != true)
 				.ToListAsync();
-
+				
 			ServiceValidator.ValueNotEqualZero(transactionsQuery.Count());
 
 			return transactionsQuery;
@@ -88,9 +188,9 @@ namespace WebCasino.Service
 
 			var transactionsQuery = await this.dbContext
 				.Transactions
-				.Where(t => t.UserId == userId)
+				.Where(t => t.UserId == userId && t.IsDeleted != true)
 				.ToListAsync();
-
+				
 			ServiceValidator.ValueNotEqualZero(transactionsQuery.Count);
 
 			return transactionsQuery;

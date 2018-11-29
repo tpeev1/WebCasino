@@ -11,8 +11,12 @@ namespace WebCasino.Service.Abstract
 		Task<IEnumerable<Transaction>> GetUserTransactions(string userId);
 
 		Task<IEnumerable<Transaction>> GetTransactionByType(string transactionTypeName);
- 
-		Task<Transaction> AddTransaction(string userId, double originalAmount, BankCard bankCard,
-								int transactionTypeId, string description);
-    }
+ 		
+		//TODO: Withdraw,Deposit
+		Task<Transaction> AddWinTransaction(string userId, double originalAmount, int transactionTypeId, string description);
+		Task<Transaction> AddStakeTransaction(string userId, double originalAmount, int transactionTypeId, string description);
+		Task<Transaction> AddWithdrawTransaction(string userId, double originalAmount, int transactionTypeId, string description);
+		Task<Transaction> AddDepositTransaction(string userId, double originalAmount, int transactionTypeId, string description);
+
+	}
 }
