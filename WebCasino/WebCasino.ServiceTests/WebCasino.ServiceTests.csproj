@@ -19,4 +19,8 @@
     <ProjectReference Include="..\WebCasino.Service\WebCasino.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Utility\APICurrencyConvertorTests\" />
+  </ItemGroup>
+
 </Project>

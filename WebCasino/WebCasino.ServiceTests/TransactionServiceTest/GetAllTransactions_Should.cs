@@ -13,23 +13,6 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 	public class GetAllTransactions_Should
 	{
 		[TestMethod]
-		public async Task ThrowEntityNotFoundException_WhenNoTransactionIsFound()
-		{
-			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-			.UseInMemoryDatabase(databaseName: "ThrowEntityNotFoundException_WhenNoTransactionIsFound")
-			.Options;
-
-			using (var context = new CasinoContext(contextOptions))
-			{
-				var transactionService = new TransactionService(context);
-
-				await Assert.ThrowsExceptionAsync<ArgumentNullException>(
-					() => transactionService.GetAllTransactions()
-				);
-			}
-		}
-
-		[TestMethod]
 		public async Task ReturnTransaction()
 		{
 			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
@@ -53,8 +36,9 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 				context.SaveChanges();
 
 				var transactionService = new TransactionService(context);
-
-				await transactionService.AddTransaction(userId, originalAmount, newBankCard, transactionTypeId, description);
+				context.Transactions.Add(new Transaction());
+				
+				//await transactionService.AddTransaction(userId, originalAmount, newBankCard, transactionTypeId, description);
 
 				var transactions = await transactionService.GetAllTransactions();
 
