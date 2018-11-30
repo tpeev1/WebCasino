@@ -12,24 +12,24 @@ namespace WebCasino.Service
 	public class TransactionService : ITransactionService
 	{
 		private readonly CasinoContext dbContext;
+		private readonly ICurrencyRateApiService currencyService;
 
-		public TransactionService(CasinoContext dbContext)
+		public TransactionService(CasinoContext dbContext, ICurrencyRateApiService currencyService)
 		{
 			ServiceValidator.ObjectIsNotEqualNull(dbContext);
 
 			this.dbContext = dbContext;
+			this.currencyService = currencyService;
 		}
 
 		public async Task<Transaction> AddDepositTransaction(
 			string userId,
-			double originalAmount,
-			int transactionTypeId,
+			double originalAmount,			
 			string description)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(userId);
 			ServiceValidator.IsInputStringEmptyOrNull(description);
 			ServiceValidator.CheckStringLength(description, 10, 100);
-			ServiceValidator.ValueNotEqualZero(transactionTypeId);
 			ServiceValidator.ValueIsBetween(originalAmount, 0, double.MaxValue);
 
 			var newTransaction = new Transaction()
@@ -37,7 +37,7 @@ namespace WebCasino.Service
 				UserId = userId,
 				OriginalAmount = originalAmount,
 				Description = description,
-				TransactionTypeId = transactionTypeId,
+				TransactionTypeId = 3,
 			};
 
 
@@ -58,13 +58,11 @@ namespace WebCasino.Service
 		public async Task<Transaction> AddStakeTransaction(
 			string userId, 
 			double originalAmount,
-			int transactionTypeId, 
 			string description)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(userId);
 			ServiceValidator.IsInputStringEmptyOrNull(description);
 			ServiceValidator.CheckStringLength(description, 10, 100);
-			ServiceValidator.ValueNotEqualZero(transactionTypeId);
 			ServiceValidator.ValueIsBetween(originalAmount, 0, double.MaxValue);
 
 			var newTransaction = new Transaction()
@@ -72,7 +70,7 @@ namespace WebCasino.Service
 				UserId = userId,
 				OriginalAmount = originalAmount,
 				Description = description,
-				TransactionTypeId = transactionTypeId,
+				TransactionTypeId = 2,
 			};
 
 
@@ -93,22 +91,12 @@ namespace WebCasino.Service
 		public async Task<Transaction> AddWinTransaction(
 			string userId,
 			double originalAmount, 
-			int transactionTypeId,
 			string description)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(userId);
 			ServiceValidator.IsInputStringEmptyOrNull(description);
 			ServiceValidator.CheckStringLength(description, 10, 100);
-			ServiceValidator.ValueNotEqualZero(transactionTypeId);
 			ServiceValidator.ValueIsBetween(originalAmount, 0, double.MaxValue);
-
-			var newTransaction = new Transaction()
-			{
-				UserId = userId,
-				OriginalAmount = originalAmount,
-				Description = description,
-				TransactionTypeId = transactionTypeId,				
-			};
 
 			var userWin = await this.dbContext.Users
 				.Include(w => w.Wallet)
@@ -116,6 +104,17 @@ namespace WebCasino.Service
 
 			ServiceValidator.ObjectIsEqualNull(userWin);
 
+			var userCurrency = userWin.Wallet.Currency.Name;
+
+
+			var newTransaction = new Transaction()
+			{
+				UserId = userId,
+				OriginalAmount = originalAmount,
+				Description = description,
+				TransactionTypeId = 1,						  
+			};
+			
 			userWin.Wallet.NormalisedBalance += originalAmount;
 
 			await this.dbContext.Transactions.AddAsync(newTransaction);
@@ -127,13 +126,11 @@ namespace WebCasino.Service
 		public async Task<Transaction> AddWithdrawTransaction(
 			string userId, 
 			double originalAmount, 
-			int transactionTypeId,
 			string description)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(userId);
 			ServiceValidator.IsInputStringEmptyOrNull(description);
 			ServiceValidator.CheckStringLength(description, 10, 100);
-			ServiceValidator.ValueNotEqualZero(transactionTypeId);
 			ServiceValidator.ValueIsBetween(originalAmount, 0, double.MaxValue);
 
 			var newTransaction = new Transaction()
@@ -141,7 +138,7 @@ namespace WebCasino.Service
 				UserId = userId,
 				OriginalAmount = originalAmount,
 				Description = description,
-				TransactionTypeId = transactionTypeId,
+				TransactionTypeId = 4,
 			};
 
 
