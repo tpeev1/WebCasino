@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using WebCasino.DataContext;
-using WebCasino.Entities;
 using WebCasino.Service;
+using WebCasino.Service.Abstract;
 
 namespace WebCasino.ServiceTests.TransactionServiceTest
 {
@@ -19,9 +19,11 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 				.UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenUserIdIsNull")
 				.Options;
 
+			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
+
 			using (var context = new CasinoContext(contextOptions))
 			{
-				var transactionService = new TransactionService(context);
+				var transactionService = new TransactionService(context, currencyServiceMock.Object);
 
 				await Assert.ThrowsExceptionAsync<ArgumentNullException>(
 					() => transactionService.GetUserTransactions(null)
@@ -36,18 +38,18 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 			.UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenNoSuchUserInDb")
 			.Options;
 
+			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
+
 			var userId = "noId";
 
 			using (var context = new CasinoContext(contextOptions))
 			{
-				var transactionService = new TransactionService(context);
+				var transactionService = new TransactionService(context, currencyServiceMock.Object);
 
 				await Assert.ThrowsExceptionAsync<ArgumentNullException>(
 					() => transactionService.GetUserTransactions(userId)
 				);
 			}
 		}
-
-	
 	}
 }

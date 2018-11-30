@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using WebCasino.DataContext;
 using WebCasino.Entities;
 using WebCasino.Service;
+using WebCasino.Service.Abstract;
 
 namespace WebCasino.ServiceTests.TransactionServiceTest
 {
@@ -19,9 +21,11 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 				.UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenTransactionTypeNameIsNull")
 				.Options;
 
+			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
+
 			using (var context = new CasinoContext(contextOptions))
 			{
-				var transactionService = new TransactionService(context);
+				var transactionService = new TransactionService(context, currencyServiceMock.Object);
 
 				await Assert.ThrowsExceptionAsync<ArgumentNullException>(
 					() => transactionService.GetTransactionByType(null)
@@ -36,11 +40,13 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 				.UseInMemoryDatabase(databaseName: "ThrowArgumentOutOfRangeException_WhenTransactionTypeNameLengthIsLessThenThree")
 				.Options;
 
+			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
+
 			var transactionType = "12";
 
 			using (var context = new CasinoContext(contextOptions))
 			{
-				var transactionService = new TransactionService(context);
+				var transactionService = new TransactionService(context, currencyServiceMock.Object);
 
 				await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(
 					() => transactionService.GetTransactionByType(transactionType)
@@ -55,11 +61,13 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 				.UseInMemoryDatabase(databaseName: "ThrowArgumentOutOfRangeException_WhenTransactionTypeNameBiggerThenTen")
 				.Options;
 
+			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
+
 			var transactionType = new string('-', 21);
 
 			using (var context = new CasinoContext(contextOptions))
 			{
-				var transactionService = new TransactionService(context);
+				var transactionService = new TransactionService(context, currencyServiceMock.Object);
 
 				await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(
 					() => transactionService.GetTransactionByType(transactionType)
@@ -74,11 +82,13 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 			.UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenTransactionTypeTypeCountAreEqualZero")
 			.Options;
 
+			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
+
 			var transactionType = "NoSuchTransaction";
 
 			using (var context = new CasinoContext(contextOptions))
 			{
-				var transactionService = new TransactionService(context);
+				var transactionService = new TransactionService(context, currencyServiceMock.Object);
 
 				await Assert.ThrowsExceptionAsync<ArgumentNullException>(
 					() => transactionService.GetTransactionByType(transactionType)
@@ -86,13 +96,14 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 			}
 		}
 
-
 		[TestMethod]
 		public async Task ReturnTransactionByType()
 		{
 			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
 			.UseInMemoryDatabase(databaseName: "ReturnTransactionByType")
 			.Options;
+
+			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
 
 			string userId = "id";
 			double originalAmount = 1;
@@ -114,7 +125,7 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 
 			using (var context = new CasinoContext(contextOptions))
 			{
-				var transactionService = new TransactionService(context);
+				var transactionService = new TransactionService(context, currencyServiceMock.Object);
 				await context.Transactions.AddAsync(newTransaction);
 				context.BankCards.Add(newBankCard);
 				context.SaveChanges();
