@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCasino.Service", "WebCas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCasino.ServiceTests", "WebCasino.ServiceTests\WebCasino.ServiceTests.csproj", "{05BC315A-6363-4896-8422-8D6E472B578C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCasino.ControllerTests", "WebCasino.ControllerTests\WebCasino.ControllerTests.csproj", "{F59F3409-5A09-40BB-9CA5-48D30FCC3001}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCasino.ControllerTests", "WebCasino.ControllerTests\WebCasino.ControllerTests.csproj", "{F59F3409-5A09-40BB-9CA5-48D30FCC3001}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

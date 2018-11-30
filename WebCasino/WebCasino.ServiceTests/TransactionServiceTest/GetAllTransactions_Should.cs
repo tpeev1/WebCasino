@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+using Moq;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
 using WebCasino.DataContext;
 using WebCasino.Entities;
 using WebCasino.Service;
+using WebCasino.Service.Abstract;
 
 namespace WebCasino.ServiceTests.TransactionServiceTest
 {
@@ -13,52 +15,41 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 	public class GetAllTransactions_Should
 	{
 		[TestMethod]
-		public async Task ThrowEntityNotFoundException_WhenNoTransactionIsFound()
+		public async Task ReturnAllTransactions()
 		{
 			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-			.UseInMemoryDatabase(databaseName: "ThrowEntityNotFoundException_WhenNoTransactionIsFound")
-			.Options;
+				.UseInMemoryDatabase(databaseName: "ReturnAllTransactions")
+				.Options;
 
-			using (var context = new CasinoContext(contextOptions))
-			{
-				var transactionService = new TransactionService(context);
+			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
 
-				await Assert.ThrowsExceptionAsync<ArgumentNullException>(
-					() => transactionService.GetAllTransactions()
-				);
-			}
-		}
+			var serviceReturn = new ConcurrentDictionary<string, double>();
 
-		[TestMethod]
-		public async Task ReturnTransaction()
-		{
-			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-			.UseInMemoryDatabase(databaseName: "ReturnTransaction")
-			.Options;
-
-			string userId = "id";
-			double originalAmount = 1;
-			var newBankCard = new BankCard()
-			{
-				Id = "id1",
-			};
-
-			int transactionTypeId = 1;
+			string userId = "userId";
+			double amountInUserCurrency = 50;
 			string description = "1234567890";
 
+			var newTransaction = new Transaction()
+			{
+				UserId = userId,
+				OriginalAmount = amountInUserCurrency,
+				Description = description,
+				TransactionTypeId = 1,
+			};
+
 			using (var context = new CasinoContext(contextOptions))
 			{
-				context.BankCards.Add(newBankCard);
+				context.Transactions.Add(newTransaction);
+				await context.SaveChangesAsync();
 
-				context.SaveChanges();
-
-				var transactionService = new TransactionService(context);
-
-				await transactionService.AddTransaction(userId, originalAmount, newBankCard, transactionTypeId, description);
+				var transactionService = new TransactionService(context, currencyServiceMock.Object);
 
 				var transactions = await transactionService.GetAllTransactions();
 
 				Assert.AreEqual(1, transactions.Count());
+				Assert.IsTrue(transactions.First(u => u.UserId == userId).UserId == userId);
+				Assert.IsTrue(transactions.First(u => u.UserId == userId).OriginalAmount == amountInUserCurrency);
+				Assert.IsTrue(transactions.First(u => u.UserId == userId).Description == description);
 			}
 		}
 	}

@@ -1,0 +1,14 @@
+﻿@model IEnumerable<CardViewModel>
+@{
+    ViewData["Title"] = "_CardsPartial";
+}
+
+<form action="/" method="post"></form>
+
+@foreach(var card in Model)
+{
+    <p>@card.CardId</p>
+    <p>@card.MaskedNumber</p>
+    <p>@card.MoneyAdded</p>
+}
+
