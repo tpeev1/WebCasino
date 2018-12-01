@@ -17,7 +17,7 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 
 		public async Task<IActionResult> History()
 		{
-			var allTransactionsQuery = await this.service.GetAllTransactions();
+			var allTransactionsQuery = await this.service.GetAllTransactionsInfo();
 
 			var viewModel = new TransactionHistoryViewModel(allTransactionsQuery);
 

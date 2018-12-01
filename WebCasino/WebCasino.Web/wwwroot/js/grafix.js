@@ -106,8 +106,8 @@ demo = {
 			options: gradientChartOptionsConfiguration
 		});
 	},
-
-	initDashboardPageCharts: function () {
+	//sending only DailyWins
+	initDashboardPageCharts: function (dailyWinsData) {
 		gradientChartOptionsConfigurationWithTooltipBlue = {
 			maintainAspectRatio: false,
 			legend: {
@@ -490,7 +490,7 @@ demo = {
 				display: false
 			},
 			data: {
-				labels: ['USA', 'GER', 'AUS', 'UK', 'RO', 'BR'],
+				labels: ['USA', 'GBP', 'EUR', 'BGN'],
 				datasets: [{
 					label: "Countries",
 					fill: true,
@@ -500,7 +500,7 @@ demo = {
 					borderWidth: 2,
 					borderDash: [],
 					borderDashOffset: 0.0,
-					data: [53, 20, 10, 80, 100, 45],
+					data: dailyWinsData,
 				}]
 			},
 			options: gradientBarChartConfiguration

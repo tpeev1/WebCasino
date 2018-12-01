@@ -1,4 +1,6 @@
-﻿<div id="open-admin-nav" class="fixed-plugin float-left">
+﻿@model WebCasino.Web.Areas.Administration.Models.DashboardViewModel
+
+<div id="open-admin-nav" class="fixed-plugin float-left">
 	<div class="dropdown show-dropdown">
 		<a href="#" class="open-admin-menu" onclick="openNav()">
 			<i class="fa fa-cog fa-2x"> </i>
@@ -24,7 +26,7 @@
 				<div class="card card-chart">
 					<div class="card-header">
 						<h5 class="card-category">Total Wins</h5>
-						<h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> 763,215</h3>
+						<h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> @Model.TotalWins</h3>
 					</div>
 				</div>
 			</div>
@@ -32,7 +34,7 @@
 				<div class="card card-chart">
 					<div class="card-header">
 						<h5 class="card-category">Total Stakes</h5>
-						<h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> 763,215</h3>
+						<h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> @Model.TotalStakes</h3>
 					</div>
 				</div>
 			</div>
@@ -40,7 +42,7 @@
 				<div class="card card-chart">
 					<div class="card-header">
 						<h5 class="card-category">Total Users</h5>
-						<h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> 763,215</h3>
+						<h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> @Model.TotalUsers</h3>
 					</div>
 				</div>
 			</div>
@@ -93,8 +95,8 @@
 			<div class="col-lg-4">
 				<div class="card card-chart">
 					<div class="card-header">
-						<h5 class="card-category">Total Wins</h5>
-						<h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> 763,215</h3>
+						<h5 class="card-category">Six Months Wins</h5>
+						<h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> @Model.SixMonthsTotalWins</h3>
 					</div>
 					<div class="card-body">
 						<div class="chart-area">
@@ -107,7 +109,7 @@
 				<div class="card card-chart">
 					<div class="card-header">
 						<h5 class="card-category">Daily Wins</h5>
-						<h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info"></i> 3,500€</h3>
+						<h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info"></i> @Model.DaylyWins.DaylyTotalUSD</h3>
 					</div>
 					<div class="card-body">
 						<div class="chart-area">
@@ -119,8 +121,8 @@
 			<div class="col-lg-4">
 				<div class="card card-chart">
 					<div class="card-header">
-						<h5 class="card-category">Completed Score</h5>
-						<h3 class="card-title"><i class="tim-icons icon-send text-success"></i> 12,100K</h3>
+						<h5 class="card-category">Six Months Stakes</h5>
+						<h3 class="card-title"><i class="tim-icons icon-send text-success"></i> @Model.SixMonthsTotalStakes</h3>
 					</div>
 					<div class="card-body">
 						<div class="chart-area">
@@ -137,8 +139,13 @@
 
 <script>
 	$(document).ready(function () {
-		// Javascript method's body can be found in assets/js/demos.js
-		demo.initDashboardPageCharts();
+		let daylyUSD = @Html.Raw(Json.Serialize(Model.DaylyWins.DaylyTotalUSD));
+		let daylyGBP = @Html.Raw(Json.Serialize(Model.DaylyWins.DaylyWinsGBP));
+		let daylyEUR = @Html.Raw(Json.Serialize(Model.DaylyWins.DaylyWinsEUR));
+		let daylyBGN = @Html.Raw(Json.Serialize(Model.DaylyWins.DaylyWinsBGN));
+
+		let daylyArr = [daylyUSD, daylyGBP, daylyEUR, daylyBGN];
+		demo.initDashboardPageCharts(daylyArr);
 
 	});
 </script>

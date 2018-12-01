@@ -6,7 +6,7 @@ namespace WebCasino.Service.Abstract
 {
 	public interface ITransactionService
     {
-		Task<IEnumerable<Transaction>> GetAllTransactions();
+		Task<IEnumerable<Transaction>> GetAllTransactionsInfo();
 
 		Task<IEnumerable<Transaction>> GetUserTransactions(string userId);
 

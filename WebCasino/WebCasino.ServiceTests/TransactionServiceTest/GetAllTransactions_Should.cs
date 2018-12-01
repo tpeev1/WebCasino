@@ -44,7 +44,7 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 
 				var transactionService = new TransactionService(context, currencyServiceMock.Object);
 
-				var transactions = await transactionService.GetAllTransactions();
+				var transactions = await transactionService.GetAllTransactionsInfo();
 
 				Assert.AreEqual(1, transactions.Count());
 				Assert.IsTrue(transactions.First(u => u.UserId == userId).UserId == userId);

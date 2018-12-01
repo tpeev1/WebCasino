@@ -211,9 +211,13 @@ namespace WebCasino.Service
 			return newTransaction;
 		}
 
-		public async Task<IEnumerable<Transaction>> GetAllTransactions()
+		public async Task<IEnumerable<Transaction>> GetAllTransactionsInfo()
 		{
-			var transactionsQuery = await dbContext.Transactions.ToListAsync();
+			var transactionsQuery = await dbContext
+				.Transactions
+				.Include(tt => tt.TransactionType)
+				.Include(u => u.User.Wallet.Currency)
+				.ToListAsync();
 
 			return transactionsQuery;
 		}

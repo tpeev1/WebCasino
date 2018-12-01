@@ -35,6 +35,7 @@ namespace WebCasino.Web
 			services.AddScoped<IWalletService, WalletService>();
 			services.AddScoped<IUserWrapper, UserWrapper>();
 			services.AddScoped<IUserService, UserService>();
+			services.AddScoped<ITransactionService, TransactionService>();
 
 			services.AddHttpClient<IHttpWrapper, HttpWrapper>();
 
