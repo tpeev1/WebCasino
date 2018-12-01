@@ -34,7 +34,6 @@
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
 #main {
 	transition: margin-left .5s;
-	padding: 20px;
 }
 
 .open-admin-menu {
@@ -51,6 +50,9 @@
 		}
 }
 
+.fixed-plugin {
+	left: 0;
+}
 /*
 	---------------------------
 	CHARTS
@@ -65,4 +67,9 @@
 	pointer-events: none;
 	visibility: hidden;
 	z-index: -1;
+}
+
+.chart-container {
+	width: 10px;
+	height: 600px
 }

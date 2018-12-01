@@ -85,6 +85,7 @@ demo = {
 		myChart = new Chart(ctx, {
 			type: 'line',
 			responsive: true,
+
 			data: {
 				labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 				datasets: [{
@@ -99,7 +100,7 @@ demo = {
 					fill: true,
 					backgroundColor: gradientFill,
 					borderWidth: 2,
-					data: [542, 480, 430, 550, 530, 453, 380, 434, 568, 610, 700, 630]
+					data: [542, 480, 430, 550, 10030, 453, 380, 434, 568, 610, 700, 630]
 				}]
 			},
 			options: gradientChartOptionsConfiguration
@@ -427,8 +428,10 @@ demo = {
 		gradientStroke.addColorStop(0, 'rgba(119,52,169,0)'); //purple colors
 		var config = {
 			type: 'line',
+
 			data: {
 				labels: chart_labels,
+
 				datasets: [{
 					label: "My First dataset",
 					fill: true,
