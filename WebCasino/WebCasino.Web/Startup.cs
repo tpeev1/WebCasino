@@ -34,6 +34,7 @@ namespace WebCasino.Web
             services.AddScoped<IWalletService, WalletService>();
             services.AddScoped<IUserWrapper, UserWrapper>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICardService, CardService>();
 
             // Add application services.
 
@@ -60,6 +61,10 @@ namespace WebCasino.Web
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

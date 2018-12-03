@@ -15,6 +15,10 @@
     <ProjectReference Include="..\WebCasino.DataContext\WebCasino.DataContext.csproj" />
     <ProjectReference Include="..\WebCasino.Entities\WebCasino.Entities.csproj" />
     <ProjectReference Include="..\WebCasino.Service\WebCasino.Service.csproj" />
+  </ItemGroup> 
+
+  <ItemGroup>
+    <Folder Include="wwwroot\card-master\card-master\src\scss\bourbon\" />
   </ItemGroup>
 
 </Project>

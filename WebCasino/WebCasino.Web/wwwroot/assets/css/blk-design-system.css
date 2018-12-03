@@ -294,7 +294,8 @@ input,
 button,
 select,
 optgroup,
-textarea {
+textarea,
+select{
   margin: 0;
   font-family: inherit;
   font-size: inherit;
@@ -302,7 +303,8 @@ textarea {
 }
 
 button,
-input {
+input,
+select{
   overflow: visible;
 }
 
