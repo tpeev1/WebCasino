@@ -36,6 +36,7 @@ namespace WebCasino.Web
 			services.AddScoped<IUserWrapper, UserWrapper>();
 			services.AddScoped<IUserService, UserService>();
 			services.AddScoped<ITransactionService, TransactionService>();
+			services.AddScoped<IAdminDashboard, AdminDashboardService>();
 
 			services.AddHttpClient<IHttpWrapper, HttpWrapper>();
 

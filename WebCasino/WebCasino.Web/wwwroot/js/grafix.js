@@ -100,14 +100,14 @@ demo = {
 					fill: true,
 					backgroundColor: gradientFill,
 					borderWidth: 2,
-					data: [542, 480, 430, 550, 10030, 453, 380, 434, 568, 610, 700, 630]
+					data: [10000, 480, 430, 550, 10030, 453, 380, 434, 568, 610, 700, 630]
 				}]
 			},
 			options: gradientChartOptionsConfiguration
 		});
 	},
 	//sending only DailyWins
-	initDashboardPageCharts: function (dailyWinsData) {
+	initDashboardPageCharts: function (dailyWinsData, sixMonthsWins, sixMonthWinsMonths, sixMonthsStakesValus, sixMonthStakesMonths, oneYearWinValues, oneYearWinMonths) {
 		gradientChartOptionsConfigurationWithTooltipBlue = {
 			maintainAspectRatio: false,
 			legend: {
@@ -182,8 +182,8 @@ demo = {
 						zeroLineColor: "transparent",
 					},
 					ticks: {
-						suggestedMin: 60,
-						suggestedMax: 125,
+						suggestedMin: 1,
+						suggestedMax: Math.max(...sixMonthsWins),
 						padding: 20,
 						fontColor: "#9a9a9a"
 					}
@@ -279,7 +279,7 @@ demo = {
 					},
 					ticks: {
 						suggestedMin: 50,
-						suggestedMax: 125,
+						suggestedMax: Math.max(...sixMonthsStakesValus),
 						padding: 20,
 						fontColor: "#9e9e9e"
 					}
@@ -355,7 +355,7 @@ demo = {
 		gradientStroke.addColorStop(0, 'rgba(119,52,169,0)'); //purple colors
 
 		var data = {
-			labels: ['JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+			labels: sixMonthWinsMonths,
 			datasets: [{
 				label: "Data",
 				fill: true,
@@ -371,7 +371,7 @@ demo = {
 				pointHoverRadius: 4,
 				pointHoverBorderWidth: 15,
 				pointRadius: 4,
-				data: [80, 100, 70, 80, 120, 80],
+				data: sixMonthsWins,
 			}]
 		};
 
@@ -390,7 +390,7 @@ demo = {
 		gradientStroke.addColorStop(0, 'rgba(66,134,121,0)'); //green colors
 
 		var data = {
-			labels: ['JUL', 'AUG', 'SEP', 'OCT', 'NOV'],
+			labels: sixMonthStakesMonths,
 			datasets: [{
 				label: "My First dataset",
 				fill: true,
@@ -406,7 +406,7 @@ demo = {
 				pointHoverRadius: 4,
 				pointHoverBorderWidth: 15,
 				pointRadius: 4,
-				data: [90, 27, 60, 12, 80],
+				data: sixMonthsStakesValus,
 			}]
 		};
 
@@ -460,7 +460,7 @@ demo = {
 			myChartData.update();
 		});
 		$("#1").click(function () {
-			var chart_data = [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120];
+			var chart_data = [1000, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120];
 			var data = myChartData.config.data;
 			data.datasets[0].data = chart_data;
 			data.labels = chart_labels;
@@ -468,7 +468,7 @@ demo = {
 		});
 
 		$("#2").click(function () {
-			var chart_data = [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130];
+			var chart_data = oneYearWinValues;
 			var data = myChartData.config.data;
 			data.datasets[0].data = chart_data;
 			data.labels = chart_labels;

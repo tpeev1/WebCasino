@@ -14,38 +14,49 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 	public class HomeController : Controller
 	{
 		private readonly ITransactionService transactionService;
-        private readonly IAdminDashboard adminDashboardService;
+		private readonly IAdminDashboard adminDashboardService;
 		private readonly IUserService userService;
 
-		public HomeController(ITransactionService transactionService, IUserService userService)
+		public HomeController(ITransactionService transactionService, IUserService userService, IAdminDashboard adminDashboardService)
 		{
 			this.transactionService = transactionService ?? throw new System.ArgumentNullException(nameof(transactionService));
 			this.userService = userService ?? throw new System.ArgumentNullException(nameof(userService));
+			this.adminDashboardService = adminDashboardService ?? throw new ArgumentNullException(nameof(adminDashboardService));
 		}
 
 		public async Task<IActionResult> Index()
 		{
-			var allTransactionsQuery = await this.transactionService.GetAllTransactionsInfo();
-			
-            var totalWins = await adminDashboardService.GetTotalWinsCount();
-            var totalStakes = await adminDashboardService.GetTotalStakesCount();
+			var totalWins = await adminDashboardService.GetTotaTransactionsByTypeCount("Win");
+			var totalStakes = await adminDashboardService.GetTotaTransactionsByTypeCount("Stake");
 
-            var allUsers = await this.userService.GetAllUsers();
-            var totalUsers = allUsers.Count();
+			var allUsers = await this.userService.GetAllUsers();
+			var totalUsers = allUsers.Count();
 
-            var allCurrencyDaylyWins = await this.adminDashboardService
-                .GetTransactionsCurrencyDaylyWins(DateTime.Now.Day);
+			var allCurrencyDaylyWins = await this.adminDashboardService
+				.GetTransactionsCurrencyDaylyWins(DateTime.Now.Day);
 
-            var sixMonthsWins = await this.adminDashboardService.GetMonthsTransactions(DateTime.Now, "Win",6);
-            var sixMonthsStakes = await this.adminDashboardService.GetMonthsTransactions(DateTime.Now, "Stake",6);
+			var sixMonthsTotalWins = await this.adminDashboardService.GetMonthsTransactions(DateTime.Now, "Win", 5);
+			var sixMonthsTotalStakes = await this.adminDashboardService.GetMonthsTransactions(DateTime.Now, "Stake", 5);
 
-            var viewModel = new DashboardViewModel()
+			//TODO: Find a way to incorporate this two in to model
+			var oneYearTransactions = await this.transactionService.GetAllTransactionsInfo();
+			var oneYearUsersCount = await this.userService.GetAllUsers();
+
+			var oneYearWinsCount = await this.adminDashboardService.GetMonthsTransactions(DateTime.Now, "Win", 11);
+
+			var sixMonthsWins = sixMonthsTotalWins.ValuesByMonth;
+
+			var viewModel = new DashboardViewModel()
 			{
 				TotalWins = totalWins,
 				TotalStakes = totalStakes,
 				TotalUsers = totalUsers,
-				SixMonthsTotalWins = sixMonthsWins,
-				SixMonthsTotalStakes = sixMonthsStakes,
+				SixMonthsTotalWins = sixMonthsTotalWins.ValuesByMonth.Where(v => v.Value > 0).Count(),
+				SixMonthsTotalStakes = sixMonthsTotalStakes.ValuesByMonth.Where(v => v.Value > 0).Count(),
+				SixMonthsWins = new SixMonthsModel(sixMonthsTotalWins.ValuesByMonth),
+				SixMonthsStakes = new SixMonthsModel(sixMonthsTotalStakes.ValuesByMonth),
+
+				OneYearWins = new SixMonthsModel(oneYearWinsCount.ValuesByMonth),
 				DaylyWins = new DaylyWinsModel()
 				{
 					DaylyTotalUSD = allCurrencyDaylyWins.DaylyTotalUSD,

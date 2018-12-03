@@ -139,13 +139,28 @@
 
 <script>
 	$(document).ready(function () {
+		console.debug();
 		let daylyUSD = @Html.Raw(Json.Serialize(Model.DaylyWins.DaylyTotalUSD));
 		let daylyGBP = @Html.Raw(Json.Serialize(Model.DaylyWins.DaylyWinsGBP));
 		let daylyEUR = @Html.Raw(Json.Serialize(Model.DaylyWins.DaylyWinsEUR));
 		let daylyBGN = @Html.Raw(Json.Serialize(Model.DaylyWins.DaylyWinsBGN));
 
 		let daylyArr = [daylyUSD, daylyGBP, daylyEUR, daylyBGN];
-		demo.initDashboardPageCharts(daylyArr);
+
+		let sixMonthsWins = @Html.Raw(Json.Serialize(Model.SixMonthsWins.monthValue));
+		let sixMonthsStakes = @Html.Raw(Json.Serialize(Model.SixMonthsWins.monthValue));
+		let oneYearWins = @Html.Raw(Json.Serialize(Model.OneYearWins.monthValue));
+
+		let sixMonthWinsMonths = Object.keys(sixMonthsWins);
+		let sixMonthsWinsValus = Object.values(sixMonthsWins);
+
+		let sixMonthStakesMonths = Object.keys(sixMonthsStakes);
+		let sixMonthsStakesValus = Object.values(sixMonthsStakes);
+
+		let oneYearWinMonths = Object.keys(oneYearWins);
+		let oneYearWinValues = Object.values(oneYearWins);
+
+		demo.initDashboardPageCharts(daylyArr, sixMonthsWinsValus, sixMonthWinsMonths, sixMonthsStakesValus, sixMonthStakesMonths, oneYearWinValues, oneYearWinMonths);
 
 	});
 </script>
