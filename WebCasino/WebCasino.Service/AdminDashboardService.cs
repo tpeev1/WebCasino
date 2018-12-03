@@ -18,11 +18,9 @@ namespace WebCasino.Service
             this.dbContext = dbContext ?? throw new NullReferenceException();
         }
 
-       
-
         public async Task<MonthsTransactionsModel> GetMonthsTransactions(DateTime timePeriod, string transactionType, int monthCount)
         {
-            var winsQuery = await this.dbContext.Transactions
+            var dbQuery = await this.dbContext.Transactions
                 .Include(tt => tt.TransactionType.Name)
                 .Where(t => t.TransactionType.Name == transactionType)
                 .ToListAsync();
@@ -35,7 +33,7 @@ namespace WebCasino.Service
                 var monthly = new MonthVallueModel();
 
                 monthly.MonthValue = i;
-                monthly.Value = winsQuery
+                monthly.Value = dbQuery
                 .Where(d => d.CreatedOn.Value.Month == i).Count();
 
                 resultModel.ValuesByMonth.Add(monthly); 

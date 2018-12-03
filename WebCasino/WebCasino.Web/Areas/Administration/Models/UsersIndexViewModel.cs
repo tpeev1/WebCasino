@@ -6,16 +6,32 @@ namespace WebCasino.Web.Areas.Administration.Models
 {
 	public class UsersIndexViewModel
 	{
-		public readonly IEnumerable<UserViewModel> users;
+		public  IEnumerable<User> Users { get; set; }
 
-		public UsersIndexViewModel(IEnumerable<User> users)
+        public int TotalPages { get; set; }
+
+        public int Page { get; set; } = 1;
+
+        public int PreviousPage => this.Page ==
+            1 ? 1 : this.Page - 1;
+
+        public int NextPage => this.Page ==
+            this.TotalPages ? this.TotalPages : this.Page + 1;
+
+        public string SearchText { get; set; } = string.Empty;
+
+        public UsersIndexViewModel()
+        {
+                
+        }
+        public UsersIndexViewModel(IEnumerable<User> users)
 		{
-			this.users = users.Select(u => new UserViewModel()
-			{
-				Alias = u.Alias,
-				Wallet = u.Wallet,
-				Transactions = u.Transactions
-			});
+			//this.Users = users.Select(u => new UserViewModel()
+			//{
+			//	Alias = u.Alias,
+			//	Wallet = u.Wallet,
+			//	Transactions = u.Transactions
+			//});
 		}
 	}
 }

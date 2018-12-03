@@ -31,10 +31,25 @@ namespace WebCasino.Service
 
         }
 
-        public async Task<IEnumerable<User>> GetAllUsers()
+        public async Task<IEnumerable<User>> GetAllUsers(int page = 1, int pageSize = 10)
         {
-            return await this.context.Users.Where(us => !us.IsDeleted).ToListAsync();
+            return await this.context.Users.Where(us => !us.IsDeleted)
+                .OrderByDescending(x => x.Id)
+                .Skip((page - 1) * pageSize).Take(pageSize)
+                .ToListAsync();
         }
+
+        public IEnumerable<User> ListByContainingText(string searchText, int page = 1, int pageSize = 10)
+        {
+            return this.context.Users.Where(m => m.IsDeleted == false)
+                .Where(m => m.Email.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)).OrderByDescending(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        }
+
+        public int TotalContainingText(string searchText)
+        {
+            return this.context.Users.Where(m => m.Email.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)).ToList().Count();
+        }
+
 
         public async Task<User> LockUser(string id)
         {
@@ -76,6 +91,11 @@ namespace WebCasino.Service
 
             ServiceValidator.ObjectIsNotEqualNull(user);
             return user;
+        }
+
+        public async Task<int> Total()
+        {
+            return await this.context.Users.CountAsync();
         }
     }
 }
