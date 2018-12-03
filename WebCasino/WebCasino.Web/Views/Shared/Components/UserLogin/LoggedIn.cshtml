@@ -8,9 +8,12 @@
         <li>
             <a class="nav-link" asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @Model.Alias!</a>
         </li>
-        <li>
-            <a class="nav-link" asp-area="" asp-controller="Wallet" asp-action="Index">Balance: @Model.Balance @Model.Currency</a>
-        </li>
+        @if (User.IsInRole("Player"))
+        {
+            <li>
+                <a class="nav-link" asp-area="" asp-controller="Wallet" asp-action="Index">Balance: @Model.Balance @Model.Currency</a>
+            </li>
+        }
         <li>
             <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
         </li>

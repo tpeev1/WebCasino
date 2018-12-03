@@ -174,6 +174,17 @@ namespace WebCasino.DataContext
 				RoleId = 1.ToString(),
 				UserId = adminUser.Id
 			});
+
+            var wallet = new Wallet
+            {
+                Id = "admin-wallet",
+                CurrencyId = 1,
+                UserId = adminUser.Id,
+                DisplayBalance = 0,
+                NormalisedBalance = 0
+            };
+
+            builder.Entity<Wallet>().HasData(wallet);
 		}
 	}
 }

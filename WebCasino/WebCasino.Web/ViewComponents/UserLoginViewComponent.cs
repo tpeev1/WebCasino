@@ -26,11 +26,14 @@ namespace WebCasino.Web.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            if(signInManager.IsSignedIn(HttpContext.User))
+            if (signInManager.IsSignedIn(HttpContext.User))
             {
                 var userId = this.userManager.GetUserId(HttpContext.User);
                 var user = await userService.RetrieveUser(userId);
+
                 return View("LoggedIn", new UserLogginViewModel(user));
+
+
             }
             else
             {
