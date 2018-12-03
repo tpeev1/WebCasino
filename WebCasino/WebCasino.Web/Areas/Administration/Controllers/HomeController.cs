@@ -14,6 +14,7 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 	public class HomeController : Controller
 	{
 		private readonly ITransactionService transactionService;
+        private readonly IAdminDashboard adminDashboardService;
 		private readonly IUserService userService;
 
 		public HomeController(ITransactionService transactionService, IUserService userService)
@@ -25,49 +26,20 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 		public async Task<IActionResult> Index()
 		{
 			var allTransactionsQuery = await this.transactionService.GetAllTransactionsInfo();
-			var allUsers = await this.userService.GetAllUsers();
+			
+            var totalWins = await adminDashboardService.GetTotalWinsCount();
+            var totalStakes = await adminDashboardService.GetTotalStakesCount();
 
-			var totalWins = allTransactionsQuery.Where(t => t.TransactionType.Name == "Win").Count();
-			var totalStakes = allTransactionsQuery.Where(t => t.TransactionType.Name == "Stake").Count();
-			var totalUsers = allUsers.Count();
+            var allUsers = await this.userService.GetAllUsers();
+            var totalUsers = allUsers.Count();
 
-			var sixMonthsWins = allTransactionsQuery
-				.Where(t => t.TransactionType.Name == "Win")
-				.Where(d => d.CreatedOn.Value.Month >= DateTime.Now.Month - 6
-								&& d.CreatedOn.Value.Month <= DateTime.Now.Month).Count();
+            var allCurrencyDaylyWins = await this.adminDashboardService
+                .GetTransactionsCurrencyDaylyWins(DateTime.Now.Day);
 
-			var sixMonthsStakes = allTransactionsQuery
-				.Where(t => t.TransactionType.Name == "Stake")
-				.Where(d => d.CreatedOn.Value.Month >= DateTime.Now.Month - 6
-								&& d.CreatedOn.Value.Month <= DateTime.Now.Month).Count();
+            var sixMonthsWins = await this.adminDashboardService.GetMonthsTransactions(DateTime.Now, "Win",6);
+            var sixMonthsStakes = await this.adminDashboardService.GetMonthsTransactions(DateTime.Now, "Stake",6);
 
-			var daylyTotalUsd = allTransactionsQuery
-				.Where(tt => tt.TransactionType.Name == "Win")
-				.Where(td => td.CreatedOn.Value.Month == DateTime.Now.Month
-							&& td.CreatedOn.Value.Day == DateTime.Now.Day)
-				.Select(t => t.NormalisedAmount).Sum();
-
-			var daylyWinsBGN = allTransactionsQuery
-				.Where(tt => tt.TransactionType.Name == "Win")
-				.Where(c => c.User.Wallet.Currency.Name == "BGN")
-				.Select(t => t.OriginalAmount).Sum();
-
-			var daylyWinsUSD = allTransactionsQuery
-				.Where(tt => tt.TransactionType.Name == "Win")
-				.Where(c => c.User.Wallet.Currency.Name == "USD")
-				.Select(t => t.OriginalAmount).Sum();
-
-			var daylyWinsGBP = allTransactionsQuery
-				.Where(tt => tt.TransactionType.Name == "Win")
-				.Where(c => c.User.Wallet.Currency.Name == "GBP")
-				.Select(t => t.OriginalAmount).Sum();
-
-			var daylyWinsEUR = allTransactionsQuery
-				.Where(tt => tt.TransactionType.Name == "Win")
-				.Where(c => c.User.Wallet.Currency.Name == "EUR")
-				.Select(t => t.OriginalAmount).Sum();
-
-			var viewModel = new DashboardViewModel()
+            var viewModel = new DashboardViewModel()
 			{
 				TotalWins = totalWins,
 				TotalStakes = totalStakes,
@@ -76,11 +48,11 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 				SixMonthsTotalStakes = sixMonthsStakes,
 				DaylyWins = new DaylyWinsModel()
 				{
-					DaylyTotalUSD = daylyTotalUsd,
-					DaylyWinsBGN = daylyWinsBGN,
-					DaylyWinsEUR = daylyWinsEUR,
-					DaylyWinsGBP = daylyWinsGBP,
-					DaylyWinsUSD = daylyWinsUSD
+					DaylyTotalUSD = allCurrencyDaylyWins.DaylyTotalUSD,
+					DaylyWinsBGN = allCurrencyDaylyWins.DaylyWinsBGN,
+					DaylyWinsEUR = allCurrencyDaylyWins.DaylyWinsEUR,
+					DaylyWinsGBP = allCurrencyDaylyWins.DaylyWinsGBP,
+					DaylyWinsUSD = allCurrencyDaylyWins.DaylyWinsUSD
 				}
 			};
 

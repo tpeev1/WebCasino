@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebCasino.Entities;
+using WebCasino.Service.DTO.Canvas;
 
 namespace WebCasino.Service.Abstract
 {

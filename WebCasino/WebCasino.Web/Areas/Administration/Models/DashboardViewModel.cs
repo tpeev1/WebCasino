@@ -1,4 +1,5 @@
-﻿using WebCasino.Web.Areas.Administration.Models.ChartModels;
+﻿using WebCasino.Service.DTO.Canvas;
+using WebCasino.Web.Areas.Administration.Models.ChartModels;
 
 namespace WebCasino.Web.Areas.Administration.Models
 {
@@ -12,8 +13,8 @@ namespace WebCasino.Web.Areas.Administration.Models
 		public int TotalStakes { get; set; }
 		public int TotalUsers { get; set; }
 
-		public int SixMonthsTotalWins { get; set; }
-		public int SixMonthsTotalStakes { get; set; }
+		public MonthsTransactionsModel SixMonthsTotalWins { get; set; }
+		public MonthsTransactionsModel SixMonthsTotalStakes { get; set; }
 
 		public DaylyWinsModel DaylyWins { get; set; }
 	}

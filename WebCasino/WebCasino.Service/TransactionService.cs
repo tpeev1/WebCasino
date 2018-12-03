@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebCasino.DataContext;
 using WebCasino.Entities;
 using WebCasino.Service.Abstract;
+using WebCasino.Service.DTO.Canvas;
 using WebCasino.Service.Exceptions;
 using WebCasino.Service.Utility.Validator;
 
@@ -222,22 +224,22 @@ namespace WebCasino.Service
 			return transactionsQuery;
 		}
 
-		public async Task<IEnumerable<Transaction>> GetTransactionByType(string transactionTypeName)
-		{
-			ServiceValidator.IsInputStringEmptyOrNull(transactionTypeName);
-			ServiceValidator.CheckStringLength(transactionTypeName, 3, 20);
+        public async Task<IEnumerable<Transaction>> GetTransactionByType(string transactionTypeName)
+        {
+            ServiceValidator.IsInputStringEmptyOrNull(transactionTypeName);
+            ServiceValidator.CheckStringLength(transactionTypeName, 3, 20);
 
-			var transactionsQuery = await this.dbContext
-				.Transactions
-				.Where(t => t.TransactionType.Name == transactionTypeName && t.IsDeleted != true)
-				.ToListAsync();
+            var transactionsQuery = await this.dbContext
+                .Transactions
+                .Where(t => t.TransactionType.Name == transactionTypeName && t.IsDeleted != true)
+                .ToListAsync();
 
-			ServiceValidator.ValueNotEqualZero(transactionsQuery.Count());
+            ServiceValidator.ValueNotEqualZero(transactionsQuery.Count());
 
-			return transactionsQuery;
-		}
+            return transactionsQuery;
+        }
 
-		public async Task<IEnumerable<Transaction>> GetUserTransactions(string userId)
+        public async Task<IEnumerable<Transaction>> GetUserTransactions(string userId)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(userId);
 
@@ -252,3 +254,8 @@ namespace WebCasino.Service
 		}
 	}
 }
+
+
+
+
+
