@@ -169,6 +169,7 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 			var currency = 1.50;
 			var serviceReturn = new ConcurrentDictionary<string, double>();
 			serviceReturn.TryAdd(baseCurrency, currency);
+
 			currencyServiceMock.Setup(s => s.GetRatesAsync()).Returns(Task.FromResult(serviceReturn));
 
 			string userId = "userId";
@@ -201,12 +202,13 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 				var originalAmount = savedTransaction.OriginalAmount;
 				var normalisedAmount = savedTransaction.NormalisedAmount;
 				var userAmount = context.Users.Find(userId).Wallet.NormalisedBalance;
+                var userDisplayAmount = context.Users.Find(userId).Wallet.DisplayBalance;
 				var winTransaction = savedTransaction.TransactionTypeId;
 
 				Assert.AreEqual(amountInUserCurrency, originalAmount);
-				Assert.AreEqual(amountInUserCurrency / currency, normalisedAmount);
-				Assert.AreEqual(amountInUserCurrency, userAmount);
-				Assert.AreEqual(amountInUserCurrency, userAmount);
+				Assert.AreEqual(amountInUserCurrency * currency, normalisedAmount);
+				Assert.AreEqual(amountInUserCurrency * currency, userAmount);
+				Assert.AreEqual(amountInUserCurrency, userDisplayAmount);
 				Assert.IsTrue(winTransaction == 3);
 			}
 		}
