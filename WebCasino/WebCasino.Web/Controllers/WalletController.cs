@@ -17,6 +17,7 @@ namespace WebCasino.Web.Controllers
         private readonly IWalletService walletService;
         private readonly IUserWrapper userWrapper;
         private readonly ICardService cardService;
+        private readonly ITransactionService transactionService;
 
         public WalletController(IWalletService walletService, IUserWrapper userWrapper, ICardService cardService)
         {
@@ -44,7 +45,7 @@ namespace WebCasino.Web.Controllers
                 var userId = this.userWrapper.GetUserId(HttpContext.User);
 
                 var date = DateTime.ParseExact(model.ExpirationDate.Replace(" ", string.Empty), "MM/yyyy", CultureInfo.InvariantCulture);
-                await this.cardService.AddCard(model.RealNumber.Replace(" ",string.Empty), userId, date);
+                await this.cardService.AddCard(model.RealNumber.Replace(" ", string.Empty), userId, date);
                 TempData["CardAdded"] = "Succesfulyy added new card";
                 return this.RedirectToAction("index", "wallet");
             }
@@ -52,6 +53,15 @@ namespace WebCasino.Web.Controllers
             TempData["CardAddedFail"] = "Failed to add card. Please try again with a different card";
             return this.RedirectToAction("index", "wallet");
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> AddFunds(CardTransactionViewModel model)
+        //{
+        //    if (this.ModelState.IsValid)
+        //    {
+        //        var userId = this.userWrapper.GetUserId(HttpContext.User);
+        //    }
+        //}
     }
 
 }

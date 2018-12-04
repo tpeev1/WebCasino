@@ -1,3 +1,11 @@
 ﻿body > nav {
     margin-bottom: 40px
 }
+
+select option {
+    border-color: #2b3553;
+    border-radius: .4285rem;
+    font-size: .75rem;
+    transition: color .3s ease-in-out,border-color .3s ease-in-out,background-color .3s ease-in-out;
+    background-color: #171941;
+}

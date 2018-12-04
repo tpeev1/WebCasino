@@ -13,16 +13,20 @@ namespace WebCasino.Web.Models.WalletViewModels
         {
             CurrencyId = wallet.CurrencyId;
             Wins = wallet.Wins;
+            DisplayBalance = wallet.DisplayBalance;
+            NormalizedBalance = wallet.NormalisedBalance;
             Cards = wallet.User.Cards.Select(card => new CardViewModel(card));
-            CardSelect = this.Cards.Select(card => new SelectListItem() { Text = card.MaskedNumber, Value = card.CardId });
+            
         }
 
         public int CurrencyId { get; set; }
 
         public double Wins { get; set; }
 
+        public double DisplayBalance { get; set; }
+        public double NormalizedBalance { get; private set; }
         public IEnumerable<CardViewModel> Cards { get; set; }
 
-        public IEnumerable<SelectListItem> CardSelect { get; set; }
+
     }
 }
