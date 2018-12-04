@@ -10,7 +10,8 @@
                 <div class="card-body">
                     @if (Model.CardSelect.Count() == 0)
                     {
-                        <h4>You have no cards</h4>
+                        <h4>You have no cards to deposit with</h4>
+                        <a asp-controller="wallet" asp-action="index"><button type="button" class="btn btn-info">Add a card</button></a>
                     }
                     else
                     {
@@ -40,7 +41,37 @@
 
         </div>
         <div class="col-lg-6 col-md-6 col-xs-6 panel">
+            <div class="card card-coin card-plain">
+                <div class="card-body">
+                    @if (Model.CardSelect.Count() == 0)
+                    {
+                        <h4>You have no cards to withdraw with</h4>
+                        <a asp-controller="wallet" asp-action="index"><button type="button" class="btn btn-info">Add a card</button></a>
+                        }
+                        else
+                        {
+                        <h4>Withdraw funds</h4>
+                        <form asp-action="WithdrawFunds" asp-controller="Wallet" id="withdrawFunds">
+                            <label>Card</label>
+                            <select asp-for="CardId" class="form-control" asp-items="Model.CardSelect"></select>
+                            <div class="form-group">
+                                <label asp-for="Amount">Amount</label>
+                                <input class="form-control" asp-for="Amount" />
+                                <span asp-validation-for="Amount" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Cvv">CVV</label>
+                                <input class="form-control" asp-for="Cvv" />
+                                <span asp-validation-for="Cvv" class="text-danger"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
 
+
+
+                    }
+                </div>
+            </div>
         </div>
     </div>
 </div>

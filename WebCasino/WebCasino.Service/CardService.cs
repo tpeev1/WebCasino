@@ -90,7 +90,7 @@ namespace WebCasino.Service
 		public async Task<double> Withdraw(string cardNumber, double amount)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(cardNumber);
-			ServiceValidator.ValidateCardNumber(cardNumber);
+			//ServiceValidator.ValidateCardNumber(cardNumber);
 			ServiceValidator.ValueIsBetween(amount, 0, double.MaxValue);
 
 			var bankCardQuery = await this.dbContext.BankCards

@@ -185,6 +185,7 @@ namespace WebCasino.Service
 
 			var userWin = await this.dbContext.Users
 				.Include(w => w.Wallet)
+                    .ThenInclude(w => w.Currency)
 				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
 
 			ServiceValidator.ObjectIsNotEqualNull(userWin);
@@ -218,6 +219,11 @@ namespace WebCasino.Service
             if (userWin.Wallet.NormalisedBalance < 0)
             {
                 throw new InsufficientFundsException("Insufficient funds for the requested operation");
+            }
+
+            if(userWin.Wallet.NormalisedBalance < 0.009)
+            {
+                userWin.Wallet.NormalisedBalance = 0;
             }
 
             await this.dbContext.Transactions.AddAsync(newTransaction);

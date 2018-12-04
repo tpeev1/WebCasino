@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebCasino.Service.Abstract;
+using WebCasino.Service.Exceptions;
 using WebCasino.Web.Models.WalletViewModels;
 using WebCasino.Web.Utilities;
 using WebCasino.Web.Utilities.Wrappers;
@@ -72,10 +73,45 @@ namespace WebCasino.Web.Controllers
                         (userId, model.Amount, $"Deposited {model.Amount} {userCurrency} with card ending in {card.CardNumber.Substring(12)}");
                     await this.cardService.Deposit(model.CardId, model.Amount);
                     TempData["SuccessfullDeposit"] = $"Succesfully deposited {model.Amount} {userCurrency}";
+                    return this.RedirectToAction("index", "wallet");
                 }
             }
 
             TempData["FailedDeposit"] = "Failed to deposit. Please try again with a different card";
+            return this.RedirectToAction("index", "wallet");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> WithdrawFunds(CardTransactionViewModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                var userId = this.userWrapper.GetUserId(HttpContext.User);
+                var userWallet = await this.walletService.RetrieveWallet(userId);
+                var userCurrency = ((CurrencyOptions)userWallet.CurrencyId).ToString();
+
+                var card = await this.cardService.GetCard(model.CardId);
+                if (card.UserId == userId)
+                {
+                    try
+                    {
+                        await this.transactionService.AddWithdrawTransaction
+                       (userId, model.Amount, $"Withdrew {model.Amount} {userCurrency} with card ending in {card.CardNumber.Substring(12)}");
+                        await this.cardService.Withdraw(model.CardId, model.Amount);
+                        TempData["SuccesfullWithdraw"] = $"Succesfully withdrew {model.Amount} {userCurrency}";
+                        return this.RedirectToAction("index", "wallet");
+                    }
+                    catch(InsufficientFundsException exception)
+                    {
+                        TempData["FailedWithdraw"] = exception.Message;
+                    }
+
+                }
+            }
+            else
+            {
+                TempData["FailedWithdraw"] = "Failed to withdraw. Please try again with a different card";
+            }
             return this.RedirectToAction("index", "wallet");
         }
     }

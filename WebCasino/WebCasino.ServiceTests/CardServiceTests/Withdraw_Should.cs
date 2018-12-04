@@ -48,7 +48,7 @@ namespace WebCasino.ServiceTests.CardServiceTests
 			{
 				var transactionService = new CardService(context);
 
-				await Assert.ThrowsExceptionAsync<CardNumberException>(
+				await Assert.ThrowsExceptionAsync<EntityNotFoundException>(
 					() => transactionService.Withdraw(cardNumber, amount)
 				);
 			}

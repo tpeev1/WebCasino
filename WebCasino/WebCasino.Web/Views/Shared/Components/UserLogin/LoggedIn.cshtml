@@ -11,11 +11,11 @@
         @if (User.IsInRole("Player"))
         {
             <li>
-                <a class="nav-link" asp-area="" asp-controller="Wallet" asp-action="Index">Balance: @Model.Balance @Model.Currency</a>
+                <a class="nav-link" asp-area="" asp-controller="Wallet" asp-action="Index">Balance: <span id="balanceSpan">@Model.Balance</span> @Model.Currency</a>
             </li>
         }
         <li>
-            <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
+            <button type="submit" class="btn btn-info">Log out</button>
         </li>
     </ul>
 </form>

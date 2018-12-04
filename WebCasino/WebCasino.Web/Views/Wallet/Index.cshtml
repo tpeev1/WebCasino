@@ -18,15 +18,15 @@
     <div class="tab-pane fade show active" id="pills-card" role="tabpanel" aria-labelledby="pills-home-tab">
         @await Html.PartialAsync("_CardsPartial", Model.Cards)
     </div>
-    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"> 
-    @await Html.PartialAsync("_AddWithdrawFundsPartial", new CardTransactionViewModel(Model.Cards))
+    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+        @await Html.PartialAsync("_AddWithdrawFundsPartial", new CardTransactionViewModel(Model.Cards))
     </div>
     <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">History tab</div>
 </div>
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
-<script src="~/card-master/card-master/dist/card.js"></script>
+    <script src="~/card-master/card-master/dist/card.js"></script>
 
     <script>
         $(function () {
@@ -38,7 +38,8 @@
                     expiryInput: 'input[name="ExpirationDate"]', // optional — default input[name="expiry"]
                 }
             });
-            });
+        });
     </script>
     <script src="~/js/expirationDate.js"></script>
+    <script src="~/js/balanceOnWithdraw.js"></script>
 }
