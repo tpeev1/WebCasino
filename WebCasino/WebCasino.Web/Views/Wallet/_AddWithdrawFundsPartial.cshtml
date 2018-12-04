@@ -47,9 +47,9 @@
                     {
                         <h4>You have no cards to withdraw with</h4>
                         <a asp-controller="wallet" asp-action="index"><button type="button" class="btn btn-info">Add a card</button></a>
-                        }
-                        else
-                        {
+                    }
+                    else
+                    {
                         <h4>Withdraw funds</h4>
                         <form asp-action="WithdrawFunds" asp-controller="Wallet" id="withdrawFunds">
                             <label>Card</label>
