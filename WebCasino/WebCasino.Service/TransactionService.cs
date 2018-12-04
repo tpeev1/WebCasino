@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -211,15 +212,33 @@ namespace WebCasino.Service
 			return newTransaction;
 		}
 
-		public async Task<IEnumerable<Transaction>> GetAllTransactionsTable()
+		public async Task<IEnumerable<Transaction>> GetAllTransactionsTable(int page = 1, int pageSize = 10)
 		{
 			var transactionsQuery = await dbContext
-				.Transactions
+				.Transactions.Where(tr => !tr.IsDeleted)
+				.OrderByDescending(x => x.Id)
 				.Include(tt => tt.TransactionType)
 				.Include(u => u.User.Wallet.Currency)
+				 .Skip((page - 1) * pageSize).Take(pageSize)
 				.ToListAsync();
 
 			return transactionsQuery;
+		}
+
+		public IEnumerable<Transaction> ListByContainingText(string searchText, int page = 1, int pageSize = 10)
+		{
+			return this.dbContext.Transactions.Where(m => m.IsDeleted == false)
+				.Where(m => m.User.Alias.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)).OrderByDescending(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+		}
+
+		public int TotalContainingText(string searchText)
+		{
+			return this.dbContext.Transactions.Where(m => m.User.Alias.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)).ToList().Count();
+		}
+
+		public async Task<int> Total()
+		{
+			return await this.dbContext.Transactions.CountAsync();
 		}
 
 		public async Task<IEnumerable<Transaction>> GetTransactionByType(string transactionTypeName)

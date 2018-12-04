@@ -3,35 +3,39 @@
 	var previousDisabled = Model.Page == 1 ? "disabled" : string.Empty;
 	var nextDisabled = Model.Page == Model.TotalPages ? "disabled" : string.Empty;
 }
+<link href="~/assets/css/" rel="stylesheet" />
+<h2>Casino Users</h2>
 
-<h2>Movie Search</h2>
+<form class="form" asp-area="Administration" asp-action="Index" asp-controller="UserAdministration" method="GET">
+	<div class="row">
 
-<div class="row" id="inputs">
-	<div class="col-sm-6 col-lg-3">
-		<form asp-area="Administration" asp-action="Index" asp-controller="UserAdministration" method="GET">
+		<div class="col-sm-6 col-lg-3">
 			<div class="form-group">
-				<input asp-for="@Model.SearchText" type="text" class="form-control" placeholder="Search movie" id="txtSearch" />
+				<input asp-for="@Model.SearchText" type="text" class="form-control " placeholder="Search user" id="txtSearch" />
 			</div>
+		</div>
+		<div class="col-sm-2 col-lg-2">
 			<div class="form-group">
-				<input type="submit" class="btn btn-primary btn-round" value="Search" />
+				<input type="submit" class=" form-control btn btn-primary" value="Search" />
 			</div>
-		</form>
+		</div>
 	</div>
-</div>
+</form>
 
 <br />
 <div class="card ">
 	<div class="card-header">
-		<h4 class="card-title"> Simple Table</h4>
+		<h4 class="card-title"> Users Table</h4>
 	</div>
 	<div class="card-body">
-		<div class="table-responsive">
-			<table class="table tablesorter " id="">
+		<div class="table">
+			<table class="table tablesorter table-hover " id="">
 				<thead class=" text-primary">
 					<tr>
 						<th>Email</th>
 						<th>Alias</th>
 						<th>Phone Number</th>
+						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -46,21 +50,14 @@
 						@foreach (var user in Model.Users)
 						{
 							<tr>
-								@*<td class="sorting_1"><a asp-controller="Movies" asp-action="Details" asp-route-title="@movie.Title">@movie.Title</a></td>*@
 								<td>@user.Email</td>
 								<td>@user.Alias</td>
 								<td>@user.PhoneNumber</td>
+								<td class="sorting_1">
 							</tr>
 						}
 					}
 				</tbody>
-				<tfoot>
-					<tr>
-						<th>Email</th>
-						<th>Alias</th>
-						<th>Phone Number</th>
-					</tr>
-				</tfoot>
 			</table>
 		</div>
 	</div>
@@ -68,17 +65,17 @@
 <nav aria-label="Page navigation example" align="center">
 	<ul class="pagination">
 		<li class="page-item">
-			<a class="page-link @previousDisabled" href="/UserAdministration/Index/Movies?searchtext=@Model.SearchText&page=@Model.PreviousPage" aria-label="Previous">
+			<a class="page-link @previousDisabled" asp-area="Administration" asp-controller="UserAdministration" asp-action="Index" asp-route-id="Users?searchtext=@Model.SearchText&page=@Model.PreviousPage" aria-label="Previous">
 				<span aria-hidden="true">&laquo;</span>
 				<span class="sr-only">Previous</span>
 			</a>
 		</li>
 		@for (int i = 1; i <= Model.TotalPages; i++)
 		{
-			<li class="page-item"><a class="page-link" href="/UserAdministration/Index?searchtext=@Model.SearchText&page=@i">@i</a></li>
+			<li class="page-item"><a class="page-link" asp-area="Administration" asp-controller="UserAdministration" asp-action="Index" asp-route-id="Users?searchtext=@Model.SearchText&page=@i">@i</a></li>
 		}
 		<li class="page-item">
-			<a class="page-link @nextDisabled" href="/Movies/Index/Movies?searchtext=@Model.SearchText&page=@Model.NextPage" aria-label="Next">
+			<a class="page-link @nextDisabled" asp-area="Administration" asp-controller="UserAdministration" asp-action="Index" asp-route-id="Users?searchtext=@Model.SearchText&page=@Model.NextPage" aria-label="Next">
 				<span aria-hidden="true">&raquo;</span>
 				<span class="sr-only">Next</span>
 			</a>

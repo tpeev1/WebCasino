@@ -1,24 +1,5 @@
 ﻿@model WebCasino.Web.Areas.Administration.Models.DashboardViewModel
 
-<div id="open-admin-nav" class="fixed-plugin float-left">
-	<div class="dropdown show-dropdown">
-		<a href="#" class="open-admin-menu" onclick="openNav()">
-			<i class="fa fa-cog fa-2x"> </i>
-		</a>
-	</div>
-</div>
-<div id="mySidenav" class="admin-sidenav">
-	<div class="row">
-		<div class="col-md-12">
-			<ul class="nav nav-pills nav-pills-primary flex-column col-md-11">
-				<li class="nav-item  text-center" onclick="		closeNav()"><a href="#">Administration</a></li>
-				<li class="nav-item"><a class="nav-link" asp-area="Administration" asp-controller="Transactions" asp-action="History">TRANSACTION HISTORY</a></li>
-				<li class="nav-item"><a class="nav-link" asp-area="Administration" asp-controller="UserAdministration" asp-action="Index">USER ADMINISTRATION</a></li>
-			</ul>
-		</div>
-	</div>
-</div>
-
 <div id="main">
 	<div class="content">
 		<div class="row">
@@ -139,7 +120,7 @@
 
 <script>
 	$(document).ready(function () {
-		console.debug();
+
 		let daylyUSD = @Html.Raw(Json.Serialize(Model.DaylyWins.DaylyTotalUSD));
 		let daylyGBP = @Html.Raw(Json.Serialize(Model.DaylyWins.DaylyWinsGBP));
 		let daylyEUR = @Html.Raw(Json.Serialize(Model.DaylyWins.DaylyWinsEUR));

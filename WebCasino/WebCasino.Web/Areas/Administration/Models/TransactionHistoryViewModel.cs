@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using WebCasino.Entities;
 
 namespace WebCasino.Web.Areas.Administration.Models
 {
 	public class TransactionHistoryViewModel
 	{
-		public readonly IEnumerable<TransactionViewModel> transactionHistory;
+		public IEnumerable<Transaction> Transactions { get; set; }
 
-		public TransactionHistoryViewModel(IEnumerable<Entities.Transaction> transactionHistory)
-		{
-			this.transactionHistory = transactionHistory.Select(trh => new TransactionViewModel()
-			{
-				Date = (DateTime)trh.CreatedOn,
-				Description = trh.Description,
-				NormalisedAmount = trh.NormalisedAmount,
-				TransactionType = trh.TransactionType.Name,
-				User = trh.User.Email
-			});
-		}
+		public int TotalPages { get; set; }
+
+		public int Page { get; set; } = 1;
+
+		public int PreviousPage => this.Page ==
+			1 ? 1 : this.Page - 1;
+
+		public int NextPage => this.Page ==
+			this.TotalPages ? this.TotalPages : this.Page + 1;
+
+		public string SearchText { get; set; } = string.Empty;
 	}
 }
