@@ -1,83 +1,87 @@
 ﻿@model WebCasino.Web.Areas.Administration.Models.UsersIndexViewModel
 @{
-    var previousDisabled = Model.Page == 1 ? "disabled" : string.Empty;
-    var nextDisabled = Model.Page == Model.TotalPages ? "disabled" : string.Empty;
+	var previousDisabled = Model.Page == 1 ? "disabled" : string.Empty;
+	var nextDisabled = Model.Page == Model.TotalPages ? "disabled" : string.Empty;
 }
 
 <h2>Movie Search</h2>
 
-
-<div class="row">
-    <form asp-action="Index" asp-controller="Movies" method="GET">
-        <div class="col-md-6">
-            <input asp-for="@Model.SearchText" class="form-control" placeholder="Search movie" id="txtSearch" />
-        </div>
-        <div class="col-md-2">
-            <input type="submit" class="form-control" value="Search" />
-        </div>
-    </form>
+<div class="row" id="inputs">
+	<div class="col-sm-6 col-lg-3">
+		<form asp-area="Administration" asp-action="Index" asp-controller="UserAdministration" method="GET">
+			<div class="form-group">
+				<input asp-for="@Model.SearchText" type="text" class="form-control" placeholder="Search movie" id="txtSearch" />
+			</div>
+			<div class="form-group">
+				<input type="submit" class="btn btn-primary btn-round" value="Search" />
+			</div>
+		</form>
+	</div>
 </div>
 
 <br />
-
-<table class="table table-striped table-bordered" style="width:100%">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Year</th>
-            <th>Added On</th>
-            <th>Price</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Users.Count() == 0)
-        {
-            <tr>
-                <td colspan="4">No data available in table</td>
-            </tr>
-        }
-        else
-        {
-            @foreach (var user in Model.Users)
-            {
-                <tr>
-                    @*<td class="sorting_1"><a asp-controller="Movies" asp-action="Details" asp-route-title="@movie.Title">@movie.Title</a></td>*@
-                    <td>@user.Email</td>
-                    <td>@user.Alias</td>
-                    <td>@user.PhoneNumber$</td>
-
-                </tr>
-            }
-        }
-
-    </tbody>
-    <tfoot>
-        <tr>
-            <th>Title</th>
-            <th>Year</th>
-            <th>Added On</th>
-            <th>Price</th>
-        </tr>
-    </tfoot>
-</table>
-
+<div class="card ">
+	<div class="card-header">
+		<h4 class="card-title"> Simple Table</h4>
+	</div>
+	<div class="card-body">
+		<div class="table-responsive">
+			<table class="table tablesorter " id="">
+				<thead class=" text-primary">
+					<tr>
+						<th>Email</th>
+						<th>Alias</th>
+						<th>Phone Number</th>
+					</tr>
+				</thead>
+				<tbody>
+					@if (Model.Users.Count() == 0)
+					{
+						<tr>
+							<td colspan="4">No data available in table</td>
+						</tr>
+					}
+					else
+					{
+						@foreach (var user in Model.Users)
+						{
+							<tr>
+								@*<td class="sorting_1"><a asp-controller="Movies" asp-action="Details" asp-route-title="@movie.Title">@movie.Title</a></td>*@
+								<td>@user.Email</td>
+								<td>@user.Alias</td>
+								<td>@user.PhoneNumber</td>
+							</tr>
+						}
+					}
+				</tbody>
+				<tfoot>
+					<tr>
+						<th>Email</th>
+						<th>Alias</th>
+						<th>Phone Number</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</div>
 <nav aria-label="Page navigation example" align="center">
-    <ul class="pagination">
-        <li class="page-item">
-            <a class="page-link @previousDisabled" href="/Movies/Index/Movies?searchtext=@Model.SearchText&page=@Model.PreviousPage" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-            </a>
-        </li>
-        @for (int i = 1; i <= Model.TotalPages; i++)
-        {
-            <li class="page-item"><a class="page-link" href="/Movies/Index?searchtext=@Model.SearchText&page=@i">@i</a></li>
-        }
-        <li class="page-item">
-            <a class="page-link @nextDisabled" href="/Movies/Index/Movies?searchtext=@Model.SearchText&page=@Model.NextPage" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-            </a>
-        </li>
-    </ul>
+	<ul class="pagination">
+		<li class="page-item">
+			<a class="page-link @previousDisabled" href="/UserAdministration/Index/Movies?searchtext=@Model.SearchText&page=@Model.PreviousPage" aria-label="Previous">
+				<span aria-hidden="true">&laquo;</span>
+				<span class="sr-only">Previous</span>
+			</a>
+		</li>
+		@for (int i = 1; i <= Model.TotalPages; i++)
+		{
+			<li class="page-item"><a class="page-link" href="/UserAdministration/Index?searchtext=@Model.SearchText&page=@i">@i</a></li>
+		}
+		<li class="page-item">
+			<a class="page-link @nextDisabled" href="/Movies/Index/Movies?searchtext=@Model.SearchText&page=@Model.NextPage" aria-label="Next">
+				<span aria-hidden="true">&raquo;</span>
+				<span class="sr-only">Next</span>
+			</a>
+		</li>
+	</ul>
 </nav>
