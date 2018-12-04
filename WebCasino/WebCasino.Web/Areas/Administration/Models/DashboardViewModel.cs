@@ -13,15 +13,16 @@ namespace WebCasino.Web.Areas.Administration.Models
 		public int TotalUsers { get; set; }
 
 		public int SixMonthsTotalWins { get; set; }
-		public SixMonthsModel SixMonthsWins { get; set; }
+		public MonthsModel SixMonthsWins { get; set; }
 
 		public int SixMonthsTotalStakes { get; set; }
-		public SixMonthsModel SixMonthsStakes { get; set; }
+		public MonthsModel SixMonthsStakes { get; set; }
 
 		//TODO : CREATE NEW MODEL OR RENAME SixMonthsModel
-		public SixMonthsModel OneYearWins { get; set; }
+		public MonthsModel OneYearWins { get; set; }
 
-		public SixMonthsModel OneYearTransactions { get; set; }
+		public MonthsModel OneYearStakes { get; set; }
+		public MonthsModel OneYearTransactions { get; set; }
 
 		public DaylyWinsModel DaylyWins { get; set; }
 	}

@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using WebCasino.DataContext;
+using WebCasino.Entities;
 using WebCasino.Service.Abstract;
 using WebCasino.Service.DTO.Canvas;
 
@@ -18,16 +20,37 @@ namespace WebCasino.Service
 			this.dbContext = dbContext ?? throw new NullReferenceException();
 		}
 
-		public async Task<MonthsTransactionsModel> GetMonthsTransactions(DateTime timePeriod, string transactionType, int monthCount)
+		public async Task<MonthsTransactionsModel> GetMonthsTransactions(DateTime timePeriod,
+			string transactionType,
+			int monthCount)
 		{
 			var dbQuery = await this.dbContext.Transactions
 				.Include(tt => tt.TransactionType)
 				.Where(t => t.TransactionType.Name == transactionType)
 				.ToListAsync();
 
-			var resultModel = new MonthsTransactionsModel();
+			var resultModel = FiltarByMonth(timePeriod, monthCount, dbQuery);
 
 			//CHECK FOR MONTH NUMBER !!
+
+			return resultModel;
+		}
+
+		public async Task<MonthsTransactionsModel> GetYearTransactions(DateTime timePeriod)
+		{
+			var dbQuery = await this.dbContext.Transactions.ToListAsync();
+
+			var resultModel = FiltarByMonth(timePeriod, 11, dbQuery);
+
+			//CHECK FOR MONTH NUMBER !!
+
+			return resultModel;
+		}
+
+		public MonthsTransactionsModel FiltarByMonth(DateTime timePeriod, int monthCount, IList<Transaction> dbQuery)
+		{
+			var resultModel = new MonthsTransactionsModel();
+
 			for (int i = timePeriod.Month - monthCount; i <= timePeriod.Month; i++)
 			{
 				var monthly = new MonthVallueModel();

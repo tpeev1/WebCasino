@@ -149,7 +149,11 @@
 
 		let sixMonthsWins = @Html.Raw(Json.Serialize(Model.SixMonthsWins.monthValue));
 		let sixMonthsStakes = @Html.Raw(Json.Serialize(Model.SixMonthsWins.monthValue));
+
 		let oneYearWins = @Html.Raw(Json.Serialize(Model.OneYearWins.monthValue));
+		let oneYearStakes = @Html.Raw(Json.Serialize(Model.OneYearStakes.monthValue));
+
+		let oneYearTransactions = @Html.Raw(Json.Serialize(Model.OneYearTransactions.monthValue));
 
 		let sixMonthWinsMonths = Object.keys(sixMonthsWins);
 		let sixMonthsWinsValus = Object.values(sixMonthsWins);
@@ -160,7 +164,13 @@
 		let oneYearWinMonths = Object.keys(oneYearWins);
 		let oneYearWinValues = Object.values(oneYearWins);
 
-		demo.initDashboardPageCharts(daylyArr, sixMonthsWinsValus, sixMonthWinsMonths, sixMonthsStakesValus, sixMonthStakesMonths, oneYearWinValues, oneYearWinMonths);
+		let oneYearStakesMonths = Object.keys(oneYearWins);
+		let oneYearStakesValues = Object.values(oneYearWins);
+
+		let oneYearTransactionsMonths = Object.keys(oneYearTransactions);
+		let oneYearTransactionsValues = Object.values(oneYearTransactions);
+
+		demo.initDashboardPageCharts(daylyArr, sixMonthsWinsValus, sixMonthWinsMonths, sixMonthsStakesValus, sixMonthStakesMonths, oneYearWinValues, oneYearWinMonths, oneYearTransactionsValues, oneYearTransactionsMonths, oneYearStakesValues, oneYearStakesMonths);
 
 	});
 </script>

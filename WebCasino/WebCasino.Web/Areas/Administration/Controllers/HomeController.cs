@@ -38,11 +38,12 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 			var sixMonthsTotalWins = await this.adminDashboardService.GetMonthsTransactions(DateTime.Now, "Win", 5);
 			var sixMonthsTotalStakes = await this.adminDashboardService.GetMonthsTransactions(DateTime.Now, "Stake", 5);
 
-			//TODO: Find a way to incorporate this two in to model
-			var oneYearTransactions = await this.transactionService.GetAllTransactionsInfo();
 			var oneYearUsersCount = await this.userService.GetAllUsers();
 
 			var oneYearWinsCount = await this.adminDashboardService.GetMonthsTransactions(DateTime.Now, "Win", 11);
+			var oneYearStakeCount = await this.adminDashboardService.GetMonthsTransactions(DateTime.Now, "Stake", 11);
+
+			var oneYearTransactions = await this.adminDashboardService.GetYearTransactions(DateTime.Now);
 
 			var sixMonthsWins = sixMonthsTotalWins.ValuesByMonth;
 
@@ -53,10 +54,11 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 				TotalUsers = totalUsers,
 				SixMonthsTotalWins = sixMonthsTotalWins.ValuesByMonth.Where(v => v.Value > 0).Count(),
 				SixMonthsTotalStakes = sixMonthsTotalStakes.ValuesByMonth.Where(v => v.Value > 0).Count(),
-				SixMonthsWins = new SixMonthsModel(sixMonthsTotalWins.ValuesByMonth),
-				SixMonthsStakes = new SixMonthsModel(sixMonthsTotalStakes.ValuesByMonth),
-
-				OneYearWins = new SixMonthsModel(oneYearWinsCount.ValuesByMonth),
+				SixMonthsWins = new MonthsModel(sixMonthsTotalWins.ValuesByMonth),
+				SixMonthsStakes = new MonthsModel(sixMonthsTotalStakes.ValuesByMonth),
+				OneYearTransactions = new MonthsModel(oneYearTransactions.ValuesByMonth),
+				OneYearWins = new MonthsModel(oneYearWinsCount.ValuesByMonth),
+				OneYearStakes = new MonthsModel(oneYearStakeCount.ValuesByMonth),
 				DaylyWins = new DaylyWinsModel()
 				{
 					DaylyTotalUSD = allCurrencyDaylyWins.DaylyTotalUSD,
