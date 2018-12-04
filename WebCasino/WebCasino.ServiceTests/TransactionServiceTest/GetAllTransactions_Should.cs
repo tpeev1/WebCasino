@@ -29,17 +29,27 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 			double amountInUserCurrency = 50;
 			string description = "1234567890";
 
-			var newTransaction = new Transaction()
+
+            var transactionType = new TransactionType()
+            {
+                Id = 1
+            };
+
+            var newTransaction = new Transaction()
 			{
 				UserId = userId,
 				OriginalAmount = amountInUserCurrency,
 				Description = description,
 				TransactionTypeId = 1,
-			};
+                TransactionType = transactionType
+            };
+
 
 			using (var context = new CasinoContext(contextOptions))
 			{
 				context.Transactions.Add(newTransaction);
+
+
 				await context.SaveChangesAsync();
 
 				var transactionService = new TransactionService(context, currencyServiceMock.Object);

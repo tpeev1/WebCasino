@@ -51,9 +51,6 @@ namespace WebCasino.Service
 				.Where(u => u.UserId == userId && u.IsDeleted == false)
 				.ToListAsync();
 
-			//TODO: CHOFEXX -> Think for this !!
-			ServiceValidator.ValueNotEqualZero(bankCardQuery.Count);
-
 			return bankCardQuery;
 		}
 		
@@ -97,7 +94,7 @@ namespace WebCasino.Service
 			ServiceValidator.ValueIsBetween(amount, 0, double.MaxValue);
 
 			var bankCardQuery = await this.dbContext.BankCards
-				.FirstOrDefaultAsync(c => c.CardNumber == cardNumber && c.IsDeleted == false);
+				.FirstOrDefaultAsync(c => c.Id == cardNumber && c.IsDeleted == false);
 
 			ServiceValidator.ObjectIsNotEqualNull(bankCardQuery);
 			ServiceValidator.CheckCardExpirationDate(bankCardQuery.Expiration);

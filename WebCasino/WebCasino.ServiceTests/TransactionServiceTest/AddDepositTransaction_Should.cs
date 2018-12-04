@@ -206,8 +206,8 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 				var winTransaction = savedTransaction.TransactionTypeId;
 
 				Assert.AreEqual(amountInUserCurrency, originalAmount);
-				Assert.AreEqual(amountInUserCurrency * currency, normalisedAmount);
-				Assert.AreEqual(amountInUserCurrency * currency, userAmount);
+				Assert.AreEqual(amountInUserCurrency / currency, normalisedAmount);
+				Assert.AreEqual(amountInUserCurrency / currency, userAmount);
 				Assert.AreEqual(amountInUserCurrency, userDisplayAmount);
 				Assert.IsTrue(winTransaction == 3);
 			}

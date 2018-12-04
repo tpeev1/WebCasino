@@ -36,10 +36,10 @@ namespace WebCasino.ServiceTests.CardServiceTests
 		}
 
 		[TestMethod]
-		public async Task ThrowCardNumberException_WhenCardNumberIsNull()
+		public async Task ThrowCardNumberException_WhenCardNumberIsInvalid()
 		{
 			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-				.UseInMemoryDatabase(databaseName: "ThrowCardNumberException_WhenCardNumberIsNull")
+				.UseInMemoryDatabase(databaseName: "ThrowCardNumberException_WhenCardNumberIsInvalid")
 				.Options;
 
 			string cardNumber = "a00000000b000000";
@@ -124,6 +124,7 @@ namespace WebCasino.ServiceTests.CardServiceTests
 					
 
 				Assert.AreEqual(cardNumber, card.CardNumber);
+                Assert.IsNotNull(context.BankCards.FirstOrDefault(ca => ca.CardNumber == cardNumber));
 			}
 		}
 
