@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebCasino.Service.Abstract;
 using WebCasino.Web.Models.WalletViewModels;
+using WebCasino.Web.Utilities;
 using WebCasino.Web.Utilities.Wrappers;
 
 namespace WebCasino.Web.Controllers
@@ -19,11 +20,12 @@ namespace WebCasino.Web.Controllers
         private readonly ICardService cardService;
         private readonly ITransactionService transactionService;
 
-        public WalletController(IWalletService walletService, IUserWrapper userWrapper, ICardService cardService)
+        public WalletController(IWalletService walletService, IUserWrapper userWrapper, ICardService cardService, ITransactionService transactionService)
         {
             this.walletService = walletService;
             this.userWrapper = userWrapper;
             this.cardService = cardService;
+            this.transactionService = transactionService;
         }
 
         public async Task<IActionResult> Index()
@@ -54,14 +56,28 @@ namespace WebCasino.Web.Controllers
             return this.RedirectToAction("index", "wallet");
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> AddFunds(CardTransactionViewModel model)
-        //{
-        //    if (this.ModelState.IsValid)
-        //    {
-        //        var userId = this.userWrapper.GetUserId(HttpContext.User);
-        //    }
-        //}
+        [HttpPost]
+        public async Task<IActionResult> AddFunds(CardTransactionViewModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                var userId = this.userWrapper.GetUserId(HttpContext.User);
+                var userWallet = await this.walletService.RetrieveWallet(userId);
+                var userCurrency = ((CurrencyOptions)userWallet.CurrencyId).ToString();
+
+                var card = await this.cardService.GetCard(model.CardId);
+                if(card.UserId == userId)
+                {
+                    await this.transactionService.AddDepositTransaction
+                        (userId, model.Amount, $"Deposited {model.Amount} {userCurrency} with card ending in {card.CardNumber.Substring(12)}");
+                    await this.cardService.Deposit(model.CardId, model.Amount);
+                    TempData["SuccessfullDeposit"] = $"Succesfully deposited {model.Amount} {userCurrency}";
+                }
+            }
+
+            TempData["FailedDeposit"] = "Failed to deposit. Please try again with a different card";
+            return this.RedirectToAction("index", "wallet");
+        }
     }
 
 }

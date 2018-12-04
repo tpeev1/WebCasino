@@ -15,7 +15,7 @@
                     else
                     {
                         <h4>Add funds</h4>
-                        <form id="addFunds">
+                        <form asp-action="AddFunds" asp-controller="Wallet" id="addFunds">
                             <label>Card</label>
                             <select asp-for="CardId" class="form-control" asp-items="Model.CardSelect"></select>
                             <div class="form-group">

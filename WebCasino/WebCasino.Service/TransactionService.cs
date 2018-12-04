@@ -35,6 +35,7 @@ namespace WebCasino.Service
 
 			var userWin = await this.dbContext.Users
 				.Include(w => w.Wallet)
+                    .ThenInclude(wall => wall.Currency)
 				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
 
 			ServiceValidator.ObjectIsNotEqualNull(userWin);
@@ -46,7 +47,7 @@ namespace WebCasino.Service
 			if (bankRates.ContainsKey(userCurrency))
 			{
 				double normalisedUserCurrency = bankRates[userCurrency];
-				normalisedCurrency = amountInUserCurrency * normalisedUserCurrency;
+				normalisedCurrency = amountInUserCurrency / normalisedUserCurrency;
 			}
 			else
 			{
@@ -94,7 +95,7 @@ namespace WebCasino.Service
 			if (bankRates.ContainsKey(userCurrency))
 			{
 				double normalisedUserCurrency = bankRates[userCurrency];
-				normalisedCurrency = amountInUserCurrency * normalisedUserCurrency;
+				normalisedCurrency = amountInUserCurrency / normalisedUserCurrency;
 			}
 			else
 			{
@@ -147,7 +148,7 @@ namespace WebCasino.Service
 			if (bankRates.ContainsKey(userCurrency))
 			{
 				double normalisedUserCurrency = bankRates[userCurrency];
-				normalisedCurrency = amountInUserCurrency * normalisedUserCurrency;
+				normalisedCurrency = amountInUserCurrency / normalisedUserCurrency;
 			}
 			else
 			{
@@ -195,7 +196,7 @@ namespace WebCasino.Service
 			if (bankRates.ContainsKey(userCurrency))
 			{
 				double normalisedUserCurrency = bankRates[userCurrency];
-				normalisedCurrency = amountInUserCurrency * normalisedUserCurrency;
+				normalisedCurrency = amountInUserCurrency / normalisedUserCurrency;
 			}
 			else
 			{

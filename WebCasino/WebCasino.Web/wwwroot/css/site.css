@@ -2,6 +2,9 @@
 	margin-bottom: 40px
 }
 
+select option {
+    background-color: #171941 
+}
 /*
 	------------------------
 	The side navigation menu

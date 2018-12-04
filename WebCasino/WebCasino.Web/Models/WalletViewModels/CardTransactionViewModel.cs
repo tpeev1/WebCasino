@@ -10,6 +10,10 @@ namespace WebCasino.Web.Models.WalletViewModels
 {
     public class CardTransactionViewModel
     {
+        public CardTransactionViewModel()
+        {
+
+        }
         public CardTransactionViewModel(IEnumerable<CardViewModel> cards)
         {
             CardSelect = cards.Select(card => new SelectListItem() { Text = card.MaskedNumber, Value = card.CardId });

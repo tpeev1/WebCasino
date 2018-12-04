@@ -17,7 +17,7 @@ namespace WebCasino.Service
     {
         private readonly IAPIRequester apiRequester;
 
-        private const string connection = "https://api.exchangeratesapi.io/latest?base=USD&symbols=EUR,BGN,GBP";
+        private const string connection = "https://api.exchangeratesapi.io/latest?base=USD&symbols=EUR,BGN,GBP,USD";
 
         private ConcurrentDictionary<string, double> rates;
 
