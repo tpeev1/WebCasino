@@ -9,9 +9,15 @@ namespace WebCasino.Service.Abstract
     public interface IUserService
     {
         Task<User> RetrieveUser(string id);
-        Task<IEnumerable<User>> GetAllUsers();
+        Task<IEnumerable<User>> GetAllUsers(int page = 1, int pageSize = 10);
         Task<User> PromoteUser(string id);
         Task<User> LockUser(string id);
         Task<User> EditUserAlias(string alias, string id);
+
+        int TotalContainingText(string searchText);
+
+        IEnumerable<User> ListByContainingText(string searchText, int page = 1, int pageSize = 10);
+
+        Task<int> Total();
     }
 }

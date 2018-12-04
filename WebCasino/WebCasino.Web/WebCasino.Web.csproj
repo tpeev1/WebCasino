@@ -18,7 +18,12 @@
   </ItemGroup> 
 
   <ItemGroup>
-    <Folder Include="wwwroot\card-master\card-master\src\scss\bourbon\" />
+    <Content Update="Areas\Administration\Views\_ViewImports.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Administration\Views\_ViewStart.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>

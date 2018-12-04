@@ -8,67 +8,76 @@ using WebCasino.DataContext;
 using WebCasino.Entities;
 using WebCasino.Service;
 using WebCasino.Service.Abstract;
+using WebCasino.Service.Utility.APICurrencyConvertor.RequestManager;
 using WebCasino.Web.Utilities.Wrappers;
 
 namespace WebCasino.Web
 {
-    public class Startup
-    {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+	public class Startup
+	{
+		public Startup(IConfiguration configuration)
+		{
+			Configuration = configuration;
+		}
 
-        public IConfiguration Configuration { get; }
+		public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddDbContext<CasinoContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+		// This method gets called by the runtime. Use this method to add services to the container.
+		public void ConfigureServices(IServiceCollection services)
+		{
+			services.AddDbContext<CasinoContext>(options =>
+				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<CasinoContext>()
-                .AddDefaultTokenProviders();
+			services.AddIdentity<User, IdentityRole>()
+				.AddEntityFrameworkStores<CasinoContext>()
+				.AddDefaultTokenProviders();
 
-            services.AddScoped<IWalletService, WalletService>();
-            services.AddScoped<IUserWrapper, UserWrapper>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<ICardService, CardService>();
+			services.AddScoped<IWalletService, WalletService>();
+			services.AddScoped<IUserWrapper, UserWrapper>();
+			services.AddScoped<IUserService, UserService>();
+			services.AddScoped<ITransactionService, TransactionService>();
+			services.AddScoped<IAdminDashboard, AdminDashboardService>();
 
-            // Add application services.
+			services.AddHttpClient<IHttpWrapper, HttpWrapper>();
 
-            services.AddMvc();
-        }
+			services.AddSingleton<IAPIRequester, APIRequester>();
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseBrowserLink();
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
+			services.AddSingleton<ICurrencyRateApiService, CurrencyRateApiService>();
 
-            app.UseStaticFiles();
+			// Add application services.
 
-            app.UseAuthentication();
+			services.AddMvc();
+		}
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "areas",
-                    template: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		{
+			if (env.IsDevelopment())
+			{
+				app.UseBrowserLink();
+				app.UseDeveloperExceptionPage();
+				app.UseDatabaseErrorPage();
+			}
+			else
+			{
+				app.UseExceptionHandler("/Home/Error");
+			}
 
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
-        }
-    }
+			app.UseStaticFiles();
+
+			app.UseAuthentication();
+
+			app.UseMvc(routes =>
+			{
+				routes.MapRoute(
+					name: "admin",
+					template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+				 );
+
+				routes.MapRoute(
+					name: "default",
+					template: "{controller=Home}/{action=Index}/{id?}");
+			});
+		}
+	}
 }

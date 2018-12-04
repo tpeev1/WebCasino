@@ -43,8 +43,8 @@ namespace WebCasino.DataContext.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "1", ConcurrencyStamp = "24e34c1c-8c6d-4b72-bb4f-7e6ab1f8b62d", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
-                        new { Id = "2", ConcurrencyStamp = "2664ff07-05cc-4711-96fe-dbce2afa4698", Name = "Player", NormalizedName = "PLAYER" }
+                        new { Id = "1", ConcurrencyStamp = "1e796ba7-f4ec-4ad9-8d47-bf21e43ae249", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
+                        new { Id = "2", ConcurrencyStamp = "37ee0141-d1c7-45d0-ba5b-8f7b9c358a67", Name = "Player", NormalizedName = "PLAYER" }
                     );
                 });
 
@@ -117,6 +117,10 @@ namespace WebCasino.DataContext.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new { UserId = "abba12b6-5226-4067-8011-08231c0fe823", RoleId = "1" }
+                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -185,6 +189,30 @@ namespace WebCasino.DataContext.Migrations
                         new { Id = 3, Name = "EUR" },
                         new { Id = 4, Name = "BGN" }
                     );
+                });
+
+            modelBuilder.Entity("WebCasino.Entities.CurrencyExchangeRate", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("CreatedOn");
+
+                    b.Property<int>("CurrencyId");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<double>("ExchangeRate");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("ModifiedOn");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.ToTable("ExchangeRates");
                 });
 
             modelBuilder.Entity("WebCasino.Entities.LoginLog", b =>
@@ -335,6 +363,10 @@ namespace WebCasino.DataContext.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new { Id = "abba12b6-5226-4067-8011-08231c0fe823", AccessFailedCount = 0, Alias = "Boss", ConcurrencyStamp = "2e32c6ce-01c7-4bad-9baa-e202bf4eca02", DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), Email = "admin@mail.com", EmailConfirmed = true, IsDeleted = false, Locked = false, LockoutEnabled = false, ModifiedOn = new DateTime(2018, 12, 3, 12, 15, 38, 473, DateTimeKind.Local), NormalizedEmail = "ADMIN@MAIL.COM", NormalizedUserName = "ADMIN@MAIL.COM", PasswordHash = "AQAAAAEAACcQAAAAECNfFBsMnAg4BuFnPp4cYNuGXXsJKfMyw8lDNGG6ULWFMikEyw3TuMGKQEoSBpV/yQ==", PhoneNumber = "+359359", PhoneNumberConfirmed = true, SecurityStamp = "c807b4bc-f906-4e05-8aae-fd8cda0ccaf1", TwoFactorEnabled = false, UserName = "Admin" }
+                    );
                 });
 
             modelBuilder.Entity("WebCasino.Entities.Wallet", b =>
@@ -373,6 +405,10 @@ namespace WebCasino.DataContext.Migrations
                         .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Wallets");
+
+                    b.HasData(
+                        new { Id = "admin-wallet", CurrencyId = 1, Deposits = 0.0, DisplayBalance = 0.0, IsDeleted = false, NormalisedBalance = 0.0, Stakes = 0.0, UserId = "abba12b6-5226-4067-8011-08231c0fe823", Wins = 0.0 }
+                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -426,6 +462,14 @@ namespace WebCasino.DataContext.Migrations
                         .WithMany("Cards")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("WebCasino.Entities.CurrencyExchangeRate", b =>
+                {
+                    b.HasOne("WebCasino.Entities.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WebCasino.Entities.LoginLog", b =>

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WebCasino.DataContext;
 using WebCasino.Entities;
 using WebCasino.Service.Abstract;
+using WebCasino.Service.Exceptions;
 using WebCasino.Service.Utility.Validator;
 
 namespace WebCasino.Service
@@ -12,45 +13,56 @@ namespace WebCasino.Service
 	public class TransactionService : ITransactionService
 	{
 		private readonly CasinoContext dbContext;
+		private readonly ICurrencyRateApiService currencyService;
 
-		public TransactionService(CasinoContext dbContext)
+		public TransactionService(CasinoContext dbContext, ICurrencyRateApiService currencyService)
 		{
 			ServiceValidator.ObjectIsNotEqualNull(dbContext);
 
 			this.dbContext = dbContext;
+			this.currencyService = currencyService;
 		}
 
-		public async Task<Transaction> AddTransaction(string userId,
-								double originalAmount,
-								BankCard bankCard,
-								int transactionTypeId,
-								string description)
+		public async Task<Transaction> AddDepositTransaction(
+			string userId,
+			double amountInUserCurrency,
+			string description)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(userId);
 			ServiceValidator.IsInputStringEmptyOrNull(description);
 			ServiceValidator.CheckStringLength(description, 10, 100);
-			ServiceValidator.ValueNotEqualZero(transactionTypeId);
-			ServiceValidator.ObjectIsNotEqualNull(bankCard);
-			//TODO: CHOFEXX - WHAT IS MAX VALUE
-			ServiceValidator.ValueIsBetween(originalAmount, 0, double.MaxValue);
+			ServiceValidator.ValueIsBetween(amountInUserCurrency, 0, double.MaxValue);
 
-			var allCards = this.dbContext.BankCards;
+			var userWin = await this.dbContext.Users
+				.Include(w => w.Wallet)
+				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
 
-			//TODO: CHOFEXX - IF THER ISN'T A BANK CARD IN DB ?
-			ServiceValidator.ValueNotEqualZero(allCards.Count());
-			var card = allCards.Select(c => c).Where(c => c.Id == bankCard.Id).First();
+			ServiceValidator.ObjectIsNotEqualNull(userWin);
 
-			ServiceValidator.ObjectIsNotEqualNull(card);
+			var userCurrency = userWin.Wallet.Currency.Name;
+			var bankRates = await this.currencyService.GetRatesAsync();
+
+			double normalisedCurrency = 0;
+			if (bankRates.ContainsKey(userCurrency))
+			{
+				double normalisedUserCurrency = bankRates[userCurrency];
+				normalisedCurrency = amountInUserCurrency / normalisedUserCurrency;
+			}
+			else
+			{
+				throw new EntityCurrencyNotFoundException("Unknown user currency");
+			}
 
 			var newTransaction = new Transaction()
 			{
 				UserId = userId,
-				OriginalAmount = originalAmount,
+				OriginalAmount = amountInUserCurrency,
 				Description = description,
-				TransactionTypeId = transactionTypeId,
-			
-				Card = card
+				TransactionTypeId = 3,
+				NormalisedAmount = normalisedCurrency
 			};
+
+			userWin.Wallet.NormalisedBalance += amountInUserCurrency;
 
 			await this.dbContext.Transactions.AddAsync(newTransaction);
 			await this.dbContext.SaveChangesAsync();
@@ -58,11 +70,154 @@ namespace WebCasino.Service
 			return newTransaction;
 		}
 
-		public async Task<IEnumerable<Transaction>> GetAllTransactions()
+		public async Task<Transaction> AddStakeTransaction(
+			string userId,
+			double amountInUserCurrency,
+			string description)
 		{
-			var transactionsQuery = await dbContext.Transactions.ToListAsync();
-			//TODO: 0 transaction ? this check is useless?
-			ServiceValidator.ValueNotEqualZero(transactionsQuery.Count());
+			ServiceValidator.IsInputStringEmptyOrNull(userId);
+			ServiceValidator.IsInputStringEmptyOrNull(description);
+			ServiceValidator.CheckStringLength(description, 10, 100);
+			ServiceValidator.ValueIsBetween(amountInUserCurrency, 0, double.MaxValue);
+
+			var userWin = await this.dbContext.Users
+				.Include(w => w.Wallet)
+				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
+
+			ServiceValidator.ObjectIsNotEqualNull(userWin);
+
+			var userCurrency = userWin.Wallet.Currency.Name;
+			var bankRates = await this.currencyService.GetRatesAsync();
+
+			double normalisedCurrency = 0;
+			if (bankRates.ContainsKey(userCurrency))
+			{
+				double normalisedUserCurrency = bankRates[userCurrency];
+				normalisedCurrency = amountInUserCurrency / normalisedUserCurrency;
+			}
+			else
+			{
+				throw new EntityCurrencyNotFoundException("Unknown user currency");
+			}
+
+			var newTransaction = new Transaction()
+			{
+				UserId = userId,
+				OriginalAmount = amountInUserCurrency,
+				Description = description,
+				TransactionTypeId = 2,
+				NormalisedAmount = normalisedCurrency
+			};
+
+			userWin.Wallet.NormalisedBalance -= amountInUserCurrency;
+
+			await this.dbContext.Transactions.AddAsync(newTransaction);
+			await this.dbContext.SaveChangesAsync();
+
+			return newTransaction;
+		}
+
+		public async Task<Transaction> AddWinTransaction(
+			string userId,
+			double amountInUserCurrency,
+			string description)
+		{
+			ServiceValidator.IsInputStringEmptyOrNull(userId);
+			ServiceValidator.IsInputStringEmptyOrNull(description);
+			ServiceValidator.CheckStringLength(description, 10, 100);
+			ServiceValidator.ValueIsBetween(amountInUserCurrency, 0, double.MaxValue);
+
+			var userWin = await this.dbContext.Users
+				.Include(w => w.Wallet)
+				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
+
+			ServiceValidator.ObjectIsNotEqualNull(userWin);
+
+			var userCurrency = userWin.Wallet.Currency.Name;
+			var bankRates = await this.currencyService.GetRatesAsync();
+
+			double normalisedCurrency = 0;
+			if (bankRates.ContainsKey(userCurrency))
+			{
+				double normalisedUserCurrency = bankRates[userCurrency];
+				normalisedCurrency = amountInUserCurrency / normalisedUserCurrency;
+			}
+			else
+			{
+				throw new EntityCurrencyNotFoundException("Unknown user currency");
+			}
+
+			var newTransaction = new Transaction()
+			{
+				UserId = userId,
+				OriginalAmount = amountInUserCurrency,
+				Description = description,
+				TransactionTypeId = 1,
+				NormalisedAmount = normalisedCurrency
+			};
+
+			userWin.Wallet.NormalisedBalance += amountInUserCurrency;
+
+			await this.dbContext.Transactions.AddAsync(newTransaction);
+			await this.dbContext.SaveChangesAsync();
+
+			return newTransaction;
+		}
+
+		public async Task<Transaction> AddWithdrawTransaction(
+			string userId,
+			double amountInUserCurrency,
+			string description)
+		{
+			ServiceValidator.IsInputStringEmptyOrNull(userId);
+			ServiceValidator.IsInputStringEmptyOrNull(description);
+			ServiceValidator.CheckStringLength(description, 10, 100);
+			ServiceValidator.ValueIsBetween(amountInUserCurrency, 0, double.MaxValue);
+
+			var userWin = await this.dbContext.Users
+				.Include(w => w.Wallet)
+				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
+
+			ServiceValidator.ObjectIsNotEqualNull(userWin);
+
+			var userCurrency = userWin.Wallet.Currency.Name;
+			var bankRates = await this.currencyService.GetRatesAsync();
+
+			double normalisedCurrency = 0;
+			if (bankRates.ContainsKey(userCurrency))
+			{
+				double normalisedUserCurrency = bankRates[userCurrency];
+				normalisedCurrency = amountInUserCurrency / normalisedUserCurrency;
+			}
+			else
+			{
+				throw new EntityCurrencyNotFoundException("Unknown user currency");
+			}
+
+			var newTransaction = new Transaction()
+			{
+				UserId = userId,
+				OriginalAmount = amountInUserCurrency,
+				Description = description,
+				TransactionTypeId = 4,
+				NormalisedAmount = normalisedCurrency
+			};
+
+			userWin.Wallet.NormalisedBalance -= amountInUserCurrency;
+
+			await this.dbContext.Transactions.AddAsync(newTransaction);
+			await this.dbContext.SaveChangesAsync();
+
+			return newTransaction;
+		}
+
+		public async Task<IEnumerable<Transaction>> GetAllTransactionsTable()
+		{
+			var transactionsQuery = await dbContext
+				.Transactions
+				.Include(tt => tt.TransactionType)
+				.Include(u => u.User.Wallet.Currency)
+				.ToListAsync();
 
 			return transactionsQuery;
 		}
@@ -74,7 +229,7 @@ namespace WebCasino.Service
 
 			var transactionsQuery = await this.dbContext
 				.Transactions
-				.Where(t => t.TransactionType.Name == transactionTypeName)
+				.Where(t => t.TransactionType.Name == transactionTypeName && t.IsDeleted != true)
 				.ToListAsync();
 
 			ServiceValidator.ValueNotEqualZero(transactionsQuery.Count());
@@ -88,7 +243,7 @@ namespace WebCasino.Service
 
 			var transactionsQuery = await this.dbContext
 				.Transactions
-				.Where(t => t.UserId == userId)
+				.Where(t => t.UserId == userId && t.IsDeleted != true)
 				.ToListAsync();
 
 			ServiceValidator.ValueNotEqualZero(transactionsQuery.Count);

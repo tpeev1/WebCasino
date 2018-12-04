@@ -1,0 +1,176 @@
+﻿@model WebCasino.Web.Areas.Administration.Models.DashboardViewModel
+
+<div id="open-admin-nav" class="fixed-plugin float-left">
+	<div class="dropdown show-dropdown">
+		<a href="#" class="open-admin-menu" onclick="openNav()">
+			<i class="fa fa-cog fa-2x"> </i>
+		</a>
+	</div>
+</div>
+<div id="mySidenav" class="admin-sidenav">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="nav nav-pills nav-pills-primary flex-column col-md-11">
+				<li class="nav-item  text-center" onclick="		closeNav()"><a href="#">Administration</a></li>
+				<li class="nav-item"><a class="nav-link" asp-area="Administration" asp-controller="Transactions" asp-action="History">TRANSACTION HISTORY</a></li>
+				<li class="nav-item"><a class="nav-link" asp-area="Administration" asp-controller="UserAdministration" asp-action="Index">USER ADMINISTRATION</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div id="main">
+	<div class="content">
+		<div class="row">
+			<div class="col-lg-4">
+				<div class="card card-chart">
+					<div class="card-header">
+						<h5 class="card-category">Total Wins</h5>
+						<h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> @Model.TotalWins</h3>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4">
+				<div class="card card-chart">
+					<div class="card-header">
+						<h5 class="card-category">Total Stakes</h5>
+						<h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> @Model.TotalStakes</h3>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4">
+				<div class="card card-chart">
+					<div class="card-header">
+						<h5 class="card-category">Total Users</h5>
+						<h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> @Model.TotalUsers</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card card-chart">
+					<div class="card-header ">
+						<div class="row">
+							<div class="col-sm-6 text-left">
+								<h5 class="card-category">Casino</h5>
+								<h2 class="card-title">Performance</h2>
+							</div>
+							<div class="col-sm-6">
+								<div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+									<label class="btn btn-sm btn-primary btn-simple active" id="0">
+										<input type="radio" name="options" checked>
+										<span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Transactions</span>
+										<span class="d-block d-sm-none">
+											<i class="tim-icons icon-single-02"></i>
+										</span>
+									</label>
+									<label class="btn btn-sm btn-primary btn-simple" id="1">
+										<input type="radio" class="d-none d-sm-none" name="options">
+										<span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Users</span>
+										<span class="d-block d-sm-none">
+											<i class="tim-icons icon-gift-2"></i>
+										</span>
+									</label>
+									<label class="btn btn-sm btn-primary btn-simple" id="2">
+										<input type="radio" class="d-none" name="options">
+										<span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Wins</span>
+										<span class="d-block d-sm-none">
+											<i class="tim-icons icon-tap-02"></i>
+										</span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="chart-area">
+							<canvas id="chartBig1"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-4">
+				<div class="card card-chart">
+					<div class="card-header">
+						<h5 class="card-category">Six Months Wins</h5>
+						<h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> @Model.SixMonthsTotalWins</h3>
+					</div>
+					<div class="card-body">
+						<div class="chart-area">
+							<canvas id="chartLinePurple"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4">
+				<div class="card card-chart">
+					<div class="card-header">
+						<h5 class="card-category">Daily Wins</h5>
+						<h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info"></i> @Model.DaylyWins.DaylyTotalUSD</h3>
+					</div>
+					<div class="card-body">
+						<div class="chart-area">
+							<canvas id="CountryChart"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4">
+				<div class="card card-chart">
+					<div class="card-header">
+						<h5 class="card-category">Six Months Stakes</h5>
+						<h3 class="card-title"><i class="tim-icons icon-send text-success"></i> @Model.SixMonthsTotalStakes</h3>
+					</div>
+					<div class="card-body">
+						<div class="chart-area">
+							<canvas id="chartLineGreen"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+<script>
+	$(document).ready(function () {
+		console.debug();
+		let daylyUSD = @Html.Raw(Json.Serialize(Model.DaylyWins.DaylyTotalUSD));
+		let daylyGBP = @Html.Raw(Json.Serialize(Model.DaylyWins.DaylyWinsGBP));
+		let daylyEUR = @Html.Raw(Json.Serialize(Model.DaylyWins.DaylyWinsEUR));
+		let daylyBGN = @Html.Raw(Json.Serialize(Model.DaylyWins.DaylyWinsBGN));
+
+		let daylyArr = [daylyUSD, daylyGBP, daylyEUR, daylyBGN];
+
+		let sixMonthsWins = @Html.Raw(Json.Serialize(Model.SixMonthsWins.monthValue));
+		let sixMonthsStakes = @Html.Raw(Json.Serialize(Model.SixMonthsWins.monthValue));
+
+		let oneYearWins = @Html.Raw(Json.Serialize(Model.OneYearWins.monthValue));
+		let oneYearStakes = @Html.Raw(Json.Serialize(Model.OneYearStakes.monthValue));
+
+		let oneYearTransactions = @Html.Raw(Json.Serialize(Model.OneYearTransactions.monthValue));
+
+		let sixMonthWinsMonths = Object.keys(sixMonthsWins);
+		let sixMonthsWinsValus = Object.values(sixMonthsWins);
+
+		let sixMonthStakesMonths = Object.keys(sixMonthsStakes);
+		let sixMonthsStakesValus = Object.values(sixMonthsStakes);
+
+		let oneYearWinMonths = Object.keys(oneYearWins);
+		let oneYearWinValues = Object.values(oneYearWins);
+
+		let oneYearStakesMonths = Object.keys(oneYearWins);
+		let oneYearStakesValues = Object.values(oneYearWins);
+
+		let oneYearTransactionsMonths = Object.keys(oneYearTransactions);
+		let oneYearTransactionsValues = Object.values(oneYearTransactions);
+
+		demo.initDashboardPageCharts(daylyArr, sixMonthsWinsValus, sixMonthWinsMonths, sixMonthsStakesValus, sixMonthStakesMonths, oneYearWinValues, oneYearWinMonths, oneYearTransactionsValues, oneYearTransactionsMonths, oneYearStakesValues, oneYearStakesMonths);
+
+	});
+</script>

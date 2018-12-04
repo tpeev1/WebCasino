@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using WebCasino.DataContext;
 using WebCasino.Service;
+using WebCasino.Service.Abstract;
 using WebCasino.Service.Exceptions;
 
 namespace WebCasino.ServiceTests.TransactionServiceTest
@@ -12,7 +14,9 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 		[TestMethod]
 		public void ThrowEntityNotFoundException_WhenNullParameterIsPassed()
 		{
-			Assert.ThrowsException<EntityNotFoundException>(() => new TransactionService(null));
+			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
+
+			Assert.ThrowsException<EntityNotFoundException>(() => new TransactionService(null, currencyServiceMock.Object));
 		}
 
 		[TestMethod]
@@ -22,9 +26,11 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 				.UseInMemoryDatabase(databaseName: "CreateInstance_WhenCorrectParametersArePassed")
 				.Options;
 
+			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
+
 			using (var context = new CasinoContext(contextOptions))
 			{
-				var service = new TransactionService(context);
+				var service = new TransactionService(context, currencyServiceMock.Object);
 
 				Assert.IsInstanceOfType(service, typeof(TransactionService));
 			}
