@@ -31,5 +31,15 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 
 			return View(model);
 		}
+
+		public async Task<IActionResult> Details(string id)
+		{
+			var userTransaction = await this.service.GetUserTransactions(id);
+
+			var model = new TransactionHistoryViewModel();
+			model.Transactions = userTransaction;
+
+			return View(model);
+		}
 	}
 }

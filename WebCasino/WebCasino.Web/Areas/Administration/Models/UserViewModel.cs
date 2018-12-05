@@ -7,6 +7,14 @@ namespace WebCasino.Web.Areas.Administration.Models
 {
 	public class UserViewModel
 	{
+		public UserViewModel(User model)
+		{
+			this.Alias = model.Alias;
+			this.Transactions = model.Transactions;
+			this.CreatedOn = model.CreatedOn;
+			this.Wallet = model.Wallet;
+		}
+
 		[Required]
 		[MinLength(3)]
 		[MaxLength(10)]

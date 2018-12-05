@@ -18,6 +18,9 @@
   </ItemGroup> 
 
   <ItemGroup>
+    <Content Update="Areas\Administration\Views\Transactions\Details.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\Administration\Views\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

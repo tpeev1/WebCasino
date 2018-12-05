@@ -18,18 +18,27 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 
 		public async Task<IActionResult> Index(UsersIndexViewModel model)
 		{
-            if (model.SearchText == null)
-            {
-                model.Users = await this.service.GetAllUsers(model.Page, 10);
-                model.TotalPages =  (int)Math.Ceiling(await this.service.Total() / (double)10);
-            }
-            else
-            {
-                model.Users = this.service.ListByContainingText(model.SearchText, model.Page, 10);
-                model.TotalPages = (int)Math.Ceiling(this.service.TotalContainingText(model.SearchText) / (double)10);
-            }
+			if (model.SearchText == null)
+			{
+				model.Users = await this.service.GetAllUsers(model.Page, 10);
+				model.TotalPages = (int)Math.Ceiling(await this.service.Total() / (double)10);
+			}
+			else
+			{
+				model.Users = this.service.ListByContainingText(model.SearchText, model.Page, 10);
+				model.TotalPages = (int)Math.Ceiling(this.service.TotalContainingText(model.SearchText) / (double)10);
+			}
 
-            return View(model);
-        }
+			return View(model);
+		}
+
+		public async Task<IActionResult> Details(string id)
+		{
+			var user = await this.service.RetrieveUser(id);
+
+			var model = new UserViewModel(user);
+
+			return View(model);
+		}
 	}
 }
