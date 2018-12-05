@@ -221,15 +221,19 @@ namespace WebCasino.Service
                 throw new InsufficientFundsException("Insufficient funds for the requested operation");
             }
 
-            if(userWin.Wallet.NormalisedBalance < 0.009)
+            else
             {
-                userWin.Wallet.NormalisedBalance = 0;
+                if (userWin.Wallet.NormalisedBalance < 0.009)
+                {
+                    userWin.Wallet.NormalisedBalance = 0;
+                }
+
+                await this.dbContext.Transactions.AddAsync(newTransaction);
+                await this.dbContext.SaveChangesAsync();
+
+                return newTransaction;
             }
 
-            await this.dbContext.Transactions.AddAsync(newTransaction);
-			await this.dbContext.SaveChangesAsync();
-
-			return newTransaction;
 		}
 
 		public async Task<IEnumerable<Transaction>> GetAllTransactionsTable()

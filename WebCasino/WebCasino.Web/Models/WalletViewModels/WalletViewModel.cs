@@ -25,8 +25,7 @@ namespace WebCasino.Web.Models.WalletViewModels
 
         public double DisplayBalance { get; set; }
         public double NormalizedBalance { get; private set; }
-        public IEnumerable<CardViewModel> Cards { get; set; }
-
+        public IEnumerable<CardViewModel> Cards { get; set; }   
 
     }
 }
