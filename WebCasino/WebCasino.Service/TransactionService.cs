@@ -240,36 +240,48 @@ namespace WebCasino.Service
 		public async Task<IEnumerable<Transaction>> GetAllTransactionsTable(int page = 1, int pageSize = 10)
 		{
 			var transactionsQuery = await dbContext
-				.Transactions.Where(tr => !tr.IsDeleted)
-				.OrderByDescending(x => x.Id)
+				.Transactions.Where(tr => !tr.IsDeleted)				
 				.Include(tt => tt.TransactionType)
-				.Include(u => u.User.Wallet.Currency)
-				 .Skip((page - 1) * pageSize).Take(pageSize)
-				.ToListAsync();
+				.Include(u => u.User.Wallet.Currency)               
+                 .Skip((page - 1) * pageSize).Take(pageSize)
+                 .OrderByDescending(d => d.CreatedOn)
+                .ToListAsync();
 
 			return transactionsQuery;
 		}
 
-		public IEnumerable<Transaction> ListByContainingText(string searchText, int page = 1, int pageSize = 10)
+		public async Task<IEnumerable<Transaction>> ListByContainingText(string searchText, int page = 1, int pageSize = 10)
 		{
-			return this.dbContext.Transactions.Where(m => m.IsDeleted == false)
-                .OrderByDescending(x => x.Id)
-                .Include(tt => tt.TransactionType)
-                .Include(u => u.User.Wallet.Currency)
-                .Where(m => m.User.Alias.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)).OrderByDescending(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+			return await this.dbContext.Transactions.Where(m => m.IsDeleted == false)               
+                .Include(tt => tt.TransactionType)    
+                .Include(u => u.User)
+                .Where(m => m.User.Alias.Contains(searchText, StringComparison.InvariantCultureIgnoreCase) ||
+                m.Description.Contains(searchText, StringComparison.InvariantCultureIgnoreCase) ||
+                m.User.Email.Contains(searchText, StringComparison.InvariantCultureIgnoreCase) ||
+                m.TransactionType.Name.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))                    
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .OrderByDescending(d => d.CreatedOn)
+                .ToListAsync();
 		}
 
-		public int TotalContainingText(string searchText)
-		{
-			return this.dbContext.Transactions.Where(m => m.User.Alias.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)).ToList().Count();
-		}
+        public async Task<int> TotalContainingText(string searchText)
+        {
+            var total = await this.dbContext.Transactions
+                .Where(m => m.User.Alias.Contains(searchText, StringComparison.InvariantCultureIgnoreCase) ||
+               m.Description.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
+                .ToListAsync();
 
-		public async Task<int> Total()
-		{
-			return await this.dbContext.Transactions.CountAsync();
-		}
+            return total.Count;
 
-		public async Task<IEnumerable<Transaction>> GetTransactionByType(string transactionTypeName)
+        }
+
+        public async Task<int> Total()
+        {
+            return await this.dbContext.Transactions.CountAsync();
+        }
+
+        public async Task<IEnumerable<Transaction>> GetTransactionByType(string transactionTypeName)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(transactionTypeName);
 			ServiceValidator.CheckStringLength(transactionTypeName, 3, 20);

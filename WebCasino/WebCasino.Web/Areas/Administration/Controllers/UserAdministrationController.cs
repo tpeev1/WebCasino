@@ -18,7 +18,7 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 
 		public async Task<IActionResult> Index(UsersIndexViewModel model)
 		{
-			if (model.SearchText == null)
+			if (string.IsNullOrWhiteSpace(model.SearchText))
 			{
 				model.Users = await this.service.GetAllUsers(model.Page, 10);
 				model.TotalPages = (int)Math.Ceiling(await this.service.Total() / (double)10);

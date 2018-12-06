@@ -8,9 +8,9 @@ namespace WebCasino.Service.Abstract
 	{
 		Task<IEnumerable<Transaction>> GetAllTransactionsTable(int page = 1, int pageSize = 10);
 
-		IEnumerable<Transaction> ListByContainingText(string searchText, int page = 1, int pageSize = 10);
+        Task<IEnumerable<Transaction>> ListByContainingText(string searchText, int page = 1, int pageSize = 10);
 
-		int TotalContainingText(string searchText);
+		Task<int> TotalContainingText(string searchText);
 
 		Task<int> Total();
 

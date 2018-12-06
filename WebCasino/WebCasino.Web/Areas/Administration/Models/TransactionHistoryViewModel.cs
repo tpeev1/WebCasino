@@ -5,6 +5,10 @@ namespace WebCasino.Web.Areas.Administration.Models
 {
 	public class TransactionHistoryViewModel
 	{
+        public TransactionHistoryViewModel()
+        {
+
+        }
 		public IEnumerable<Transaction> Transactions { get; set; }
 
 		public int TotalPages { get; set; }
@@ -14,8 +18,14 @@ namespace WebCasino.Web.Areas.Administration.Models
 		public int PreviousPage => this.Page ==
 			1 ? 1 : this.Page - 1;
 
-		public int NextPage => this.Page ==
-			this.TotalPages ? this.TotalPages : this.Page + 1;
+		public int NextPage
+        {
+            get
+            {
+                return this.Page == this.TotalPages ? this.TotalPages : this.Page + 1;
+            }
+        }
+      
 
 		public string SearchText { get; set; } = string.Empty;
 	}
