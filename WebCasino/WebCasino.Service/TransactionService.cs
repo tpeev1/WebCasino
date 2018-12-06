@@ -309,5 +309,18 @@ namespace WebCasino.Service
 
 			return transactionsQuery;
 		}
-	}
+
+        public async Task<Transaction> RetrieveUserTransaction(string id)
+        {
+            var user = await this.dbContext.Transactions
+                .Include(u => u.User)
+                .Include(tt => tt.TransactionType)
+                .Include(uc => uc.User.Wallet.Currency)
+                .FirstOrDefaultAsync(t => t.Id == id);
+                              
+            ServiceValidator.ObjectIsNotEqualNull(user);
+
+            return user;
+        }
+    }
 }

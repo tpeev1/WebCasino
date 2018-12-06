@@ -38,10 +38,9 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 
 		public async Task<IActionResult> Details(string id)
 		{
-			var userTransaction = await this.service.GetUserTransactions(id);
+			var userTransaction = await this.service.RetrieveUserTransaction(id);
 
-			var model = new TransactionHistoryViewModel();
-			model.Transactions = userTransaction;
+            var model = new TransactionDetailsViewModel(userTransaction);
 
 			return View(model);
 		}

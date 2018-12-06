@@ -5,10 +5,7 @@ namespace WebCasino.Web.Areas.Administration.Models
 {
 	public class TransactionHistoryViewModel
 	{
-        public TransactionHistoryViewModel()
-        {
-
-        }
+      
 		public IEnumerable<Transaction> Transactions { get; set; }
 
 		public int TotalPages { get; set; }

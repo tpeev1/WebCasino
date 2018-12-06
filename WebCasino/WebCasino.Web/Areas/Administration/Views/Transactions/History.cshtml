@@ -63,8 +63,8 @@
                             <td>@String.Format("{0:.##}",transaction.NormalisedAmount)</td>                           
                             <td>@transaction.Description</td>
                             <td>@transaction.User.Email</td>
-                            <td>@transaction.User.Alias</td>
-                            <td> <a asp-action="Details" asp-controller="Transactions" asp-area="Administration" asp-route-id="@transaction.UserId">Details</a> </td>
+                            <td>@transaction.User.Alias</td>                         
+                            <td> <a asp-action="Details" asp-controller="Transactions" asp-area="Administration" asp-route-id="@transaction.Id">Details</a> </td>
                         </tr>
 						}
 					}
