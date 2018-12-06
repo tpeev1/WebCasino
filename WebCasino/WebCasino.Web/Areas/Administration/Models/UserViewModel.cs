@@ -1,48 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using WebCasino.Entities;
 
 namespace WebCasino.Web.Areas.Administration.Models
 {
 	public class UserViewModel
 	{
-		public UserViewModel(User model)
-		{
-			this.Alias = model.Alias;
-			this.Transactions = model.Transactions;
-			this.CreatedOn = model.CreatedOn;
-			this.Wallet = model.Wallet;
-		}
+        public UserViewModel()
+        {
 
-		[Required]
-		[MinLength(3)]
-		[MaxLength(10)]
-		public string Alias { get; set; }
+        }
 
-		[Required]
-		[DataType(DataType.Date)]
-		public DateTime DateOfBirth { get; set; }
+		//public UserViewModel(IEnumerable<Transaction> transaction)
+		//{
+  //          this.Transactions = transaction;
+		
+		
+		//	this.CreatedOn = model.CreatedOn;
+		//	this.Wallet = model.Wallet;
+		//}
 
-		public bool Locked { get; set; }
+        public string Id { get; set; }
+  //      public string Alias { get; set; }
 
-		public bool IsDeleted { get; set; }
+	
+		//public DateTime DateOfBirth { get; set; }
 
-		[DataType(DataType.DateTime)]
-		public DateTime? DeletedOn { get; set; }
+		//public bool Locked { get; set; }
 
-		[DataType(DataType.DateTime)]
-		public DateTime? CreatedOn { get; set; }
+		//public bool IsDeleted { get; set; }
 
-		[DataType(DataType.DateTime)]
-		public DateTime? ModifiedOn { get; set; }
+	
+		//public DateTime? DeletedOn { get; set; }
 
-		public Wallet Wallet { get; set; }
+		
+		//public DateTime? CreatedOn { get; set; }
 
-		public IEnumerable<BankCard> Cards { get; set; }
+		
+		//public DateTime? ModifiedOn { get; set; }
 
-		public IEnumerable<LoginLog> Logs { get; set; }
+		//public Wallet Wallet { get; set; }	
+        public User User { get; set; }
 
 		public IEnumerable<Transaction> Transactions { get; set; }
-	}
+
+        public int TotalPages { get; set; }
+
+        public int Page { get; set; } = 1;
+
+        public int PreviousPage => this.Page ==
+            1 ? 1 : this.Page - 1;
+
+        public int NextPage => this.Page ==
+            this.TotalPages ? this.TotalPages : this.Page + 1;
+
+        public string SearchText { get; set; } = string.Empty;
+    }
 }

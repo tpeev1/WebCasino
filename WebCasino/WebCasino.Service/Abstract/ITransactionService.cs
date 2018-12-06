@@ -27,5 +27,10 @@ namespace WebCasino.Service.Abstract
 		Task<Transaction> AddWithdrawTransaction(string userId, double originalAmount, string description);
 
 		Task<Transaction> AddDepositTransaction(string userId, double originalAmount, string description);
-	}
+
+        Task<IEnumerable<Transaction>> RetrieveUserTransaction(string id, int page = 1, int pageSize = 10);
+
+        Task<IEnumerable<Transaction>> RetrieveUserSearchTransaction(string searchText, string id, int page = 1, int pageSize = 10);
+
+    }
 }

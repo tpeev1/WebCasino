@@ -322,5 +322,43 @@ namespace WebCasino.Service
 
             return user;
         }
+
+        /// <summary>
+        /// Use for Table in User Transactions Details
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<Transaction>> RetrieveUserTransaction(string id, int page = 1, int pageSize = 10)
+        {
+            var transactionsQuery = await this.dbContext
+                 .Transactions
+                 .Where(t => t.UserId == id && t.IsDeleted != true)
+                .Include(tt => tt.TransactionType)
+                .Include(u => u.User)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .OrderByDescending(d => d.CreatedOn)
+                .ToListAsync();
+
+            return transactionsQuery;
+        }
+
+      //TODO: ADD SEARCH FILTERS      
+        public async Task<IEnumerable<Transaction>> RetrieveUserSearchTransaction(string searchText, string id, int page = 1, int pageSize = 10)
+        {
+            var transactionsQueryer = await this.dbContext.Transactions
+                .Where(t => t.UserId == id && t.IsDeleted != true)
+                 .Include(tt => tt.TransactionType)
+                .Include(u => u.User)
+                .Where(m => m.User.Alias.Contains(searchText, StringComparison.InvariantCultureIgnoreCase) ||
+                m.Description.Contains(searchText, StringComparison.InvariantCultureIgnoreCase) ||
+                m.User.Email.Contains(searchText, StringComparison.InvariantCultureIgnoreCase) ||
+                m.TransactionType.Name.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .OrderByDescending(d => d.CreatedOn)
+                .ToListAsync();
+
+            return transactionsQueryer;
+        }
     }
 }

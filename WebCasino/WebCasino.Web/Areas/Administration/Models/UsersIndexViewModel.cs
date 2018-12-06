@@ -20,18 +20,6 @@ namespace WebCasino.Web.Areas.Administration.Models
 
         public string SearchText { get; set; } = string.Empty;
 
-        public UsersIndexViewModel()
-        {
-                
-        }
-        public UsersIndexViewModel(IEnumerable<User> users)
-		{
-			//this.Users = users.Select(u => new UserViewModel()
-			//{
-			//	Alias = u.Alias,
-			//	Wallet = u.Wallet,
-			//	Transactions = u.Transactions
-			//});
-		}
+     
 	}
 }
