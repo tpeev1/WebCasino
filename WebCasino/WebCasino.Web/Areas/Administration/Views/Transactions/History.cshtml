@@ -32,12 +32,16 @@
 		<div class="table">
 			<table class="table tablesorter table-hover " id="">
 				<thead class=" text-primary">
-					<tr>
-						<th>Email</th>
-						<th>Created On</th>
-						<th>Description</th>
-						<th>Action</th>
-					</tr>
+                    <tr>
+                        <th>Created On</th>
+                        <th>Type</th>
+                        <th>Amount $</th>
+                        <th>User Currency</th>
+                        <th>Description</th>
+                        <th>Email</th>
+                        <th>Alias</th>
+                        <th>Action</th>
+                    </tr>
 				</thead>
 				<tbody>
 					@if (Model.Transactions.Count() == 0)
@@ -50,12 +54,16 @@
 					{
 						@foreach (var transaction in Model.Transactions)
 						{
-							<tr>
-								<td>@transaction.User</td>
-								<td>@transaction.CreatedOn</td>
-								<td>@transaction.Description</td>
-								<td> <a asp-action="Details" asp-controller="Transactions" asp-area="Administration" asp-route-id="@transaction.UserId">Details</a> </td>
-							</tr>
+                        <tr>
+                            <td>@transaction.CreatedOn</td>
+                            <td>@transaction.TransactionType.Id</td>
+                            <td></td>
+                            <td></td>
+                            <td>@transaction.Description</td>
+                            <td></td>
+                            <td>@transaction.User</td>
+                            <td> <a asp-action="Details" asp-controller="Transactions" asp-area="Administration" asp-route-id="@transaction.UserId">Details</a> </td>
+                        </tr>
 						}
 					}
 				</tbody>

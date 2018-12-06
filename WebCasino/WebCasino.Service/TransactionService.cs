@@ -253,7 +253,10 @@ namespace WebCasino.Service
 		public IEnumerable<Transaction> ListByContainingText(string searchText, int page = 1, int pageSize = 10)
 		{
 			return this.dbContext.Transactions.Where(m => m.IsDeleted == false)
-				.Where(m => m.User.Alias.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)).OrderByDescending(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                .OrderByDescending(x => x.Id)
+                .Include(tt => tt.TransactionType)
+                .Include(u => u.User.Wallet.Currency)
+                .Where(m => m.User.Alias.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)).OrderByDescending(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 		}
 
 		public int TotalContainingText(string searchText)
