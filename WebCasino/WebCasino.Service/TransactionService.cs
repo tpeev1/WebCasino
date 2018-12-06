@@ -36,6 +36,7 @@ namespace WebCasino.Service
 
 			var userWin = await this.dbContext.Users
 				.Include(w => w.Wallet)
+                    .ThenInclude(wall => wall.Currency)
 				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
 
 			ServiceValidator.ObjectIsNotEqualNull(userWin);
@@ -63,7 +64,8 @@ namespace WebCasino.Service
 				NormalisedAmount = normalisedCurrency
 			};
 
-			userWin.Wallet.NormalisedBalance += amountInUserCurrency;
+            userWin.Wallet.NormalisedBalance += normalisedCurrency;
+            userWin.Wallet.DisplayBalance += amountInUserCurrency;
 
 			await this.dbContext.Transactions.AddAsync(newTransaction);
 			await this.dbContext.SaveChangesAsync();
@@ -110,7 +112,13 @@ namespace WebCasino.Service
 				NormalisedAmount = normalisedCurrency
 			};
 
-			userWin.Wallet.NormalisedBalance -= amountInUserCurrency;
+			userWin.Wallet.NormalisedBalance -= normalisedCurrency;
+            userWin.Wallet.DisplayBalance -= amountInUserCurrency;
+
+            if(userWin.Wallet.NormalisedBalance < 0)
+            {
+                throw new InsufficientFundsException("Insufficient funds for the requested operation");
+            }           
 
 			await this.dbContext.Transactions.AddAsync(newTransaction);
 			await this.dbContext.SaveChangesAsync();
@@ -157,7 +165,8 @@ namespace WebCasino.Service
 				NormalisedAmount = normalisedCurrency
 			};
 
-			userWin.Wallet.NormalisedBalance += amountInUserCurrency;
+			userWin.Wallet.NormalisedBalance += normalisedCurrency;
+            userWin.Wallet.DisplayBalance += amountInUserCurrency;
 
 			await this.dbContext.Transactions.AddAsync(newTransaction);
 			await this.dbContext.SaveChangesAsync();
@@ -177,6 +186,7 @@ namespace WebCasino.Service
 
 			var userWin = await this.dbContext.Users
 				.Include(w => w.Wallet)
+                    .ThenInclude(w => w.Currency)
 				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
 
 			ServiceValidator.ObjectIsNotEqualNull(userWin);
@@ -204,12 +214,27 @@ namespace WebCasino.Service
 				NormalisedAmount = normalisedCurrency
 			};
 
-			userWin.Wallet.NormalisedBalance -= amountInUserCurrency;
+			userWin.Wallet.NormalisedBalance -= normalisedCurrency;
+            userWin.Wallet.DisplayBalance -= amountInUserCurrency;
 
-			await this.dbContext.Transactions.AddAsync(newTransaction);
-			await this.dbContext.SaveChangesAsync();
+            if (userWin.Wallet.NormalisedBalance < 0)
+            {
+                throw new InsufficientFundsException("Insufficient funds for the requested operation");
+            }
 
-			return newTransaction;
+            else
+            {
+                if (userWin.Wallet.NormalisedBalance < 0.009)
+                {
+                    userWin.Wallet.NormalisedBalance = 0;
+                }
+
+                await this.dbContext.Transactions.AddAsync(newTransaction);
+                await this.dbContext.SaveChangesAsync();
+
+                return newTransaction;
+            }
+
 		}
 
 		public async Task<IEnumerable<Transaction>> GetAllTransactionsTable(int page = 1, int pageSize = 10)

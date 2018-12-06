@@ -32,25 +32,6 @@ namespace WebCasino.ServiceTests.CardServiceTests
 		}
 
 		[TestMethod]
-		public async Task ThrowArgumentNullException_WhenUserIsNotFoundInDb()
-		{
-			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-				.UseInMemoryDatabase(databaseName: "ThrowArgumentNullException_WhenUserIDIsNull")
-				.Options;
-
-			string userId = "userId";
-
-			using (var context = new CasinoContext(contextOptions))
-			{
-				var transactionService = new CardService(context);
-
-				await Assert.ThrowsExceptionAsync<ArgumentNullException>(
-					() => transactionService.GetAllCards(userId)
-				);
-			}
-		}
-
-		[TestMethod]
 		public async Task SucesGetAllCards()
 		{
 			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()

@@ -15,6 +15,11 @@ namespace WebCasino.Service.Abstract
 
 		Task<double> Withdraw(string cardNumber, double amount);
 
-		Task<BankCard> RemoveCard(string cardNumber);
-	}
+        Task<double> Deposit(string cardNumber, double amount);
+
+
+        Task<BankCard> RemoveCard(string cardNumber);
+
+
+    }
 }

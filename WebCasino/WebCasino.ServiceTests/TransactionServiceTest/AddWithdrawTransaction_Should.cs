@@ -185,7 +185,9 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 					{
 						Id = 1,
 						Name = baseCurrency
-					}
+					},
+                    DisplayBalance = 750,
+                    NormalisedBalance = 500
 				}
 			};
 
@@ -201,13 +203,61 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 				var originalAmount = savedTransaction.OriginalAmount;
 				var normalisedAmount = savedTransaction.NormalisedAmount;
 				var userAmount = context.Users.Find(userId).Wallet.NormalisedBalance;
-				var winTransaction = savedTransaction.TransactionTypeId;
+                var userDisplayAmount = context.Users.Find(userId).Wallet.DisplayBalance;
+                var winTransaction = savedTransaction.TransactionTypeId;
 
 				Assert.AreEqual(amountInUserCurrency, originalAmount);
 				Assert.AreEqual(amountInUserCurrency / currency, normalisedAmount);
-				Assert.AreEqual(0 - amountInUserCurrency, userAmount);
+				Assert.AreEqual(750 - amountInUserCurrency, userDisplayAmount);
+                Assert.AreEqual(500 - amountInUserCurrency / currency, userAmount);
 				Assert.IsTrue(winTransaction == 4);
 			}
 		}
-	}
+
+        [TestMethod]
+        public async Task ThrowWhenInsufficientFundsForOperation()
+        {
+            var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
+                .UseInMemoryDatabase(databaseName: "ThrowWhenInsufficientFundsForOperation")
+                .Options;
+
+            var currencyServiceMock = new Mock<ICurrencyRateApiService>();
+
+            var baseCurrency = "USD";
+            var currency = 1.50;
+            var serviceReturn = new ConcurrentDictionary<string, double>();
+            serviceReturn.TryAdd(baseCurrency, currency);
+            currencyServiceMock.Setup(s => s.GetRatesAsync()).Returns(Task.FromResult(serviceReturn));
+
+            string userId = "userId";
+            double amountInUserCurrency = 50;
+            string description = "1234567890";
+
+            var user = new User()
+            {
+                Id = userId,
+                Wallet = new Wallet()
+                {
+                    Id = "walledId",
+                    Currency = new Currency()
+                    {
+                        Id = 1,
+                        Name = baseCurrency
+                    },
+
+                }
+            };
+
+            using (var context = new CasinoContext(contextOptions))
+            {
+                context.Users.Add(user);
+                await context.SaveChangesAsync();
+
+                var transactionService = new TransactionService(context, currencyServiceMock.Object);
+
+                await Assert.ThrowsExceptionAsync<InsufficientFundsException>(
+                    () => transactionService.AddWithdrawTransaction(userId, amountInUserCurrency, description));
+            }
+        }
+    }
 }

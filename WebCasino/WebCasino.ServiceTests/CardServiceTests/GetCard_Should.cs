@@ -38,7 +38,7 @@ namespace WebCasino.ServiceTests.CardServiceTests
 				.UseInMemoryDatabase(databaseName: "ThrowCardNumberException_WhenGetCardCardNumberIsNull")
 				.Options;
 
-			string cardNumber = "a00000000b000000";
+			string cardId = "a00000000b000000";
 			
 			DateTime expiration = new DateTime(2017, 11, 10);
 
@@ -46,8 +46,8 @@ namespace WebCasino.ServiceTests.CardServiceTests
 			{
 				var transactionService = new CardService(context);
 
-				await Assert.ThrowsExceptionAsync<CardNumberException>(
-					() => transactionService.GetCard(cardNumber)
+				await Assert.ThrowsExceptionAsync<EntityNotFoundException>(
+					() => transactionService.GetCard(cardId)
 				);
 			}
 		}
@@ -78,11 +78,11 @@ namespace WebCasino.ServiceTests.CardServiceTests
 			.UseInMemoryDatabase(databaseName: "SucesGetAllCard")
 			.Options;
 
-			string cardNumber = "0000000000000000";
+			string cardId = "0000000000000000";
 			var newBankCard = new BankCard()
 			{
-				CardNumber = cardNumber
-			};
+				Id = cardId
+            };
 
 			DateTime expiration = new DateTime(2019, 11, 10);
 
@@ -93,10 +93,10 @@ namespace WebCasino.ServiceTests.CardServiceTests
 				await context.BankCards.AddAsync(newBankCard);
 				await context.SaveChangesAsync();
 
-				var card = await cardService.GetCard(cardNumber);
+				var card = await cardService.GetCard(cardId);
 
 				Assert.IsInstanceOfType(card, typeof(BankCard));
-				Assert.IsTrue(card.CardNumber == cardNumber);
+				Assert.IsTrue(card.Id == cardId);
 			}
 		}
 	}

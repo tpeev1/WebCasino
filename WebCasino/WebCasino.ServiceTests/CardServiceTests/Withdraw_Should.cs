@@ -48,7 +48,7 @@ namespace WebCasino.ServiceTests.CardServiceTests
 			{
 				var transactionService = new CardService(context);
 
-				await Assert.ThrowsExceptionAsync<CardNumberException>(
+				await Assert.ThrowsExceptionAsync<EntityNotFoundException>(
 					() => transactionService.Withdraw(cardNumber, amount)
 				);
 			}
@@ -107,7 +107,7 @@ namespace WebCasino.ServiceTests.CardServiceTests
 
 			var newBankCard = new BankCard()
 			{
-				CardNumber = cardNumber,
+				Id = cardNumber,
 				Expiration = new DateTime(2017, 2, 2)
 			};
 
@@ -131,12 +131,12 @@ namespace WebCasino.ServiceTests.CardServiceTests
 			.UseInMemoryDatabase(databaseName: "WidthdrawSucessuly")
 			.Options;
 
-			string cardNumber = "0000000000000000";
+			string cardId = "0000000000000000";
 			double amount = 100.2;
 
 			var newBankCard = new BankCard()
 			{
-				CardNumber = cardNumber,
+				Id = cardId,
 				Expiration = new DateTime(2019, 2, 2)
 			};
 
@@ -147,7 +147,7 @@ namespace WebCasino.ServiceTests.CardServiceTests
 				await context.BankCards.AddAsync(newBankCard);
 				await context.SaveChangesAsync();
 
-				await cardService.Withdraw(cardNumber, amount);
+				await cardService.Withdraw(cardId, amount);
 
 				Assert.IsTrue(newBankCard.MoneyRetrieved == amount);
 			}

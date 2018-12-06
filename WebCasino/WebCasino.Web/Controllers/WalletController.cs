@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebCasino.Service.Abstract;
+using WebCasino.Service.Exceptions;
 using WebCasino.Web.Models.WalletViewModels;
+using WebCasino.Web.Utilities;
 using WebCasino.Web.Utilities.Wrappers;
 
 namespace WebCasino.Web.Controllers
@@ -15,11 +18,15 @@ namespace WebCasino.Web.Controllers
     {
         private readonly IWalletService walletService;
         private readonly IUserWrapper userWrapper;
+        private readonly ICardService cardService;
+        private readonly ITransactionService transactionService;
 
-        public WalletController(IWalletService walletService, IUserWrapper userWrapper)
+        public WalletController(IWalletService walletService, IUserWrapper userWrapper, ICardService cardService, ITransactionService transactionService)
         {
             this.walletService = walletService;
             this.userWrapper = userWrapper;
+            this.cardService = cardService;
+            this.transactionService = transactionService;
         }
 
         public async Task<IActionResult> Index()
@@ -31,5 +38,82 @@ namespace WebCasino.Web.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCard(CardViewModel model)
+        {
+            //TO DO: DA PITAM ZA VALIDACIITE TUK
+            if (this.ModelState.IsValid)
+            {
+                var userId = this.userWrapper.GetUserId(HttpContext.User);
+
+                var date = DateTime.ParseExact(model.ExpirationDate.Replace(" ", string.Empty), "MM/yyyy", CultureInfo.InvariantCulture);
+                await this.cardService.AddCard(model.RealNumber.Replace(" ", string.Empty), userId, date);
+                TempData["CardAdded"] = "Succesfulyy added new card";
+                return this.RedirectToAction("index", "wallet");
+            }
+
+            TempData["CardAddedFail"] = "Failed to add card. Please try again with a different card";
+            return this.RedirectToAction("index", "wallet");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddFunds(CardTransactionViewModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                var userId = this.userWrapper.GetUserId(HttpContext.User);
+                var userWallet = await this.walletService.RetrieveWallet(userId);
+                var userCurrency = ((CurrencyOptions)userWallet.CurrencyId).ToString();
+
+                var card = await this.cardService.GetCard(model.CardId);
+                if(card.UserId == userId)
+                {
+                    await this.transactionService.AddDepositTransaction
+                        (userId, model.Amount, $"Deposited {model.Amount} {userCurrency} with card ending in {card.CardNumber.Substring(12)}");
+                    await this.cardService.Deposit(model.CardId, model.Amount);
+                    TempData["SuccessfullDeposit"] = $"Succesfully deposited {model.Amount} {userCurrency}";
+                    return this.RedirectToAction("index", "wallet");
+                }
+            }
+
+            TempData["FailedDeposit"] = "Failed to deposit. Please try again with a different card";
+            return this.RedirectToAction("index", "wallet");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> WithdrawFunds(CardTransactionViewModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                var userId = this.userWrapper.GetUserId(HttpContext.User);
+                var userWallet = await this.walletService.RetrieveWallet(userId);
+                var userCurrency = ((CurrencyOptions)userWallet.CurrencyId).ToString();
+
+                var card = await this.cardService.GetCard(model.CardId);
+                if (card.UserId == userId)
+                {
+                    try
+                    {
+                        await this.transactionService.AddWithdrawTransaction
+                       (userId, model.Amount, $"Withdrew {model.Amount} {userCurrency} with card ending in {card.CardNumber.Substring(12)}");
+                        await this.cardService.Withdraw(model.CardId, model.Amount);
+                        TempData["SuccesfullWithdraw"] = $"Succesfully withdrew {model.Amount} {userCurrency}";
+                        return this.RedirectToAction("index", "wallet");
+                    }
+                    catch(InsufficientFundsException exception)
+                    {
+                        TempData["FailedWithdraw"] = exception.Message;
+                    }
+
+                }
+            }
+            else
+            {
+                TempData["FailedWithdraw"] = "Failed to withdraw. Please try again with a different card";
+            }
+            return this.RedirectToAction("index", "wallet");
+        }
     }
+
 }

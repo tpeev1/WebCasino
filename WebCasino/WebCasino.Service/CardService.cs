@@ -51,19 +51,17 @@ namespace WebCasino.Service
 				.Where(u => u.UserId == userId && u.IsDeleted == false)
 				.ToListAsync();
 
-			//TODO: CHOFEXX -> Think for this !!
-			ServiceValidator.ValueNotEqualZero(bankCardQuery.Count);
-
 			return bankCardQuery;
 		}
 		
+        //TO DO: FIX THIS
 		public async Task<BankCard> GetCard(string cardNumber)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(cardNumber);
-			ServiceValidator.ValidateCardNumber(cardNumber);
+			//ServiceValidator.ValidateCardNumber(cardNumber);
 
 			var bankCardQuery = await this.dbContext.BankCards
-				.FirstOrDefaultAsync(c => c.CardNumber == cardNumber && c.IsDeleted == false);
+				.FirstOrDefaultAsync(c => c.Id == cardNumber && c.IsDeleted == false);
 
 			ServiceValidator.ObjectIsNotEqualNull(bankCardQuery);
 
@@ -92,11 +90,11 @@ namespace WebCasino.Service
 		public async Task<double> Withdraw(string cardNumber, double amount)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(cardNumber);
-			ServiceValidator.ValidateCardNumber(cardNumber);
+			//ServiceValidator.ValidateCardNumber(cardNumber);
 			ServiceValidator.ValueIsBetween(amount, 0, double.MaxValue);
 
 			var bankCardQuery = await this.dbContext.BankCards
-				.FirstOrDefaultAsync(c => c.CardNumber == cardNumber && c.IsDeleted == false);
+				.FirstOrDefaultAsync(c => c.Id == cardNumber && c.IsDeleted == false);
 
 			ServiceValidator.ObjectIsNotEqualNull(bankCardQuery);
 			ServiceValidator.CheckCardExpirationDate(bankCardQuery.Expiration);
@@ -107,5 +105,25 @@ namespace WebCasino.Service
 
 			return amount;
 		}
-	}
+
+        //TO DO: TEST THIS
+        public async Task<double> Deposit(string cardNumber, double amount)
+        {
+            ServiceValidator.IsInputStringEmptyOrNull(cardNumber);
+           // ServiceValidator.ValidateCardNumber(cardNumber);
+            ServiceValidator.ValueIsBetween(amount, 0, double.MaxValue);
+
+            var bankCardQuery = await this.dbContext.BankCards
+                .FirstOrDefaultAsync(c => c.Id == cardNumber && c.IsDeleted == false);
+
+            ServiceValidator.ObjectIsNotEqualNull(bankCardQuery);
+            ServiceValidator.CheckCardExpirationDate(bankCardQuery.Expiration);
+
+            bankCardQuery.MoneyAdded += amount;
+            await this.dbContext.SaveChangesAsync();
+
+
+            return amount;
+        }
+    }
 }
