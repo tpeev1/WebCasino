@@ -16,5 +16,14 @@ namespace WebCasino.Web.Models.GameViewModels
         [Required]
         [Range(0, double.MaxValue, ErrorMessage = "Please enter valid bet.")]
         public double BetAmount { get; set; }
+
+        [Required]
+        [Range(4, 8)]
+        public int GameBoardRows { get; set; }
+
+        [Required]
+        [Range(3,5)]
+        public int GameBoardCols { get; set; }
+
     }
 }

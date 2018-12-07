@@ -1,4 +1,5 @@
-﻿using WebCasino.Entities;
+﻿using System;
+using WebCasino.Entities;
 
 namespace WebCasino.Web.Models.ViewComponentModels.UserLoginModels
 {
@@ -7,7 +8,7 @@ namespace WebCasino.Web.Models.ViewComponentModels.UserLoginModels
 		public UserLogginViewModel(User user)
 		{
 			Alias = user.Alias;
-			Balance = user.Wallet.DisplayBalance;
+			Balance = Math.Floor(user.Wallet.DisplayBalance*100)/100;
 			Currency = user.Wallet.Currency.Name;
 		}
 

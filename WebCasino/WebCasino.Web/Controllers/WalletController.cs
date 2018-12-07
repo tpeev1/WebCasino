@@ -40,6 +40,7 @@ namespace WebCasino.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddCard(CardViewModel model)
         {
             if (this.ModelState.IsValid)
@@ -57,6 +58,7 @@ namespace WebCasino.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddFunds(CardTransactionViewModel model)
         {
             if (this.ModelState.IsValid)
@@ -81,6 +83,7 @@ namespace WebCasino.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> WithdrawFunds(CardTransactionViewModel model)
         {
             if (this.ModelState.IsValid)

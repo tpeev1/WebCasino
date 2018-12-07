@@ -50,6 +50,7 @@
                     }
                     else
                     {
+                        
                         <h4>Withdraw funds</h4>
                         <form asp-action="WithdrawFunds" asp-controller="Wallet" id="withdrawFunds">
                             <label>Card</label>
@@ -63,6 +64,13 @@
                                 <label asp-for="Cvv">CVV</label>
                                 <input class="form-control" asp-for="Cvv" />
                                 <span asp-validation-for="Cvv" class="text-danger"></span>
+                            </div>
+                            <div class="alert alert-info alert-with-icon">
+                                <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                                    <i class="tim-icons icon-simple-remove"></i>
+                                </button>
+                                <span data-notify="icon" class="tim-icons icon-alert-circle-exc"></span>
+                                <span>Due to changes in the currency exchange rates the maximum amount you can withdraw is: @await Component.InvokeAsync("UserNormalizedBalanceWarning")<strong></strong></span>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>

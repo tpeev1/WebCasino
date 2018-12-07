@@ -31,5 +31,6 @@ namespace WebCasino.Web.Models.WalletViewModels
         public string Cvv { get; set; }
 
         public IEnumerable<SelectListItem> CardSelect { get; set; }
+
     }
 }
