@@ -1,0 +1,34 @@
+﻿@model GameViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+
+<table class="table table-bordered">
+    <thead>WIN: @Model.WinCoef</thead>
+    @for (int i = 0; i < Model.Board.GetLength(0); i++)
+    {
+        <tr>
+            @for (int j = 0; j < Model.Board.GetLength(1); j++)
+            {
+                <td>@Model.Board[i, j].SymbolName = @Model.Board[i, j].RolledNumber</td>
+            }
+        </tr>
+    }
+
+</table>
+
+<form id="betForm" asp-area="" asp-controller="game" asp-action="bet">
+    <div class="form-group">
+        <label asp-for="BetAmount">Bet</label>
+        <input class="form-control" asp-for="BetAmount" />
+        <span asp-validation-for="BetAmount" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+@section Scripts{ 
+<script src="~/js/betForm.js"></script>
+}

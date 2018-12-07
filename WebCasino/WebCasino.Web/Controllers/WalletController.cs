@@ -42,7 +42,6 @@ namespace WebCasino.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCard(CardViewModel model)
         {
-            //TO DO: DA PITAM ZA VALIDACIITE TUK
             if (this.ModelState.IsValid)
             {
                 var userId = this.userWrapper.GetUserId(HttpContext.User);
