@@ -35,14 +35,14 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 			return View(model);
 		}
 
-
+        [HttpGet]
         public async Task<IActionResult> Details(UserViewModel model)
         {
             if (string.IsNullOrWhiteSpace(model.SearchText))
             {
                 model.Transactions = await this.transactionService.RetrieveUserTransaction(model.Id, model.Page, 10);
-                //TODO: COMMENTS ON THIS!!
                 model.User = model.Transactions.Select(u => u.User).First();
+
                 model.TotalPages = (int)Math.Ceiling(await this.transactionService.Total() / (double)10);
             }
             else
@@ -55,9 +55,12 @@ namespace WebCasino.Web.Areas.Administration.Controllers
             return View(model);
         }
 
+
         public async Task<IActionResult> UserAccountSettings(UserViewModel model)
         {
             return  this.View(model);
         }
+
+       
     }
 }
