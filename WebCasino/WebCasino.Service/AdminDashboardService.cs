@@ -20,7 +20,7 @@ namespace WebCasino.Service
 			this.dbContext = dbContext ?? throw new NullReferenceException();
 		}
 
-		public async Task<MonthsTransactionsModel> GetMonthsTransactions(DateTime timePeriod,
+		public async Task<MonthsTransactionsModelDTO> GetMonthsTransactions(DateTime timePeriod,
 			string transactionType,
 			int monthCount)
 		{
@@ -36,7 +36,7 @@ namespace WebCasino.Service
 			return resultModel;
 		}
 
-		public async Task<MonthsTransactionsModel> GetYearTransactions(DateTime timePeriod)
+		public async Task<MonthsTransactionsModelDTO> GetYearTransactions(DateTime timePeriod)
 		{
 			var dbQuery = await this.dbContext.Transactions.ToListAsync();
 
@@ -47,13 +47,13 @@ namespace WebCasino.Service
 			return resultModel;
 		}
 
-		public MonthsTransactionsModel FiltarByMonth(DateTime timePeriod, int monthCount, IList<Transaction> dbQuery)
+		public MonthsTransactionsModelDTO FiltarByMonth(DateTime timePeriod, int monthCount, IList<Transaction> dbQuery)
 		{
-			var resultModel = new MonthsTransactionsModel();
+			var resultModel = new MonthsTransactionsModelDTO();
 
 			for (int i = timePeriod.Month - monthCount; i <= timePeriod.Month; i++)
 			{
-				var monthly = new MonthVallueModel();
+				var monthly = new MonthVallueModelDTO();
 
 				var valueFilter = dbQuery
 				.Where(d => d.CreatedOn.Value.Month == i).Count();
@@ -77,7 +77,7 @@ namespace WebCasino.Service
 			return totalWins;
 		}
 
-		public async Task<CyrrencyDaylyWin> GetTransactionsCurrencyDaylyWins(int day)
+		public async Task<CyrrencyDaylyWinDTO> GetTransactionsCurrencyDaylyWins(int day)
 		{
 			var allTransactionsQuery = await this.dbContext
 				.Transactions
@@ -119,7 +119,7 @@ namespace WebCasino.Service
 							&& td.CreatedOn.Value.Day == day)
 				.Select(t => t.OriginalAmount).Sum();
 
-			var resultModel = new CyrrencyDaylyWin()
+			var resultModel = new CyrrencyDaylyWinDTO()
 			{
 				DaylyTotalUSD = daylyTotalUsd,
 				DaylyWinsBGN = daylyWinsBGN,

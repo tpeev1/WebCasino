@@ -57,15 +57,25 @@
                         @foreach (var transaction in Model.Transactions)
                         {
 
-                            <tr>
-                                <td>@transaction.CreatedOn</td>
-                                <td>@transaction.TransactionType.Name</td>
-                                <td>@String.Format("{0:.##}", transaction.NormalisedAmount)</td>
-                                <td>@transaction.Description</td>
-                                <td>@transaction.User.Email</td>
-                                <td>@transaction.User.Alias</td>
-                                <td> <a asp-action="Details" asp-controller="Transactions" asp-area="Administration" asp-route-id="@transaction.Id">Details</a> </td>
-                            </tr>
+                        <tr>
+                            <td>@transaction.CreatedOn</td>
+                            <td>@transaction.TransactionType.Name</td>
+                            <td>@String.Format("{0:.##}", transaction.NormalisedAmount)</td>
+                            <td>@transaction.Description</td>
+                            <td>@transaction.User.Email</td>
+                            <td>@transaction.User.Alias</td>
+                            <td class="td-actions text-right">
+                                <a  class="btn btn-info btn-link btn-icon btn-sm" asp-action="UserAccountSettings" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@transaction.User.Id">
+                                    <i class="tim-icons icon-single-02"></i>
+                                </a>
+                                <a  class="btn btn-success btn-link btn-icon btn-sm" asp-action="Details" asp-controller="Transactions" asp-area="Administration" asp-route-id="@transaction.Id">
+                                    <i class="tim-icons icon-settings"></i>
+                                </a>
+                                <button type="button" rel="tooltip" class="btn btn-danger btn-link btn-icon btn-sm">
+                                    <i class="tim-icons icon-simple-remove"></i>
+                                </button>
+                            </td>                          
+                        </tr>
                         }
                     }
                 </tbody>

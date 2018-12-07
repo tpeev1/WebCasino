@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WebCasino.Service.DTO.Canvas
 {
-    public class CyrrencyDaylyWin
+    public class CyrrencyDaylyWinDTO
     {
         public double DaylyTotalUSD { get; set; }
         public double DaylyWinsUSD { get; set; }

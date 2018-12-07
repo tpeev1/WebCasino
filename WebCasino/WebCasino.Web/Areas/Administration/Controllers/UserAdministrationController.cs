@@ -54,5 +54,10 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 
             return View(model);
         }
+
+        public async Task<IActionResult> UserAccountSettings(UserViewModel model)
+        {
+            return  this.View(model);
+        }
     }
 }

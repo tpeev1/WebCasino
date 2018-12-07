@@ -50,13 +50,24 @@
                     {
                         @foreach (var user in Model.Users)
                         {
-                            <tr>
-                                <td>@user.CreatedOn</td>
-                                <td>@user.Email</td>
-                                <td>@user.Alias</td>
-                                <td>@user.Transactions.Count()</td>
-                                <td> <a asp-action="Details" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@user.Id">Details</a> </td>
-                            </tr>
+                        <tr>
+                            <td>@user.CreatedOn</td>
+                            <td>@user.Email</td>
+                            <td>@user.Alias</td>
+                            <td>@user.Transactions.Count()</td>
+                            <td class="td-actions text-right">
+                                <a  class="btn btn-info btn-link btn-icon btn-sm" asp-action="UserAccountSettings" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@user.Id">
+                                    <i class="tim-icons icon-single-02"></i>
+                                </a>
+                                <a class="btn btn-success btn-link btn-icon btn-sm" asp-action="Details" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@user.Id">
+                                    <i class="tim-icons icon-settings"></i>
+                                </a>
+                                <button type="button" rel="tooltip" class="btn btn-danger btn-link btn-icon btn-sm">
+                                    <i class="tim-icons icon-simple-remove"></i>
+                                </button>
+                            </td>
+                          
+                        </tr>
                         }
                     }
                 </tbody>
