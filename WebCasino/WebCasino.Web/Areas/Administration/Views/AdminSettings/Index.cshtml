@@ -118,14 +118,348 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="tab-pane" id="linkb">
-                                <div class="">
-                                    <table class="table tablesorter table-hover " id="plain-table"></table>
+                                <!-------------------------------USERS------------------------------------->
+                                <div class="tab-pane" id="linkb">
+                                    <form class="form" asp-area="Administration" asp-action="Details" asp-controller="UserAdministration" method="GET">
+                                        <div class="row">
+
+                                            <div class="col-sm-6 col-lg-3">
+
+                                                <div class="form-group">
+
+                                                    <inputtype="text" class="form-control " placeholder="Search transaction user" id="txtSearch" />
+
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2 col-lg-2">
+                                                <div class="form-group">
+                                                    <input type="submit" class=" form-control btn btn-primary" value="Search" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#</th>
+                                                <th>Name</th>
+                                                <th>Job Position</th>
+                                                <th>Since</th>
+                                                <th class="text-right">Salary</th>
+                                                <th class="text-right">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-center">1</td>
+                                                <td>Andrew Mike</td>
+                                                <td>Develop</td>
+                                                <td>2013</td>
+                                                <td class="text-right">&euro; 99,225</td>
+                                                <td class="td-actions text-right">
+                                                    <button type="button" rel="tooltip" class="btn btn-info btn-sm btn-icon">
+                                                        <i class="tim-icons icon-single-02"></i>
+                                                    </button>
+                                                    <button type="button" rel="tooltip" class="btn btn-success btn-sm btn-icon">
+                                                        <i class="tim-icons icon-settings"></i>
+                                                    </button>
+                                                    <button type="button" rel="tooltip" class="btn btn-danger btn-sm btn-icon">
+                                                        <i class="tim-icons icon-simple-remove"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center">2</td>
+                                                <td>John Doe</td>
+                                                <td>Design</td>
+                                                <td>2012</td>
+                                                <td class="text-right">&euro; 89,241</td>
+                                                <td class="td-actions text-right">
+                                                    <button type="button" rel="tooltip" class="btn btn-info btn-sm btn-round btn-icon">
+                                                        <i class="tim-icons icon-single-02"></i>
+                                                    </button>
+                                                    <button type="button" rel="tooltip" class="btn btn-success btn-sm btn-round btn-icon">
+                                                        <i class="tim-icons icon-settings"></i>
+                                                    </button>
+                                                    <button type="button" rel="tooltip" class="btn btn-danger btn-sm btn-round btn-icon">
+                                                        <i class="tim-icons icon-simple-remove"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center">3</td>
+                                                <td>Alex Mike</td>
+                                                <td>Design</td>
+                                                <td>2010</td>
+                                                <td class="text-right">&euro; 92,144</td>
+                                                <td class="td-actions text-right">
+                                                    <button type="button" rel="tooltip" class="btn btn-info btn-link btn-icon btn-sm">
+                                                        <i class="tim-icons icon-single-02"></i>
+                                                    </button>
+                                                    <button type="button" rel="tooltip" class="btn btn-success btn-link btn-icon btn-sm">
+                                                        <i class="tim-icons icon-settings"></i>
+                                                    </button>
+                                                    <button type="button" rel="tooltip" class="btn btn-danger btn-link btn-icon btn-sm">
+                                                        <i class="tim-icons icon-simple-remove"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="linkc">
+                                    <br/>
+                                    <!----------------------------PROMOTIONS------------------------------->
+                                    <div class="container">
+                                        <div class="row">
+
+                                            <div class="col-md-10 ml-auto col-xl-6 mr-auto">
+                                                <div class="mb-3">
+                                                    <small class="text-uppercase font-weight-bold">With icons</small>
+                                                </div>
+                                                <!-- Nav tabs -->
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <ul class="nav nav-tabs nav-tabs-primary" role="tablist">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" data-toggle="tab" href="#link1" role="tablist">
+                                                                    <i class="tim-icons icon-spaceship"></i> Profile
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active show" data-toggle="tab" href="#link2" role="tablist">
+                                                                    <i class="tim-icons icon-settings-gear-63"></i> Settings
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" data-toggle="tab" href="#link3" role="tablist">
+                                                                    <i class="tim-icons icon-bag-16"></i> Options
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <!-- Tab panes -->
+                                                        <div class="tab-content tab-space">
+                                                            <div class="tab-pane" id="link1">
+                                                                <p>
+                                                                    Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits.
+                                                                    <br>
+                                                                    <br> Dramatically visualize customer directed convergence without revolutionary ROI.
+                                                                </p>
+                                                            </div>
+                                                            <div class="tab-pane active show" id="link2">
+                                                                <p>
+                                                                    Completely synergize resource taxing relationships via premier niche markets. Professionally cultivate one-to-one customer service with robust ideas.
+                                                                    <br>
+                                                                    <br>Dynamically innovate resource-leveling customer service for state of the art customer service.
+                                                                </p>
+                                                            </div>
+                                                            <div class="tab-pane" id="link3">
+                                                                <p>
+                                                                    Efficiently unleash cross-media information without cross-media value. Quickly maximize timely deliverables for real-time schemas.
+                                                                    <br>
+                                                                    <br> Dramatically maintain clicks-and-mortar solutions without functional solutions.
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-10 ml-auto col-xl-6 mr-auto">
+                                                <div class="mb-3">
+                                                    <small class="text-uppercase font-weight-bold">With text</small>
+                                                </div>
+                                                <!-- Tabs with Background on Card -->
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <ul class="nav nav-tabs nav-tabs-primary" role="tablist">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" data-toggle="tab" href="#link1" role="tablist">
+                                                                    <i class="tim-icons icon-spaceship"></i> Profile
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active show" data-toggle="tab" href="#link2" role="tablist">
+                                                                    <i class="tim-icons icon-settings-gear-63"></i> Settings
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" data-toggle="tab" href="#link3" role="tablist">
+                                                                    <i class="tim-icons icon-bag-16"></i> Options
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <!-- Tab panes -->
+                                                        <div class="tab-content tab-space">
+                                                            <div class="tab-pane active show" id="link4">
+                                                                <p>
+                                                                    These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided.
+                                                                    <br>But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures
+                                                                </p>
+                                                            </div>
+                                                            <div class="tab-pane" id="link5">
+                                                                <p> I will be the leader of a company that ends up being worth billions of dollars, because I got the answers. I understand culture. I am the nucleus. I think that’s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at. I think that’s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at. </p>
+                                                            </div>
+                                                            <div class="tab-pane" id="link6">
+                                                                <p>I think that’s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at. So when you get something that has the name Kanye West on it, it’s supposed to be pushing the furthest possibilities. I will be the leader of a company that ends up being worth billions of dollars, because I got the answers. I understand culture. I am the nucleus.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End Tabs on plain Card -->
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="linkd">
+
+                                    <!-----------------------------RESTRICTIONS---------------------------->
+                                    <div class="card card-tasks">
+                                        
+                                        <div class="card-body ">
+                                            <div class="table tablesorter table-hover ">
+                                                <table class="table">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label">
+                                                                        <input class="form-check-input" type="checkbox" value="">
+                                                                        <span class="form-check-sign">
+                                                                            <span class="check"></span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <p class="title">Update the Documentation</p>
+                                                                <p class="text-muted">Dwuamish Head, Seattle, WA 8:47 AM</p>
+                                                            </td>
+                                                            <td class="td-actions text-right">
+                                                               
+
+                                                                <!-- DROPDOWN EDIT-->
+                                                                <div class="dropdown show-dropdown">
+                                                                    <a href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                        <i class="tim-icons icon-pencil"></i>
+                                                                    </a>
+                                                                    <ul class="dropdown-menu" x-placement="top-start" style="position: absolute; transform: translate3d(-231px, -125px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                                                        <li class="header-title"> Sidebar Background</li>
+                                                                        <li class="adjustments-line">
+                                                                            <a href="javascript:void(0)" class="switch-trigger background-color">
+                                                                                <div class="badge-colors text-center">
+                                                                                    <span class="badge filter badge-primary active" data-color="primary"></span>
+                                                                                    <span class="badge filter badge-info" data-color="blue"></span>
+                                                                                    <span class="badge filter badge-success" data-color="green"></span>
+                                                                                </div>
+                                                                                <div class="clearfix"></div>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="adjustments-line text-center color-change">
+                                                                            <span class="color-label">LIGHT MODE</span>
+                                                                            <span class="badge light-badge mr-2"></span>
+                                                                            <span class="badge dark-badge ml-2"></span>
+                                                                            <span class="color-label">DARK MODE</span>
+                                                                        </li>
+                                                                        <li class="button-container">
+                                                                            <a href="https://www.creative-tim.com/product/black-dashboard" target="_blank" class="btn btn-primary btn-block btn-round">Download Now</a>
+                                                                            <a href="https://demos.creative-tim.com/black-dashboard/docs/1.0/getting-started/introduction.html" target="_blank" class="btn btn-default btn-block btn-round">
+                                                                                Save
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="header-title">Thank you for 95 shares!</li>
+                                                                        <li class="button-container text-center">
+                                                                            <button id="twitter" class="btn btn-round btn-info"><i class="fab fa-twitter"></i> · 45</button>
+                                                                            <button id="facebook" class="btn btn-round btn-info"><i class="fab fa-facebook-f"></i> · 50</button>
+                                                                            <br>
+                                                                            <br>
+                                                                            <a class="github-button" href="https://github.com/creativetimofficial/black-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label">
+                                                                        <input class="form-check-input" type="checkbox" value="" checked="">
+                                                                        <span class="form-check-sign">
+                                                                            <span class="check"></span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <p class="title">GDPR Compliance</p>
+                                                                <p class="text-muted">The GDPR is a regulation that requires businesses to protect the personal data and privacy of Europe citizens for transactions that occur within EU member states.</p>
+                                                            </td>
+                                                            <td class="td-actions text-right">
+                                                                <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">
+                                                                    <i class="tim-icons icon-pencil"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label">
+                                                                        <input class="form-check-input" type="checkbox" value="">
+                                                                        <span class="form-check-sign">
+                                                                            <span class="check"></span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <p class="title">Solve the issues</p>
+                                                                <p class="text-muted">Fifty percent of all respondents said they would be more likely to shop at a company </p>
+                                                            </td>
+                                                            <td class="td-actions text-right">
+                                                                <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">
+                                                                    <i class="tim-icons icon-pencil"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                       
+                                                      
+                                                        <tr>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label">
+                                                                        <input class="form-check-input" type="checkbox" value="">
+                                                                        <span class="form-check-sign">
+                                                                            <span class="check"></span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <p class="title">Arival at export process</p>
+                                                                <p class="text-muted">Capitol Hill, Seattle, WA 12:34 AM</p>
+                                                            </td>
+                                                            <td class="td-actions text-right">
+                                                                <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">
+                                                                    <i class="tim-icons icon-pencil"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 410px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 333px;"></div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
-                            
                         </div>
 
                         </div>
