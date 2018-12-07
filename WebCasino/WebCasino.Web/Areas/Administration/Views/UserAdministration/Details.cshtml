@@ -26,14 +26,10 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="#linkb">
-                                        Details
+                                        User Details
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#linkc">
-                                        Actions
-                                    </a>
-                                </li>
+                              
                             </ul>
                             <form class="form" asp-area="Administration" asp-action="Details" asp-controller="UserAdministration" method="GET">
                                 <div class="row">
@@ -211,64 +207,7 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="tab-pane" id="linkc">
-                                    <form action="/" method="post">
-                                        <div class="card card-tasks">
-                                            <div class="card-body ">
-                                                <div class="table tablesorter table-hover ">
-                                                    <table class="table">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="form-check">
-                                                                        <label class="form-check-label">
-                                                                            <input class="form-check-input" type="checkbox" value="">
-                                                                            <span class="form-check-sign">
-                                                                                <span class="check"></span>
-                                                                            </span>
-                                                                        </label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <p class="title">Remove All user transactions</p>
-                                                                    <p class="text-muted">Remove all user transactions from history</p>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="form-check">
-                                                                        <label class="form-check-label">
-                                                                            <input class="form-check-input" type="checkbox" value="">
-                                                                            <span class="form-check-sign">
-                                                                                <span class="check"></span>
-                                                                            </span>
-                                                                        </label>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <p class="title">Remove user transactions</p>
-                                                                    <p class="text-muted">Remove from start date to end date</p>
-                                                                    <div class="col-md-4">
-                                                                        <div class="datepicker-container">
-                                                                            <div class="form-group">
-                                                                                <input type="text" id="datepicker" class="form-control datepicker" value="10/05/2016" data-datepicker-color="primary">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>                                
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2 col-lg-2">
-                                            <div class="form-group">
-                                                <input type="submit" class=" form-control btn btn-primary" value="Save" />
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                               
 
                             </div>
 

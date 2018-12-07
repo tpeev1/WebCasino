@@ -1,37 +1,38 @@
 ﻿@model WebCasino.Web.Areas.Administration.Models.TransactionHistoryViewModel
 
 @{
-	var previousDisabled = Model.Page == 1 ? "disabled" : string.Empty;
-	var nextDisabled = Model.Page == Model.TotalPages ? "disabled" : string.Empty;
+    var previousDisabled = Model.Page == 1 ? "disabled" : string.Empty;
+    var nextDisabled = Model.Page == Model.TotalPages ? "disabled" : string.Empty;
+
 }
 <link href="~/assets/css/" rel="stylesheet" />
 <h2>Transactions History</h2>
 
 <form class="form" asp-area="Administration" asp-action="History" asp-controller="Transactions" method="GET">
-	<div class="row">
+    <div class="row">
 
-		<div class="col-sm-6 col-lg-3">
+        <div class="col-sm-6 col-lg-3">
 
             <div class="form-group">
 
-                <input asp-for="@Model.SearchText" type="text" class="form-control " placeholder="Search transaction user" id="txtSearch" />
-               
+                <input asp-for="@Model.SearchText" type="text" class="form-control " placeholder="Search" id="txtSearch" />
+
             </div>
-		</div>
-		<div class="col-sm-2 col-lg-2">
-			<div class="form-group">
-				<input type="submit" class=" form-control btn btn-primary" value="Search" />
-			</div>
-		</div>
-	</div>
+        </div>
+        <div class="col-sm-2 col-lg-2">
+            <div class="form-group">
+                <input type="submit" class=" form-control btn btn-primary" value="Search" />
+            </div>
+        </div>
+    </div>
 </form>
 
 <br />
 <div class="card ">
-	<div class="card-header">
-		<h4 class="card-title"> Transactions Table</h4>
-	</div>
-	<div class="card-body">
+    <div class="card-header">
+        <h4 class="card-title"> Transactions Table</h4>
+    </div>
+    <div class="card-body">
         <div class="table">
             <table class="table table-hover table-dark" id="table-click">
                 <thead class=" text-primary">
@@ -57,25 +58,24 @@
                         @foreach (var transaction in Model.Transactions)
                         {
 
-                        <tr>
-                            <td>@transaction.CreatedOn</td>
-                            <td>@transaction.TransactionType.Name</td>
-                            <td>@String.Format("{0:.##}", transaction.NormalisedAmount)</td>
-                            <td>@transaction.Description</td>
-                            <td>@transaction.User.Email</td>
-                            <td>@transaction.User.Alias</td>
-                            <td class="td-actions text-right">
-                                <a  class="btn btn-info btn-link btn-icon btn-sm" asp-action="UserAccountSettings" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@transaction.User.Id">
-                                    <i class="tim-icons icon-single-02"></i>
-                                </a>
-                                <a  class="btn btn-success btn-link btn-icon btn-sm" asp-action="Details" asp-controller="Transactions" asp-area="Administration" asp-route-id="@transaction.Id">
-                                    <i class="tim-icons icon-settings"></i>
-                                </a>
-                                <button type="button" rel="tooltip" class="btn btn-danger btn-link btn-icon btn-sm">
-                                    <i class="tim-icons icon-simple-remove"></i>
-                                </button>
-                            </td>                          
-                        </tr>
+                            <tr>
+                                <td>@transaction.CreatedOn</td>
+
+                                <td>@transaction.TransactionType.Name</td>
+                                <td>@String.Format("{0:.##}", transaction.NormalisedAmount)</td>
+                                <td>@transaction.Description</td>
+                                <td>@transaction.User.Email</td>
+                                <td>@transaction.User.Alias</td>
+                                <td>
+                                    <a class="btn btn-info btn-link btn-icon btn-sm btn-tooltip " asp-action="UserAccountSettings" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@transaction.User.Id" data-toggle="tooltip" data-placement="bottom" title="" data-container="body" data-animation="true" data-original-title="Go to User Settings">
+                                        <i class="tim-icons icon-single-02"></i>
+                                    </a>
+                                    <a class="btn btn-success btn-link btn-icon btn-sm" asp-action="Details" asp-controller="Transactions" asp-area="Administration" asp-route-id="@transaction.Id" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-animation="true" data-original-title="Go to Transaction Details">
+                                        <i class="tim-icons icon-settings"></i>
+                                    </a>
+
+                                </td>
+                            </tr>
                         }
                     }
                 </tbody>
@@ -101,6 +101,6 @@
                 </ul>
             </nav>
         </div>
-	</div>
+    </div>
 </div>
 

@@ -32,5 +32,7 @@ namespace WebCasino.Service.Abstract
 
         Task<IEnumerable<Transaction>> RetrieveUserSearchTransaction(string searchText, string id, int page = 1, int pageSize = 10);
 
+       
+
     }
 }

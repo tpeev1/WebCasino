@@ -8,8 +8,14 @@ namespace WebCasino.Web.Areas.Administration.Models
 {
     public class TransactionDetailsViewModel
     {
+        public TransactionDetailsViewModel()
+        {
+
+        }
+
         public TransactionDetailsViewModel(Transaction transaction)
         {
+            this.Id = transaction.Id;
             this.CreatedOn = transaction.CreatedOn;
             this.User = transaction.User;
             this.TransactionType = transaction.TransactionType.Name;
@@ -19,8 +25,8 @@ namespace WebCasino.Web.Areas.Administration.Models
             this.Description = transaction.Description;
             
         }
+        public string Id { get; set; }
 
-       
         public User User { get; set; }
 
         public string UserCurrency { get; set; }

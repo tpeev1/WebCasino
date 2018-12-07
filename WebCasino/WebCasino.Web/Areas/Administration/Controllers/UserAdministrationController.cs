@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,12 +11,12 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 	[Area("Administration")]
 	public class UserAdministrationController : Controller
 	{
-		private readonly IUserService service;
+		private readonly IUserService userService;
         private readonly ITransactionService transactionService;
 
         public UserAdministrationController(IUserService service, ITransactionService transactionService)
 		{
-			this.service = service ?? throw new System.ArgumentNullException(nameof(service));
+			this.userService = service ?? throw new System.ArgumentNullException(nameof(service));
             this.transactionService = transactionService ?? throw new ArgumentNullException(nameof(transactionService));
         }
 
@@ -23,13 +24,13 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 		{
 			if (string.IsNullOrWhiteSpace(model.SearchText))
 			{
-				model.Users = await this.service.GetAllUsers(model.Page, 10);
-				model.TotalPages = (int)Math.Ceiling(await this.service.Total() / (double)10);
+				model.Users = await this.userService.GetAllUsers(model.Page, 10);
+				model.TotalPages = (int)Math.Ceiling(await this.userService.Total() / (double)10);
 			}
 			else
 			{
-				model.Users = this.service.ListByContainingText(model.SearchText, model.Page, 10);
-				model.TotalPages = (int)Math.Ceiling(this.service.TotalContainingText(model.SearchText) / (double)10);
+				model.Users = this.userService.ListByContainingText(model.SearchText, model.Page, 10);
+				model.TotalPages = (int)Math.Ceiling(this.userService.TotalContainingText(model.SearchText) / (double)10);
 			}
 
 			return View(model);
@@ -56,11 +57,19 @@ namespace WebCasino.Web.Areas.Administration.Controllers
         }
 
 
-        public async Task<IActionResult> UserAccountSettings(UserViewModel model)
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LockUser(string id)
         {
-            return  this.View(model);
+
+            var removedTransaction = await this.userService.LockUser(id);
+
+            this.TempData["Deleted"] = "You Lock this user";
+
+            return RedirectToAction("History", "Transactions");
         }
 
-       
+
     }
 }

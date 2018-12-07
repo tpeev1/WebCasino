@@ -360,5 +360,7 @@ namespace WebCasino.Service
 
             return transactionsQueryer;
         }
+
+      
     }
 }
