@@ -3,8 +3,8 @@
     $('#betForm').on('submit', function (event) {
         event.preventDefault();
         const $withdrawForm = $('#betForm');
-        const value = +($withdrawForm.find('input[name="BetAmount"]').val());
-        const balance = +($('#balanceSpan').html());
+        let value = +($withdrawForm.find('input[name="BetAmount"]').val());
+        let balance = +($('#balanceSpan').html());
         if (value > balance || value < 1) {
             const spanValidation = $withdrawForm.find('*[data-valmsg-for="BetAmount"]');
             spanValidation.addClass('field-validation-error');
@@ -17,10 +17,14 @@
             const data = $(this).serialize();
             const url = $(this).attr("action");
             const posting = $.post(url, data);
+            let newBalance = balance - value;
+            $('#balanceSpan').html(newBalance);
 
             posting.done(function (data) {
                 $('#gameBoard').html(data);
-
+                let winAmount = +($('#winningAmount').html());
+                newBalance = +($('#balanceSpan').html()) + winAmount;
+                $('#balanceSpan').html(newBalance);
                 console.log(data);
             });
     }

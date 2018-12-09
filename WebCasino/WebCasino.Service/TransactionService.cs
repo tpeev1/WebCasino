@@ -64,7 +64,7 @@ namespace WebCasino.Service
 			};
 
             userWin.Wallet.NormalisedBalance += normalisedCurrency;
-            userWin.Wallet.DisplayBalance += amountInUserCurrency;
+            userWin.Wallet.DisplayBalance = userWin.Wallet.NormalisedBalance * bankRates[userCurrency];
 
 			await this.dbContext.Transactions.AddAsync(newTransaction);
 			await this.dbContext.SaveChangesAsync();
@@ -113,7 +113,7 @@ namespace WebCasino.Service
 			};
 
 			userWin.Wallet.NormalisedBalance -= normalisedCurrency;
-            userWin.Wallet.DisplayBalance -= amountInUserCurrency;
+            userWin.Wallet.DisplayBalance = userWin.Wallet.NormalisedBalance * bankRates[userCurrency];
 
             if(userWin.Wallet.NormalisedBalance < 0)
             {
@@ -171,7 +171,7 @@ namespace WebCasino.Service
 			};
 
 			userWin.Wallet.NormalisedBalance += normalisedCurrency;
-            userWin.Wallet.DisplayBalance += amountInUserCurrency;
+            userWin.Wallet.DisplayBalance = userWin.Wallet.NormalisedBalance * bankRates[userCurrency];
 
 			await this.dbContext.Transactions.AddAsync(newTransaction);
 			await this.dbContext.SaveChangesAsync();

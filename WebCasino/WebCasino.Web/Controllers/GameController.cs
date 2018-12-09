@@ -53,7 +53,8 @@ namespace WebCasino.Web.Controllers
                 var dto = new GameViewModel()
                 {
                     Board = board,
-                    WinCoef = gameModel.WinCoefficient
+                    WinCoef = gameModel.WinCoefficient,
+                    BetAmount = model.BetAmount
                 };
 
                 return PartialView("_GameBoardPartial", dto);
