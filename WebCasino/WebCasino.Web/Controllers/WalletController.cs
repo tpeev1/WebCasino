@@ -21,7 +21,8 @@ namespace WebCasino.Web.Controllers
         private readonly ICardService cardService;
         private readonly ITransactionService transactionService;
 
-        public WalletController(IWalletService walletService, IUserWrapper userWrapper, ICardService cardService, ITransactionService transactionService)
+        public WalletController
+            (IWalletService walletService, IUserWrapper userWrapper, ICardService cardService, ITransactionService transactionService)
         {
             this.walletService = walletService;
             this.userWrapper = userWrapper;
@@ -54,9 +55,18 @@ namespace WebCasino.Web.Controllers
                     TempData["CardAddedFail"] = "Invalid card date";
                     return this.RedirectToAction("index", "wallet");
                 }
-                await this.cardService.AddCard(model.RealNumber.Replace(" ", string.Empty), userId, date);
-                TempData["CardAdded"] = "Succesfulyy added new card";
-                return this.RedirectToAction("index", "wallet");
+                else if(date < DateTime.Now.Date)
+                {
+                    TempData["CardAddedFail"] = "Card is expired";
+                    return this.RedirectToAction("index", "wallet");
+                }
+                else
+                {
+                    await this.cardService.AddCard(model.RealNumber.Replace(" ", string.Empty), userId, date);
+                    TempData["CardAdded"] = "Succesfulyy added new card";
+                    return this.RedirectToAction("index", "wallet");
+                }
+
             }
 
             TempData["CardAddedFail"] = "Failed to add card. Please try again with a different card";
@@ -116,10 +126,10 @@ namespace WebCasino.Web.Controllers
 
                 }
             }
-            else
+            if(TempData["FailedWithdraw"] == null)
             {
                 TempData["FailedWithdraw"] = "Failed to withdraw. Please try again with a different card";
-            }
+            }          
             return this.RedirectToAction("index", "wallet");
         }
     }
