@@ -1,5 +1,9 @@
-﻿@{
-    var lockedUser = TempData["Deleted"];
+﻿@model WebCasino.Web.Areas.Administration.Models.UserSettingsViewModel
+@{
+    var lockedUser = TempData["Locked"];
+    var unLocked = TempData["UnLocked"];
+    var promoted = TempData["Promoted"];
+
 }
 @if (lockedUser != null)
 {
@@ -9,7 +13,7 @@
         </button>
         <span data-notify="icon" class="tim-icons icon-support-17"></span>
         <span>
-            <b> Deleted! </b> @TempData["Deleted"]
+            <b> Deleted! </b> @TempData["Locked"]
         </span>
     </div>
 }
@@ -41,87 +45,126 @@
                                 </li>
                             </ul>
 
-                            <div class="tab-content tab-subcategories">
+                            <div class="tab-content tab-subcategories ">
                                 <div class="tab-pane active" id="linka">
-                                    <div class="card">
+                                    <div class="card text-center">
+                                        <div class="card-body text-center">
 
-                                        <div class="card-body">
-                                            <form>
-                                                <div class="row">
-                                                    <div class="col-md-5 pr-md-1">
-                                                        <div class="form-group">
-                                                            <label>Company (disabled)</label>
-                                                            <input type="text" class="form-control" disabled="" placeholder="Company" value="Creative Code Inc.">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3 px-md-1">
-                                                        <div class="form-group">
-                                                            <label>Username</label>
-                                                            <input type="text" class="form-control" placeholder="Username" value="michael23">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4 pl-md-1">
-                                                        <div class="form-group">
-                                                            <label for="exampleInputEmail1">Email address</label>
-                                                            <input type="email" class="form-control" placeholder="mike@email.com">
-                                                        </div>
+                                            <div class="col-md-12 justify-content-center">
+                                                <div class="card">
+                                       
+                                                    <div class="card-body">
+                                                        <form>
+                                                            <div class="row">
+
+                                                                <div class="col-md-6 px-md-1">
+                                                                    <div class="form-group">
+                                                                        <label>Alias</label>
+                                                                        <input type="text" class="form-control" placeholder="Username" value="@Model.Alias">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6 pl-md-1">
+                                                                    <div class="form-group">
+                                                                        <label for="exampleInputEmail1">Email address</label>
+                                                                        <input type="email" class="form-control" placeholder="@Model.Email">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-6 pr-md-1">
+                                                                    <div class="form-group">
+                                                                        <label>First Name</label>
+                                                                        <input type="text" class="form-control" placeholder="Company" value="Mike">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6 pl-md-1">
+                                                                    <div class="form-group">
+                                                                        <label>Last Name</label>
+                                                                        <input type="text" class="form-control" placeholder="Last Name" value="Andrew">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label>Address</label>
+                                                                        <input type="text" class="form-control" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-4 pr-md-1">
+                                                                    <div class="form-group">
+                                                                        <label>City</label>
+                                                                        <input type="text" class="form-control" placeholder="City" value="Mike">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 px-md-1">
+                                                                    <div class="form-group">
+                                                                        <label>Country</label>
+                                                                        <input type="text" class="form-control" placeholder="Country" value="Andrew">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 pl-md-1">
+                                                                    <div class="form-group">
+                                                                        <label>Postal Code</label>
+                                                                        <input type="number" class="form-control" placeholder="ZIP Code">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-4 pr-md-1">
+                                                                    <div class="form-group">
+                                                                        <label>Date Of Birth</label>
+                                                                        <input type="text" class="form-control" placeholder="dateOfBirth" value="@Model.DateOfBirth.ToShortDateString()">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 px-md-1">
+                                                                    <div class="form-group">
+                                                                        <label>Created On</label>
+                                                                        <input type="text" class="form-control" placeholder="CreatedOn" value="@Model.CreatedOn">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 pl-md-1">
+                                                                    <div class="form-group">
+                                                                        <label>Modified On</label>
+                                                                        <input type="text" class="form-control" placeholder="ModifiedOn" value="@Model.ModifiedOn">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-4 pr-md-1">
+                                                                    <div class="form-group">
+                                                                        <label>Locked</label>
+                                                                        <input type="text" class="form-control" placeholder="Locked" value="@Model.Locked.ToString()">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 px-md-1">
+                                                                    <div class="form-group">
+                                                                        <label>Is Deleted</label>
+                                                                        <input type="text" class="form-control" placeholder="IsDeleted" value="@Model.IsDeleted.ToString()">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 pl-md-1">
+                                                                    <div class="form-group">
+                                                                        <label>Deleted On</label>
+                                                                        <input type="text" class="form-control" placeholder="DeletedOn" value="@Model.DeletedOn.ToString()">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-footer">
+                                                                <button type="submit" class="btn btn-fill btn-primary">Save</button>
+                                                            </div>
+                                                        </form>
+                                                       
+
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-md-6 pr-md-1">
-                                                        <div class="form-group">
-                                                            <label>First Name</label>
-                                                            <input type="text" class="form-control" placeholder="Company" value="Mike">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 pl-md-1">
-                                                        <div class="form-group">
-                                                            <label>Last Name</label>
-                                                            <input type="text" class="form-control" placeholder="Last Name" value="Andrew">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Address</label>
-                                                            <input type="text" class="form-control" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-4 pr-md-1">
-                                                        <div class="form-group">
-                                                            <label>City</label>
-                                                            <input type="text" class="form-control" placeholder="City" value="Mike">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4 px-md-1">
-                                                        <div class="form-group">
-                                                            <label>Country</label>
-                                                            <input type="text" class="form-control" placeholder="Country" value="Andrew">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4 pl-md-1">
-                                                        <div class="form-group">
-                                                            <label>Postal Code</label>
-                                                            <input type="number" class="form-control" placeholder="ZIP Code">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-8">
-                                                        <div class="form-group">
-                                                            <label>About Me</label>
-                                                            <textarea rows="4" cols="80" class="form-control" placeholder="Here can be your description" value="Mike">Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
+                                            </div>
+
+
                                         </div>
-                                        <div class="card-footer">
-                                            <button type="submit" class="btn btn-fill btn-primary">Save</button>
-                                        </div>
+
                                     </div>
                                 </div>
 
@@ -137,24 +180,51 @@
                                                             <td class="col-md-3">
                                                                 <div class="">
                                                                     <div class="form-group">
-                                                                        <form asp-action="DeleteTransaction" asp-controller="Transactions" asp-area="Administration" method="post">
-                                                                            <input type="hidden" />
-                                                                            <button class=" form-control btn btn-danger">Lock</button>
-                                                                        </form>
+                                                                        @{
+                                                                            if (Model.Locked)
+                                                                            {
+                                                                                <form asp-action="UnLockUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@Model.Id" method="post">
+                                                                                    <input type="hidden" />
+                                                                                    <button class=" form-control btn btn-default">UnLock</button>
+                                                                                </form>
+
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <form asp-action="LockUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@Model.Id" method="post">
+                                                                                    <input type="hidden" />
+                                                                                    <button class=" form-control btn btn-danger">Lock</button>
+                                                                                </form>
+                                                                            }
+                                                                        }
+
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td>
-                                                                <p class="title">Lock User</p>
-                                                                <p class="text-muted">With this action you are going to lock user.</p>
-                                                            </td>
+                                                            @{
+                                                                if (Model.Locked)
+                                                                {
+                                                                    <td>
+                                                                        <p class="title">UnLock User</p>
+                                                                        <p class="text-muted">With this action you are going to unlock user.</p>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <p class="title">Lock User</p>
+                                                                        <p class="text-muted">With this action you are going to lock user.</p>
+                                                                    </td>
+                                                                }
+                                                            }
+
                                                         </tr>
                                                         <tr>
                                                             <!-- Change Display if User is locked, to unlock-->
                                                             <td class="col-md-3">
                                                                 <div class="">
                                                                     <div class="form-group">
-                                                                        <form asp-action="LockUser" asp-controller="UserAdministration" asp-area="Administration" method="post">
+                                                                        <form asp-action="PromoteUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@Model.Id" method="post">
                                                                             <input type="hidden" />
                                                                             <button class=" form-control btn btn-danger">Promote</button>
                                                                         </form>

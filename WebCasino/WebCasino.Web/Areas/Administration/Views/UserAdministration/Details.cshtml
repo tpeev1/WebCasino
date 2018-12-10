@@ -80,15 +80,13 @@
                                                     <td>@transaction.User.Email</td>
                                                     <td>@transaction.User.Alias</td>
                                                     <td class="td-actions text-right">
-                                                        <button type="button" rel="tooltip" class="btn btn-info btn-link btn-icon btn-sm">
+                                                        <a class="btn btn-info btn-link btn-icon btn-sm btn-tooltip " asp-action="UserAccountSettings" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@transaction.User.Id" data-toggle="tooltip" data-placement="bottom" title="" data-container="body" data-animation="true" data-original-title="Go to User Settings">
                                                             <i class="tim-icons icon-single-02"></i>
-                                                        </button>
-                                                        <a class="btn btn-success btn-link btn-icon btn-sm"  asp-action="Details" asp-controller="Transactions" asp-area="Administration" asp-route-id="@transaction.Id">
+                                                        </a>
+                                                        <a class="btn btn-success btn-link btn-icon btn-sm" asp-action="Details" asp-controller="Transactions" asp-area="Administration" asp-route-id="@transaction.Id">
                                                             <i class="tim-icons icon-settings"></i>
                                                         </a>
-                                                        <button type="button" rel="tooltip" class="btn btn-danger btn-link btn-icon btn-sm">
-                                                            <i class="tim-icons icon-simple-remove"></i>
-                                                        </button>
+                                                      
                                                     </td>
                                                     
                                                 </tr>

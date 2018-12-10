@@ -69,7 +69,23 @@ namespace WebCasino.Service
 			return user;
 		}
 
-		public async Task<User> PromoteUser(string id)
+        public async Task<User> UnLockUser(string id)
+        {
+            var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.IsDeleted);
+            ServiceValidator.ObjectIsNotEqualNull(user);
+            var role = context.UserRoles.FirstOrDefault(ur => ur.UserId == id);
+            ServiceValidator.ObjectIsNotEqualNull(role);
+            if (role.RoleId == "1")
+            {
+                throw new InvalidAdministratorOperationException("You cannot lock other administrators");
+            }
+            user.Locked = false;
+            await this.context.SaveChangesAsync();
+            return user;
+        }
+
+
+        public async Task<User> PromoteUser(string id)
 		{
 			var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.IsDeleted);
 			var userRole = await this.context.UserRoles.FirstOrDefaultAsync(ur => ur.UserId == id);
@@ -87,10 +103,9 @@ namespace WebCasino.Service
 		public async Task<User> RetrieveUser(string id)
 		{
 			var user = await this.context.Users
-				.Include(us => us.Wallet.Currency)
-				.Include(tt => tt.Transactions)
-
-				.FirstOrDefaultAsync(us => us.Id == id && !us.Locked);
+				.Include(us => us.Wallet)
+				.ThenInclude(wa => wa.Currency)
+                .FirstOrDefaultAsync(us => us.Id == id );
 
 			ServiceValidator.ObjectIsNotEqualNull(user);
 			return user;

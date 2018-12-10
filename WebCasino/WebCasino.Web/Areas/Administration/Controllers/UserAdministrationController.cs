@@ -65,11 +65,44 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 
             var removedTransaction = await this.userService.LockUser(id);
 
-            this.TempData["Deleted"] = "You Lock this user";
+            this.TempData["Locked"] = "You Lock this user";
 
-            return RedirectToAction("History", "Transactions");
+            return RedirectToAction("UserAccountSettings", "UserAdministration");
         }
 
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UnLockUser(string id)
+        {
+
+            var removedTransaction = await this.userService.UnLockUser(id);
+
+            this.TempData["UnLocked"] = "You Unlock this user";
+
+            return RedirectToAction("UserAccountSettings", "UserAdministration");
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PromoteUser(string id)
+        {
+
+            var removedTransaction = await this.userService.PromoteUser(id);
+
+            this.TempData["Promoted"] = "You promote to admin this user";
+
+            return RedirectToAction("UserAccountSettings", "UserAdministration");
+        }
+
+        public async Task<IActionResult> UserAccountSettings(string id)
+        {
+            var userModel =await userService.RetrieveUser(id);
+            var model = new UserSettingsViewModel(userModel);
+            
+            return  this.View(model);
+        }
 
     }
 }
