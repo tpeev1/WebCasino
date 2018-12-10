@@ -18,13 +18,13 @@
             const url = $(this).attr("action");
             const posting = $.post(url, data);
             let newBalance = balance - value;
-            $('#balanceSpan').html(newBalance);
+            $('#balanceSpan').html(Math.round(newBalance * 100) / 100);
 
             posting.done(function (data) {
                 $('#gameBoard').html(data);
                 let winAmount = +($('#winningAmount').html());
                 newBalance = +($('#balanceSpan').html()) + winAmount;
-                $('#balanceSpan').html(newBalance);
+                $('#balanceSpan').html(Math.round(newBalance*100)/100);
                 console.log(data);
             });
     }

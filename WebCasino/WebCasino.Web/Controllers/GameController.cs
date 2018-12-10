@@ -37,6 +37,51 @@ namespace WebCasino.Web.Controllers
             return View(dto);
         }
 
+        public IActionResult Small()
+        {
+            var board = this.gameService.GenerateBoard(4, 3);
+            var model = this.gameService.GameResults(board);
+            var dto = new GameViewModel()
+            {
+                Board = board,
+                WinCoef = model.WinCoefficient,
+                GameBoardRows = 4,
+                GameBoardCols = 3
+            };
+
+            return View(dto);
+        }
+
+        public IActionResult Medium()
+        {
+            var board = this.gameService.GenerateBoard(5, 5);
+            var model = this.gameService.GameResults(board);
+            var dto = new GameViewModel()
+            {
+                Board = board,
+                WinCoef = model.WinCoefficient,
+                GameBoardRows = 5,
+                GameBoardCols = 5
+            };
+
+            return View(dto);
+        }
+
+        public IActionResult Big()
+        {
+            var board = this.gameService.GenerateBoard(8, 5);
+            var model = this.gameService.GameResults(board);
+            var dto = new GameViewModel()
+            {
+                Board = board,
+                WinCoef = model.WinCoefficient,
+                GameBoardRows = 8,
+                GameBoardCols = 5
+            };
+
+            return View(dto);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Bet(GameViewModel model)
         {
@@ -44,7 +89,7 @@ namespace WebCasino.Web.Controllers
             {
                 var userId = this.userWrapper.GetUserId(HttpContext.User);
                 await this.transactionService.AddStakeTransaction(userId, model.BetAmount, $"Stake at slot game {model.GameBoardRows} x {model.GameBoardCols}");
-                var board = this.gameService.GenerateBoard(4, 3);
+                var board = this.gameService.GenerateBoard(model.GameBoardRows, model.GameBoardCols);
                 var gameModel = this.gameService.GameResults(board);
                 if(gameModel.WinCoefficient > 0)
                 {
