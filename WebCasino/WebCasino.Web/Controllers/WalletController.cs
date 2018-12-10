@@ -47,7 +47,13 @@ namespace WebCasino.Web.Controllers
             {
                 var userId = this.userWrapper.GetUserId(HttpContext.User);
 
-                var date = DateTime.ParseExact(model.ExpirationDate.Replace(" ", string.Empty), "MM/yyyy", CultureInfo.InvariantCulture);
+                DateTime date; 
+                var validDate = DateTime.TryParseExact(model.ExpirationDate.Replace(" ", string.Empty), "MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date);
+                if (!validDate)
+                {
+                    TempData["CardAddedFail"] = "Invalid card date";
+                    return this.RedirectToAction("index", "wallet");
+                }
                 await this.cardService.AddCard(model.RealNumber.Replace(" ", string.Empty), userId, date);
                 TempData["CardAdded"] = "Succesfulyy added new card";
                 return this.RedirectToAction("index", "wallet");
