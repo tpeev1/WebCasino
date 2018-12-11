@@ -6,13 +6,13 @@ using WebCasino.Entities;
 
 namespace WebCasino.Web.Areas.Administration.Models
 {
-    public class UserSettingsViewModel
+    public class AdminSettingsViewModel
     {
-        public UserSettingsViewModel()
+        public AdminSettingsViewModel()
         {
 
         }
-        public UserSettingsViewModel(User user)
+        public AdminSettingsViewModel(User user)
         {
             this.Id = user.Id;
             this.Alias = user.Alias;
@@ -41,6 +41,5 @@ namespace WebCasino.Web.Areas.Administration.Models
         public DateTime? CreatedOn { get; set; }
 
         public DateTime? ModifiedOn { get; set; }
-
     }
 }

@@ -56,6 +56,22 @@ namespace WebCasino.Web.Areas.Administration.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserAccountSettings(UserSettingsViewModel model, string returnUrl = null)
+        {
+            //ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var updateModel = await this.userService.EditUserAlias(model.Alias, model.Id);
+
+                this.TempData["Updated"] = "User info is updated";
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
 
         [HttpPost]
         [Authorize]

@@ -19,7 +19,7 @@
 					<li class="nav-item"><a class="nav-link" asp-area="Administration" asp-controller="Transactions" asp-action="History">TRANSACTIONS HISTORY</a></li>
 					<li class="nav-item"><a class="nav-link" asp-area="Administration" asp-controller="UserAdministration" asp-action="Index">USERS ADMINISTRATION</a></li>
 					<li class="nav-item">GAMES ADMINISTRATION</li>
-                    <li class="nav-item"><a class="nav-link" asp-area="Administration" asp-controller="AdminSettings" asp-action="Index">ADMIN SETTINGS</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Administration" asp-controller="AdminSettings" asp-action="Index" asp-route-id="@User.Identity.Name">ADMIN SETTINGS</a></li>
 				</ul>
 			</div>
 		</div>

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebCasino.Service.Abstract;
+using WebCasino.Web.Areas.Administration.Models;
 
 namespace WebCasino.Web.Areas.Administration.Controllers
 {
@@ -11,9 +13,28 @@ namespace WebCasino.Web.Areas.Administration.Controllers
     [Authorize(Roles = "Administrator")]
     public class AdminSettingsController : Controller
     {
-        public IActionResult Index()
+        private readonly IUserService userService;
+
+        public AdminSettingsController(IUserService userService)
         {
-            return this.View();
+            this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(UserSettingsViewModel model, string returnUrl = null)
+        {
+            //ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var updateModel = await this.userService.EditUserAlias(model.Alias, model.Id);
+
+                this.TempData["Updated"] = "User info is updated";
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
     }
 }

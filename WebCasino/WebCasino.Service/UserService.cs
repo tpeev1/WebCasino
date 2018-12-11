@@ -31,7 +31,15 @@ namespace WebCasino.Service
 			return user;
 		}
 
-		public async Task<IEnumerable<User>> GetAllUsers(int page = 1, int pageSize = 10)
+        public async Task<IEnumerable<User>> GetAllUsers()
+        {
+            return await this.context.Users.Where(us => !us.IsDeleted)
+                .Include(t => t.Transactions)
+                .OrderByDescending(x => x.Id)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<User>> GetAllUsers(int page = 1, int pageSize = 10)
 		{
 			return await this.context.Users.Where(us => !us.IsDeleted)
                 .Include(t => t.Transactions)             
@@ -99,6 +107,15 @@ namespace WebCasino.Service
 			await this.context.SaveChangesAsync();
 			return user;
 		}
+
+        public async Task<User> GetAdmin(string id)
+        {
+            var adminQuery = await this.context
+                .Users
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            return adminQuery;
+        }
 
 		public async Task<User> RetrieveUser(string id)
 		{
