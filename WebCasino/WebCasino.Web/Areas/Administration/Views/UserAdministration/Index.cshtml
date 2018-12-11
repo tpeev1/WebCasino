@@ -2,21 +2,7 @@
 <link href="~/assets/css/" rel="stylesheet" />
 @await Html.PartialAsync("AdminActions/_DisplayUserStateChange")
 <h2>Casino Users</h2>
-<form class="form" asp-area="Administration" asp-action="Index" asp-controller="UserAdministration" method="GET">
-    <div class="row">
 
-        <div class="col-sm-6 col-lg-3">
-            <div class="form-group">
-                <input asp-for="@Model.SearchText" type="text" class="form-control " placeholder="Search user" id="txtSearch" />
-            </div>
-        </div>
-        <div class="col-sm-2 col-lg-2">
-            <div class="form-group">
-                <input type="submit" class=" form-control btn btn-primary" value="Search" />
-            </div>
-        </div>
-    </div>
-</form>
 
 <br />
 <div class="card ">
@@ -24,8 +10,22 @@
         <h4 class="card-title"> Users Table</h4>
     </div>
     <div class="card-body">
-        <div class="table">
+        
             @await Html.PartialAsync("UsersTable/_AllUsersTable", Model)
-        </div>
+        
     </div>
 </div>
+@section Scripts{
+    <script src="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable({
+                responsive: true,              
+            });
+
+            });
+
+    </script>
+}

@@ -237,13 +237,13 @@ namespace WebCasino.Service
 
 		}
 
-		public async Task<IEnumerable<Transaction>> GetAllTransactionsTable(int page = 1, int pageSize = 10)
+		public async Task<IEnumerable<Transaction>> GetAllTransactionsTable()
 		{
 			var transactionsQuery = await dbContext
 				.Transactions.Where(tr => !tr.IsDeleted)				
 				.Include(tt => tt.TransactionType)
 				.Include(u => u.User.Wallet.Currency)               
-                 .Skip((page - 1) * pageSize).Take(pageSize)
+                 
                  .OrderByDescending(d => d.CreatedOn)
                 .ToListAsync();
 

@@ -11,11 +11,11 @@
             <div class="row">
 
                 <div class="col-md-12">
-                    <div class="card card-coin card-plain">
+                    <div class="card">
 
-                        <div class="card-body">
+                        <div class="card-head">
                             <div class="row justify-content-center">
-                                <h3>User Transactions History</h3>
+                                <h3 class="card-title">User Transactions History</h3>
                             </div>
 
                             <ul class="nav nav-tabs nav-tabs-primary justify-content-center">
@@ -29,30 +29,12 @@
                                         Transactions Details
                                     </a>
                                 </li>
-                              
                             </ul>
-                            <form class="form" asp-area="Administration" asp-action="Details" asp-controller="UserAdministration" method="GET">
-                                <div class="row">
-
-                                    <div class="col-sm-6 col-lg-3">
-
-                                        <div class="form-group">
-
-                                            <input asp-for="@Model.SearchText" type="text" class="form-control " placeholder="Search transaction user" id="txtSearch" />
-
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-2 col-lg-2">
-                                        <div class="form-group">
-                                            <input type="submit" class=" form-control btn btn-primary" value="Search" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                         </div>
                             <div class="tab-content tab-subcategories">
                                 <div class="tab-pane active" id="linka">
-                                    <div >
-                                        @await  Html.PartialAsync("UsersTable/_UserTransactionsHistoryTable")
+                                    <div class="card-body">
+                                        @await Html.PartialAsync("UsersTable/_UserTransactionsHistoryTable", Model)
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="linkb">
@@ -60,7 +42,7 @@
                                         @await Html.PartialAsync("UsersTable/_UserTransactionsDetails", Model)
                                     </div>
                                 </div>
-                               
+
 
                             </div>
 
@@ -71,3 +53,18 @@
         </div>
     </div>
 </div>
+@section Scripts{
+    <script src="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable({
+                responsive: true,
+            
+            });
+
+            });
+
+    </script>
+}

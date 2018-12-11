@@ -39,14 +39,7 @@ namespace WebCasino.Service
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<User>> GetAllUsers(int page = 1, int pageSize = 10)
-		{
-			return await this.context.Users.Where(us => !us.IsDeleted)
-                .Include(t => t.Transactions)             
-				.OrderByDescending(x => x.Id)
-				.Skip((page - 1) * pageSize).Take(pageSize)
-				.ToListAsync();
-		}
+   
 
 		public IEnumerable<User> ListByContainingText(string searchText, int page = 1, int pageSize = 10)
 		{

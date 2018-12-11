@@ -1,67 +1,42 @@
 ﻿
-@{
-    var previousDisabled = Model.Page == 1 ? "disabled" : string.Empty;
-    var nextDisabled = Model.Page == Model.TotalPages ? "disabled" : string.Empty;
-}
-<table class="table tablesorter " id="plain-table">
-    <thead class=" text-primary">
-
-        <tr>
-            <th class="header">Created On</th>
-            <th class="header">Type</th>
-            <th class="header">Amount $</th>
-            <th class="header">User Currency</th>
-            <th class="header">Description</th>
-            <th class="header">Email</th>
-            <th class="header">Alias</th>
-            <th class="header">Action</th>
-        </tr>
-
-    </thead>
-    <tbody>
-        @foreach (var transaction in Model.Transactions)
-        {
-
+<div class="table">
+    <table id="table" class="table table-hover table-dark">
+        <thead>
             <tr>
-                <td>@transaction.CreatedOn</td>
-                <td>@transaction.TransactionType.Name</td>
-                <td>@String.Format("{0:.##}", transaction.NormalisedAmount)</td>
-                <td>XXX</td>
-                <td>@transaction.Description</td>
-                <td>@transaction.User.Email</td>
-                <td>@transaction.User.Alias</td>
-                <td class="td-actions text-right">
-                    <a class="btn btn-info btn-link btn-icon btn-sm btn-tooltip " asp-action="UserAccountSettings" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@transaction.User.Id" data-toggle="tooltip" data-placement="bottom" title="" data-container="body" data-animation="true" data-original-title="Go to User Settings">
-                        <i class="tim-icons icon-single-02"></i>
-                    </a>
-                    <a class="btn btn-success btn-link btn-icon btn-sm" asp-action="Details" asp-controller="Transactions" asp-area="Administration" asp-route-id="@transaction.Id">
-                        <i class="tim-icons icon-settings"></i>
-                    </a>
-
-                </td>
-
+                <th scope="col">Created On</th>
+                <th scope="col">Type</th>
+                <th scope="col">Amount $</th>
+                <th scope="col">User Currency</th>
+                <th scope="col">Description</th>
+                <th scope="col">Email</th>
+                <th scope="col">Alias</th>
+                <th scope="col">Action</th>
             </tr>
-        }
-    </tbody>
+        </thead>
+        <tbody>
+            @foreach (var transaction in Model.Transactions)
+            {
 
-</table>
-<nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-        <li class="page-item">
-            <a class="page-link @previousDisabled" asp-area="Administration" asp-controller="UserAdministration" asp-action="Details" asp-route-page="@Model.PreviousPage" asp-route-searchtext="@Model.SearchText" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-            </a>
-        </li>
-        @for (int i = 1; i < Model.TotalPages; i++)
-        {
-            <li class="page-item"><a class="page-link" asp-area="Administration" asp-controller="UserAdministration" asp-action="Details" asp-route-searchtext="@Model.SearchText" asp-route-page="@i">@i</a></li>
-        }
-        <li class="page-item">
-            <a class="page-link @nextDisabled" asp-area="Administration" asp-controller="UserAdministration" asp-action="Details" asp-route-page="@Model.NextPage" asp-route-searchtext="@Model.SearchText" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-            </a>
-        </li>
-    </ul>
-</nav>
+                <tr>
+                    <td>@transaction.CreatedOn</td>
+                    <td>@transaction.TransactionType.Name</td>
+                    <td>@String.Format("{0:.##}", transaction.NormalisedAmount)</td>
+                    <td>XXX</td>
+                    <td>@transaction.Description</td>
+                    <td>@transaction.User.Email</td>
+                    <td>@transaction.User.Alias</td>
+                    <td class="td-actions text-right">
+                        <a class="btn btn-info btn-link btn-icon btn-sm btn-tooltip " asp-action="UserAccountSettings" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@transaction.User.Id" data-toggle="tooltip" data-placement="bottom" title="" data-container="body" data-animation="true" data-original-title="Go to User Settings">
+                            <i class="tim-icons icon-single-02"></i>
+                        </a>
+                        <a class="btn btn-success btn-link btn-icon btn-sm" asp-action="Details" asp-controller="Transactions" asp-area="Administration" asp-route-id="@transaction.Id">
+                            <i class="tim-icons icon-settings"></i>
+                        </a>
+
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -18,24 +18,33 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 			this.service = service ?? throw new System.ArgumentNullException(nameof(service));
 		}
 
-      
-
-		public async Task<IActionResult> History(TransactionHistoryViewModel model)
-		{
-			if (string.IsNullOrWhiteSpace(model.SearchText))
-			{
-				model.Transactions = await this.service.GetAllTransactionsTable(model.Page, 10);
-				model.TotalPages = (int)Math.Ceiling(await this.service.Total() / (double)10);
-			}
-			else
-			{
-				model.Transactions = await this.service.ListByContainingText(model.SearchText, model.Page, 10);
-				model.TotalPages = (int)Math.Ceiling(await this.service.TotalContainingText(model.SearchText) / (double)10);
+        //TEST
+        public async Task<IActionResult> History(TransactionHistoryViewModel model)
+        {
+           
+                model.Transactions = await this.service.GetAllTransactionsTable();
               
-            }
+          
 
-			return View(model);
-		}
+            return View(model);
+        }
+
+  //      public async Task<IActionResult> History(TransactionHistoryViewModel model)
+		//{
+		//	if (string.IsNullOrWhiteSpace(model.SearchText))
+		//	{
+		//		model.Transactions = await this.service.GetAllTransactionsTable(model.Page, 10);
+		//		model.TotalPages = (int)Math.Ceiling(await this.service.Total() / (double)10);
+		//	}
+		//	else
+		//	{
+		//		model.Transactions = await this.service.ListByContainingText(model.SearchText, model.Page, 10);
+		//		model.TotalPages = (int)Math.Ceiling(await this.service.TotalContainingText(model.SearchText) / (double)10);
+              
+  //          }
+
+		//	return View(model);
+		//}
 
 		public async Task<IActionResult> Details(string id)
 		{

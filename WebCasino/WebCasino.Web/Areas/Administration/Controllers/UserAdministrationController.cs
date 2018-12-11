@@ -22,16 +22,9 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 
 		public async Task<IActionResult> Index(UsersIndexViewModel model)
 		{
-			if (string.IsNullOrWhiteSpace(model.SearchText))
-			{
-				model.Users = await this.userService.GetAllUsers(model.Page, 10);
-				model.TotalPages = (int)Math.Ceiling(await this.userService.Total() / (double)10);
-			}
-			else
-			{
-				model.Users = this.userService.ListByContainingText(model.SearchText, model.Page, 10);
-				model.TotalPages = (int)Math.Ceiling(this.userService.TotalContainingText(model.SearchText) / (double)10);
-			}
+			
+				model.Users = await this.userService.GetAllUsers();
+			
 
 			return View(model);
 		}

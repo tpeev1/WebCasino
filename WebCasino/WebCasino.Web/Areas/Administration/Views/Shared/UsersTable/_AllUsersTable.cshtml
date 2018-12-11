@@ -1,28 +1,17 @@
 ﻿@model WebCasino.Web.Areas.Administration.Models.UsersIndexViewModel
 
-@{
-    var previousDisabled = Model.Page == 1 ? "disabled" : string.Empty;
-    var nextDisabled = Model.Page == Model.TotalPages ? "disabled" : string.Empty;
-}
-<table class="table table-hover table-dark" id="">
-    <thead class="text-primary">
-        <tr>
-            <th>Created On</th>
-            <th>Email</th>
-            <th>Alias</th>
-            <th>Transactions</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Users.Count() == 0)
-        {
+<div class="table">
+    <table id="table" class="table table-hover table-dark">
+        <thead class="text-primary">
             <tr>
-                <td colspan="4">No data available in table</td>
+                <th scope="col">Created On</th>
+                <th scope="col">Email</th>
+                <th scope="col">Alias</th>
+                <th scope="col">Transactions</th>
+                <th scope="col">Action</th>
             </tr>
-        }
-        else
-        {
+        </thead>
+        <tbody>
             @foreach (var user in Model.Users)
             {
                 <tr>
@@ -43,47 +32,27 @@
 
                         @if (user.Locked)
                         {
-                            
+
                             <form style=" display:inline!important;" asp-action="TableUnLockUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@user.Id" method="post">
                                 <button class="btn btn-danger btn-link btn-icon btn-sm" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-animation="true" data-original-title="Unlock User">
                                     <i class="tim-icons icon-lock-circle btn-default"></i>
                                 </button>
-                                </form>
-                                }
-                                else
-                                {
-                                <form style=" display:inline!important;" asp-action="TableLockUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@user.Id" method="post">
-                                    <button class="btn btn-danger btn-link btn-icon btn-sm" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-animation="true" data-original-title="Lock User">
-                                        <i class="tim-icons icon-key-25  btn-danger"></i>
-                                    </button>
-                                </form>
-                                }
+                            </form>
+                        }
+                        else
+                        {
+                            <form style=" display:inline!important;" asp-action="TableLockUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@user.Id" method="post">
+                                <button class="btn btn-danger btn-link btn-icon btn-sm" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-animation="true" data-original-title="Lock User">
+                                    <i class="tim-icons icon-key-25  btn-danger"></i>
+                                </button>
+                            </form>
+                        }
 
 
-                        </td>
+                    </td>
 
                 </tr>
             }
-        }
-    </tbody>
-</table>
-<nav aria-label="Page navigation example" align="center">
-    <ul class="pagination justify-content-center">
-        <li class="page-item">
-            <a class="page-link @previousDisabled" asp-area="Administration" asp-controller="UserAdministration" asp-action="Index" asp-route-page="@Model.PreviousPage" asp-route-searchtext="@Model.SearchText" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-            </a>
-        </li>
-        @for (int i = 1; i <= Model.TotalPages; i++)
-        {
-            <li class="page-item"><a class="page-link" asp-area="Administration" asp-controller="UserAdministration" asp-action="Index" asp-route-searchtext="@Model.SearchText" asp-route-page="@i">@i</a></li>
-        }
-        <li class="page-item">
-            <a class="page-link @nextDisabled" asp-area="Administration" asp-controller="UserAdministration" asp-action="Index" asp-route-page="@Model.NextPage" asp-route-searchtext="@Model.SearchText" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-            </a>
-        </li>
-    </ul>
-</nav>
+        </tbody>
+    </table>
+</div>

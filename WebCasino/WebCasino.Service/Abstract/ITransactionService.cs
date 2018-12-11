@@ -6,7 +6,7 @@ namespace WebCasino.Service.Abstract
 {
 	public interface ITransactionService
 	{
-		Task<IEnumerable<Transaction>> GetAllTransactionsTable(int page = 1, int pageSize = 10);
+		Task<IEnumerable<Transaction>> GetAllTransactionsTable();
 
         Task<IEnumerable<Transaction>> ListByContainingText(string searchText, int page = 1, int pageSize = 10);
 

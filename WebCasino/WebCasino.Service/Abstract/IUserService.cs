@@ -12,7 +12,7 @@ namespace WebCasino.Service.Abstract
 
         Task<IEnumerable<User>> GetAllUsers();
 
-        Task<IEnumerable<User>> GetAllUsers(int page = 1, int pageSize = 10);
+    
 
        
         Task<User> PromoteUser(string id);
