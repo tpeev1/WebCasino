@@ -1,0 +1,49 @@
+﻿<form class="form" asp-area="Administration" asp-action="Details" asp-controller="UserAdministration" method="GET">
+    <div class="row">
+
+        <div class="col-sm-6 col-lg-3">
+
+            <div class="form-group">
+
+                <inputtype ="text" class="form-control " placeholder="Search transaction user" id="txtSearch" />
+
+            </div>
+        </div>
+        <div class="col-sm-2 col-lg-2">
+            <div class="form-group">
+                <input type="submit" class=" form-control btn btn-primary" value="Search" />
+            </div>
+        </div>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th class="text-center">#</th>
+            <th>Name</th>
+            <th>Job Position</th>
+            <th>Since</th>
+            <th class="text-right">Salary</th>
+            <th class="text-right">Wins</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="text-center">1</td>
+            <td>Andrew Mike</td>
+            <td>PAGE2</td>
+            <td>2013</td>
+            <td class="text-right">&euro; 99,225</td>
+            <td class="td-actions text-right">
+                <a class="btn btn-info btn-link btn-icon btn-sm" asp-action="UserAccountSettings" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="">
+                    <i class="tim-icons icon-settings"></i>
+                </a>
+
+                <button type="button" rel="tooltip" class="btn btn-danger btn-link btn-icon btn-sm">
+                    <i class="tim-icons icon-simple-remove"></i>
+                </button>
+            </td>
+        </tr>
+
+    </tbody>
+</table>

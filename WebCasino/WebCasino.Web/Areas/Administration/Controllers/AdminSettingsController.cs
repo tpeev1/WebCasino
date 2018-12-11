@@ -20,19 +20,12 @@ namespace WebCasino.Web.Areas.Administration.Controllers
             this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(UserSettingsViewModel model, string returnUrl = null)
+      
+        public async Task<IActionResult> Index(string id)
         {
-            //ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
-            {
-                var updateModel = await this.userService.EditUserAlias(model.Alias, model.Id);
+            var admin =await this.userService.RetrieveUser(id);
 
-                this.TempData["Updated"] = "User info is updated";
-            }
-
+            var model = new UserSettingsViewModel(admin);
             // If we got this far, something failed, redisplay form
             return View(model);
         }

@@ -108,15 +108,7 @@ namespace WebCasino.Service
 			return user;
 		}
 
-        public async Task<User> GetAdmin(string id)
-        {
-            var adminQuery = await this.context
-                .Users
-                .FirstOrDefaultAsync(u => u.Id == id);
-
-            return adminQuery;
-        }
-
+   
 		public async Task<User> RetrieveUser(string id)
 		{
 			var user = await this.context.Users
