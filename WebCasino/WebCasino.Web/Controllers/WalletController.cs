@@ -81,6 +81,7 @@ namespace WebCasino.Web.Controllers
             {
                 var userId = this.userWrapper.GetUserId(HttpContext.User);
                 var userWallet = await this.walletService.RetrieveWallet(userId);
+                //TO DO: OPTIMIZE!!!
                 var userCurrency = ((CurrencyOptions)userWallet.CurrencyId).ToString();
 
                 var card = await this.cardService.GetCard(model.CardId);
@@ -95,6 +96,7 @@ namespace WebCasino.Web.Controllers
             }
 
             TempData["FailedDeposit"] = "Failed to deposit. Please try again with a different card";
+            string pesho = "";
             return this.RedirectToAction("index", "wallet");
         }
 

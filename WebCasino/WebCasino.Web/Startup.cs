@@ -10,6 +10,7 @@ using WebCasino.Service;
 using WebCasino.Service.Abstract;
 using WebCasino.Service.Utility.APICurrencyConvertor.RequestManager;
 using WebCasino.Service.Utility.RandomGeneration;
+using WebCasino.Service.Utility.Wrappers;
 using WebCasino.Web.Utilities.Wrappers;
 
 namespace WebCasino.Web
@@ -59,6 +60,8 @@ namespace WebCasino.Web
             services.AddSingleton<IAPIRequester, APIRequester>();
 
             services.AddSingleton<ICurrencyRateApiService, CurrencyRateApiService>();
+
+            services.AddSingleton<IDateWrapper, DateWrapper>();
 
             // Add application services.
 

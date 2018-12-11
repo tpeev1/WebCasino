@@ -10,12 +10,12 @@ using WebCasino.Service.Utility.APICurrencyConvertor.Exceptions;
 using WebCasino.Service.Utility.APICurrencyConvertor.RequestConverter;
 using WebCasino.Service.Utility.APICurrencyConvertor.RequestConverter.Models;
 using WebCasino.Service.Utility.APICurrencyConvertor.RequestManager;
+using WebCasino.Service.Utility.Wrappers;
 
 namespace WebCasino.Service
 {
     public class CurrencyRateApiService : ICurrencyRateApiService
     {
-        private readonly IAPIRequester apiRequester;
 
         private const string connection = "https://api.exchangeratesapi.io/latest?base=USD&symbols=EUR,BGN,GBP,USD";
 
@@ -23,15 +23,20 @@ namespace WebCasino.Service
 
         private DateTime lastUpdate;
 
+        private readonly IDateWrapper dateTime;
 
-        public CurrencyRateApiService(IAPIRequester apiRequester)
+        private readonly IAPIRequester apiRequester;
+
+
+        public CurrencyRateApiService(IAPIRequester apiRequester, IDateWrapper dateTime)
         {
             this.apiRequester = apiRequester;
+            this.dateTime = dateTime;
         }
 
         public async Task<ConcurrentDictionary<string,double>> GetRatesAsync()
         {
-            if(lastUpdate.AddHours(24) <= DateTime.UtcNow || rates == null)
+            if(lastUpdate.AddHours(24) <= dateTime.Now() || rates == null)
             {
                 var dic = this.RefreshRates();
                 rates = new ConcurrentDictionary<string,double>(await this.RefreshRates());

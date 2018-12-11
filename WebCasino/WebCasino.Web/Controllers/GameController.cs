@@ -40,11 +40,9 @@ namespace WebCasino.Web.Controllers
         public IActionResult Small()
         {
             var board = this.gameService.GenerateBoard(4, 3);
-            var model = this.gameService.GameResults(board);
             var dto = new GameViewModel()
             {
                 Board = board,
-                WinCoef = model.WinCoefficient,
                 GameBoardRows = 4,
                 GameBoardCols = 3
             };
@@ -55,11 +53,9 @@ namespace WebCasino.Web.Controllers
         public IActionResult Medium()
         {
             var board = this.gameService.GenerateBoard(5, 5);
-            var model = this.gameService.GameResults(board);
             var dto = new GameViewModel()
             {
                 Board = board,
-                WinCoef = model.WinCoefficient,
                 GameBoardRows = 5,
                 GameBoardCols = 5
             };
@@ -70,11 +66,9 @@ namespace WebCasino.Web.Controllers
         public IActionResult Big()
         {
             var board = this.gameService.GenerateBoard(8, 5);
-            var model = this.gameService.GameResults(board);
             var dto = new GameViewModel()
             {
                 Board = board,
-                WinCoef = model.WinCoefficient,
                 GameBoardRows = 8,
                 GameBoardCols = 5
             };
@@ -83,6 +77,7 @@ namespace WebCasino.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Bet(GameViewModel model)
         {
             if (ModelState.IsValid)
@@ -105,7 +100,14 @@ namespace WebCasino.Web.Controllers
                 return PartialView("_GameBoardPartial", dto);
 
             }
-            return View("index", "game");
+            var dtoError = new GameViewModel()
+            {
+                Board = model.Board,
+                WinCoef = 0,
+                BetAmount = 0
+            };
+            TempData["Invalid bet"] = "We couldn't place your bet";
+            return PartialView("_GameBoardPartial", dtoError);
         }
 
     }
