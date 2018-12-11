@@ -94,6 +94,19 @@ namespace WebCasino.Web.Areas.Administration.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TableLockUser(UsersIndexViewModel model, string id)
+        {
+
+            var removedTransaction = await this.userService.LockUser(id);
+
+            this.TempData["Locked"] = "You Lock this user";
+
+            return RedirectToAction("Index", "UserAdministration", model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UnLockUser(UserSettingsViewModel model)
         {
 
@@ -102,6 +115,19 @@ namespace WebCasino.Web.Areas.Administration.Controllers
             this.TempData["UnLocked"] = "You Unlock this user";
 
             return RedirectToAction("UserAccountSettings", "UserAdministration", model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TableUnLockUser(UserSettingsViewModel model, string id)
+        {
+
+            var removedTransaction = await this.userService.UnLockUser(id);
+
+            this.TempData["UnLocked"] = "You Unlock this user";
+
+            return RedirectToAction("Index", "UserAdministration", model);
         }
 
         [HttpPost]

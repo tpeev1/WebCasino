@@ -1,4 +1,5 @@
 ﻿@model WebCasino.Web.Areas.Administration.Models.UsersIndexViewModel
+
 @{
     var previousDisabled = Model.Page == 1 ? "disabled" : string.Empty;
     var nextDisabled = Model.Page == Model.TotalPages ? "disabled" : string.Empty;
@@ -42,19 +43,24 @@
 
                         @if (user.Locked)
                         {
-                            <a class="btn btn-danger btn-link btn-icon btn-sm" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-animation="true" data-original-title="Unlock User">
-                                <i class="tim-icons icon-lock-circle btn-default"></i>
-                            </a>
-                        }
-                        else
-                        {
-                            <a  class="btn btn-danger btn-link btn-icon btn-sm" asp-action="LockUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@user.Id" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-animation="true" data-original-title="Lock User">
-                                <i class="tim-icons icon-key-25  btn-danger"></i>
-                            </a>
-                        }
+                            
+                            <form style=" display:inline!important;" asp-action="TableUnLockUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@user.Id" method="post">
+                                <button class="btn btn-danger btn-link btn-icon btn-sm" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-animation="true" data-original-title="Unlock User">
+                                    <i class="tim-icons icon-lock-circle btn-default"></i>
+                                </button>
+                                </form>
+                                }
+                                else
+                                {
+                                <form style=" display:inline!important;" asp-action="TableLockUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@user.Id" method="post">
+                                    <button class="btn btn-danger btn-link btn-icon btn-sm" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-animation="true" data-original-title="Lock User">
+                                        <i class="tim-icons icon-key-25  btn-danger"></i>
+                                    </button>
+                                </form>
+                                }
 
 
-                    </td>
+                        </td>
 
                 </tr>
             }
