@@ -81,40 +81,40 @@ namespace WebCasino.Web.Areas.Administration.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LockUser(string id)
+        public async Task<IActionResult> LockUser(UserSettingsViewModel model)
         {
 
-            var removedTransaction = await this.userService.LockUser(id);
+            var removedTransaction = await this.userService.LockUser(model.Id);
 
             this.TempData["Locked"] = "You Lock this user";
 
-            return RedirectToAction("UserAccountSettings", "UserAdministration");
+            return RedirectToAction("UserAccountSettings", "UserAdministration", model);
         }
 
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UnLockUser(string id)
+        public async Task<IActionResult> UnLockUser(UserSettingsViewModel model)
         {
 
-            var removedTransaction = await this.userService.UnLockUser(id);
+            var removedTransaction = await this.userService.UnLockUser(model.Id);
 
             this.TempData["UnLocked"] = "You Unlock this user";
 
-            return RedirectToAction("UserAccountSettings", "UserAdministration");
+            return RedirectToAction("UserAccountSettings", "UserAdministration", model);
         }
 
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PromoteUser(string id)
+        public async Task<IActionResult> PromoteUser(UserSettingsViewModel model)
         {
 
-            var removedTransaction = await this.userService.PromoteUser(id);
+            var removedTransaction = await this.userService.PromoteUser(model.Id);
 
             this.TempData["Promoted"] = "You promote to admin this user";
 
-            return RedirectToAction("UserAccountSettings", "UserAdministration");
+            return RedirectToAction("UserAccountSettings", "UserAdministration", model);
         }
 
         public async Task<IActionResult> UserAccountSettings(string id)

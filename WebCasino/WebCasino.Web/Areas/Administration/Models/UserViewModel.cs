@@ -13,35 +13,8 @@ namespace WebCasino.Web.Areas.Administration.Models
 
         }
 
-		//public UserViewModel(IEnumerable<Transaction> transaction)
-		//{
-  //          this.Transactions = transaction;
-		
-		
-		//	this.CreatedOn = model.CreatedOn;
-		//	this.Wallet = model.Wallet;
-		//}
-
         public string Id { get; set; }
-  //      public string Alias { get; set; }
-
-	
-		//public DateTime DateOfBirth { get; set; }
-
-		//public bool Locked { get; set; }
-
-		//public bool IsDeleted { get; set; }
-
-	
-		//public DateTime? DeletedOn { get; set; }
-
-		
-		//public DateTime? CreatedOn { get; set; }
-
-		
-		//public DateTime? ModifiedOn { get; set; }
-
-		//public Wallet Wallet { get; set; }	
+  
         public User User { get; set; }
 
 		public IEnumerable<Transaction> Transactions { get; set; }

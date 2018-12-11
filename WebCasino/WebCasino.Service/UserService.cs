@@ -83,10 +83,7 @@ namespace WebCasino.Service
             ServiceValidator.ObjectIsNotEqualNull(user);
             var role = context.UserRoles.FirstOrDefault(ur => ur.UserId == id);
             ServiceValidator.ObjectIsNotEqualNull(role);
-            if (role.RoleId == "1")
-            {
-                throw new InvalidAdministratorOperationException("You cannot lock other administrators");
-            }
+           
             user.Locked = false;
             await this.context.SaveChangesAsync();
             return user;

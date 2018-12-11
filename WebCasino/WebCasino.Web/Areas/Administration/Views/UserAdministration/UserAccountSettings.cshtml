@@ -30,6 +30,7 @@
 
                             <div class="tab-content tab-subcategories ">
                                 <div class="tab-pane active" id="linka">
+
                                     @await Html.PartialAsync("UserForm/_UserSettingsForm")
                                 </div>
 
@@ -38,7 +39,8 @@
 
                                         <div class="card-body ">
                                             <div class="table tablesorter table-hover ">
-                                                @await Html.PartialAsync("AdminActions/_ChangeUserState")
+                                             
+                                                @await Html.PartialAsync("AdminActions/_ChangeUserState", Model)
 
 
 

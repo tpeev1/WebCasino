@@ -34,6 +34,8 @@ namespace WebCasino.Web.Areas.Administration.Models
 
         public bool Locked { get; set; }
 
+        public bool IsPromoted { get; set; }
+
         public bool IsDeleted { get; set; }
 
         public DateTime? DeletedOn { get; set; }

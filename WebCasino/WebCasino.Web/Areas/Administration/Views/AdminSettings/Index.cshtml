@@ -22,21 +22,13 @@
                                 </li>
 
 
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#linkc">
-                                        UnLock
-                                    </a>
-                                </li>
                             </ul>
 
                             <div class="tab-content tab-subcategories">
                                 <div class="tab-pane active" id="linka">
-                                    @await Html.PartialAsync("UserForm/_UserSettingsForm")
+                                    @await Html.PartialAsync("AdminActions/_AdminSettingsForm", Model)
                                 </div>
-                                <!-- UNLOCK -->
-                                <div class="tab-pane" id="linkc">
-                                    @await Html.PartialAsync("AdminActions/_UnlockTable")
-                                </div>
+                              
                             </div>
 
                         </div>

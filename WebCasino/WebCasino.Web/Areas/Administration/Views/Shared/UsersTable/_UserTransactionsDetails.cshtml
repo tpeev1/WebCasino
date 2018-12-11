@@ -1,8 +1,9 @@
-﻿<table class="table tablesorter table-hover " id="plain-table">
+﻿@model WebCasino.Web.Areas.Administration.Models.UserViewModel
+<table class="table tablesorter table-hover " id="plain-table">
     <thead class=" text-primary">
         <tr>
             <th class="header">
-                Transaction Full Ditails
+                User Transaction Ditails
             </th>
         </tr>
     </thead>
@@ -10,7 +11,14 @@
         <tr>
             <td>
                 <p>
-                    Amount in USD:
+                    Total transactions in USD : @String.Format("{0:.##}", Model.Transactions.Sum(a => a.NormalisedAmount));
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>
+                    Total Amount in User Currency: @String.Format("{0:.##}", Model.Transactions.Sum(a => a.OriginalAmount))
                 </p>
 
             </td>
@@ -18,7 +26,7 @@
         <tr>
             <td>
                 <p>
-                    Amount in User Currency:
+                    Win Transactions: @Model.Transactions.Where(t => t.TransactionType.Name == "Win").Count()
                 </p>
 
             </td>
@@ -26,7 +34,14 @@
         <tr>
             <td>
                 <p>
-                    Transaction Type:
+                    Stake Transactions:  @Model.Transactions.Where(t => t.TransactionType.Name == "Stake").Count()
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>
+                    Deposits: @Model.Transactions.Where(t => t.TransactionType.Name == "Deposit").Count()
                 </p>
 
             </td>
@@ -34,19 +49,27 @@
         <tr>
             <td>
                 <p>
-                    Created On:
+                    Widthdraws: @Model.Transactions.Where(t => t.TransactionType.Name == "Widthdraw").Count()
                 </p>
+
             </td>
         </tr>
         <tr>
             <td>
                 <p>
-                    Transaction Description:
+                    First Transaction Date: @Model.Transactions.OrderBy(t => t.CreatedOn).First().CreatedOn
                 </p>
 
             </td>
         </tr>
+        <tr>
+            <td>
+                <p>
+                    Last Transaction Date: @Model.Transactions.OrderByDescending(t => t.CreatedOn).First().CreatedOn
+                </p>
 
+            </td>
+        </tr>
     </tbody>
 
 

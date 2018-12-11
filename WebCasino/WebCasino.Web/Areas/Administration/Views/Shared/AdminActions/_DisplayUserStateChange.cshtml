@@ -12,7 +12,32 @@
             </button>
             <span data-notify="icon" class="tim-icons icon-support-17"></span>
             <span>
-                <b> Deleted! </b> @TempData["Locked"]
+                <b> Locked! </b> @TempData["Locked"]
+            </span>
+        </div>
+    }
+    if (unLocked != null)
+    {
+        <div class="alert alert-danger alert-with-icon">
+            <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                <i class="tim-icons icon-simple-remove"></i>
+            </button>
+            <span data-notify="icon" class="tim-icons icon-support-17"></span>
+            <span>
+                <b> UnLocked! </b> @TempData["UnLocked"]
+            </span>
+        </div>
+    }
+
+    if (promoted != null)
+    {
+        <div class="alert alert-danger alert-with-icon">
+            <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                <i class="tim-icons icon-simple-remove"></i>
+            </button>
+            <span data-notify="icon" class="tim-icons icon-support-17"></span>
+            <span>
+                <b> Promoted! </b> @TempData["Promoted"]
             </span>
         </div>
     }

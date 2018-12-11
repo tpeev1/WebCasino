@@ -26,7 +26,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="#linkb">
-                                        User Details
+                                        Transactions Details
                                     </a>
                                 </li>
                               
@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="tab-pane" id="linkb">
                                     <div class="">
-                                        @await Html.PartialAsync("UsersTable/_UserTransactionsDetails")
+                                        @await Html.PartialAsync("UsersTable/_UserTransactionsDetails", Model)
                                     </div>
                                 </div>
                                
