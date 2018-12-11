@@ -42,9 +42,14 @@ namespace WebCasino.Web.Areas.Administration.Controllers
             if (string.IsNullOrWhiteSpace(model.SearchText))
             {
                 model.Transactions = await this.transactionService.RetrieveUserTransaction(model.Id, model.Page, 10);
-                model.User = model.Transactions.Select(u => u.User).First();
-
                 model.TotalPages = (int)Math.Ceiling(await this.transactionService.Total() / (double)10);
+                model.User = model.Transactions.Select(u => u.User).First();
+                if (model.Transactions.Count() -1  == 0)
+                {
+                    model.Page = 0;
+                   
+                }
+              
             }
             else
             {

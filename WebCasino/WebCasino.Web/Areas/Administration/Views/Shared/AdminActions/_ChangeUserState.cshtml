@@ -1,0 +1,64 @@
+﻿<table class="table">
+    <tbody>
+        <tr>
+            <td class="col-md-3">
+                <div class="">
+                    <div class="form-group">
+                        @{
+                            if (Model.Locked)
+                            {
+                                <form asp-action="UnLockUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@Model.Id" method="post">
+                                    <input type="hidden" />
+                                    <button class=" form-control btn btn-default">UnLock</button>
+                                </form>
+
+                            }
+                            else
+                            {
+                                <form asp-action="LockUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@Model.Id" method="post">
+                                    <input type="hidden" />
+                                    <button class=" form-control btn btn-danger">Lock</button>
+                                </form>
+                            }
+                        }
+
+                    </div>
+                </div>
+            </td>
+            @{
+                if (Model.Locked)
+                {
+                    <td>
+                        <p class="title">UnLock User</p>
+                        <p class="text-muted">With this action you are going to unlock user.</p>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <p class="title">Lock User</p>
+                        <p class="text-muted">With this action you are going to lock user.</p>
+                    </td>
+                }
+            }
+
+        </tr>
+        <tr>
+            <!-- Change Display if User is locked, to unlock-->
+            <td class="col-md-3">
+                <div class="">
+                    <div class="form-group">
+                        <form asp-action="PromoteUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@Model.Id" method="post">
+                            <input type="hidden" />
+                            <button class=" form-control btn btn-danger">Promote</button>
+                        </form>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <p class="title">Promoto User</p>
+                <p class="text-muted">With this action you are going to promote user to Admin Role.</p>
+            </td>
+        </tr>
+    </tbody>
+</table>

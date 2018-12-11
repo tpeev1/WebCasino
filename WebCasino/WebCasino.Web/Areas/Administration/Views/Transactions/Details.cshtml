@@ -33,95 +33,12 @@
                             <div class="tab-content tab-subcategories">
                                 <div class="tab-pane active" id="linka">
                                     <div class="">
-                                        <table class="table tablesorter " id="plain-table">
-                                            <thead class=" text-primary">
-                                                <tr>
-                                                    <th class="header">
-                                                        Currency $
-                                                    </th>
-                                                    <th class="header">
-                                                        AMOUNT @Model.UserCurrency
-                                                    </th>
-                                                    <th class="header">
-                                                        Transaction Type
-                                                    </th>
-                                                    <th class="header">
-                                                        Date
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        @String.Format("{0:.##}", Model.NormalisedAmount)
-                                                    </td>
-                                                    <td>
-                                                        @String.Format("{0:.##}", Model.OriginalAmount)
-                                                    </td>
-                                                    <td>
-                                                        @Model.TransactionType
-                                                    </td>
-                                                    <td>
-                                                        @Model.CreatedOn
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        @await Html.PartialAsync("TransactionsTable/_SingleTransactionTable")
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="linkc">
-                                    <div class="">
-                                        <table class="table tablesorter table-hover " id="plain-table">
-                                            <thead class=" text-primary">
-                                                <tr>
-                                                    <th class="header">
-                                                        Transaction Full Ditails
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <p>
-                                                            Amount in USD: @String.Format("{0:.##}", Model.NormalisedAmount)
-                                                        </p>
-
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <p>
-                                                            Amount in User Currency: @String.Format("{0:.##}", Model.OriginalAmount) @Model.UserCurrency
-                                                        </p>
-
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <p>
-                                                            Transaction Type: @Model.TransactionType
-                                                        </p>
-
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <p>
-                                                            Created On:  @Model.CreatedOn
-                                                        </p>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <p>
-                                                            Transaction Description: @Model.Description
-                                                        </p>
-
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
+                                    <div>
+                                        @await  Html.PartialAsync("TransactionsTable/_TransactionDetailsTable")
                                     </div>
                                 </div>
                                 

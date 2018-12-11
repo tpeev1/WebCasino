@@ -1,0 +1,74 @@
+﻿@model WebCasino.Web.Areas.Administration.Models.TransactionHistoryViewModel
+@{
+    var previousDisabled = Model.Page == 1 ? "disabled" : string.Empty;
+    var nextDisabled = Model.Page == Model.TotalPages ? "disabled" : string.Empty;
+
+}
+<div class="table">
+    <table class="table table-hover table-dark" id="table-click">
+        <thead class=" text-primary">
+            <tr>
+                <th>Created On</th>
+                <th>Type</th>
+                <th>Amount $</th>
+                <th>Description</th>
+                <th>Email</th>
+                <th>Alias</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Transactions.Count() == 0)
+            {
+                <tr>
+                    <td colspan="4">No data available in table</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var transaction in Model.Transactions)
+                {
+
+                    <tr>
+                        <td>@transaction.CreatedOn</td>
+
+                        <td>@transaction.TransactionType.Name</td>
+                        <td>@String.Format("{0:.##}", transaction.NormalisedAmount)</td>
+                        <td>@transaction.Description</td>
+                        <td>@transaction.User.Email</td>
+                        <td>@transaction.User.Alias</td>
+                        <td>
+                            <a class="btn btn-info btn-link btn-icon btn-sm btn-tooltip " asp-action="UserAccountSettings" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@transaction.User.Id" data-toggle="tooltip" data-placement="bottom" title="" data-container="body" data-animation="true" data-original-title="Go to User Settings">
+                                <i class="tim-icons icon-single-02"></i>
+                            </a>
+                            <a class="btn btn-success btn-link btn-icon btn-sm" asp-action="Details" asp-controller="Transactions" asp-area="Administration" asp-route-id="@transaction.Id" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-animation="true" data-original-title="Go to Transaction Details">
+                                <i class="tim-icons icon-settings"></i>
+                            </a>
+
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example" align="center">
+        <ul class="pagination justify-content-center">
+            <li class="page-item">
+                <a class="page-link @previousDisabled" asp-area="Administration" asp-controller="Transactions" asp-action="History" asp-route-page="@Model.PreviousPage" asp-route-searchtext="@Model.SearchText" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item"><a class="page-link" asp-area="Administration" asp-controller="Transactions" asp-action="History" asp-route-searchtext="@Model.SearchText" asp-route-page="@i">@i</a></li>
+            }
+            <li class="page-item">
+                <a class="page-link @nextDisabled" asp-area="Administration" asp-controller="Transactions" asp-action="History" asp-route-page="@Model.NextPage" asp-route-searchtext="@Model.SearchText" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

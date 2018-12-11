@@ -1,36 +1,6 @@
 ﻿@model WebCasino.Web.Areas.Administration.Models.UserSettingsViewModel
-@{
-    var lockedUser = TempData["Locked"];
-    var unLocked = TempData["UnLocked"];
-    var promoted = TempData["Promoted"];
-    var updated = TempData["Updated"];
 
-}
-@if (lockedUser != null)
-{
-    <div class="alert alert-danger alert-with-icon">
-        <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
-            <i class="tim-icons icon-simple-remove"></i>
-        </button>
-        <span data-notify="icon" class="tim-icons icon-support-17"></span>
-        <span>
-            <b> Deleted! </b> @TempData["Locked"]
-        </span>
-    </div>
-}
-@if (updated != null)
-{
-    <div class="alert alert-danger alert-with-icon">
-        <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
-            <i class="tim-icons icon-simple-remove"></i>
-        </button>
-        <span data-notify="icon" class="tim-icons icon-support-17"></span>
-        <span>
-            <b> Updated! </b> @TempData["Updated"]
-        </span>
-    </div>
-}
-
+@await Html.PartialAsync("AdminActions/_DisplayUserStateChange")
 <div class="wrapper">
     <div class="page-header">
         <div class="container align-items-center">
@@ -60,87 +30,7 @@
 
                             <div class="tab-content tab-subcategories ">
                                 <div class="tab-pane active" id="linka">
-                                    <div class="card text-center">
-                                        <div class="card-body text-center">
-
-                                            <div class="col-md-12 justify-content-center">
-                                                <div class="card">
-
-                                                    <div class="card-body">
-                                                        <h4>Edit User Profile</h4>
-                                                        <hr />
-                                                        <form asp-area="Administration" asp-action="UserAccountSettings" asp-controller="UserAdministration" asp-route-id="@Model.Id" method="post">
-                                                            <div asp-validation-summary="All" class="text-danger"></div>
-                                                            <div class="row">
-                                                                <div class="col-md-6 px-md-1">
-                                                                    <div class="form-group">
-                                                                        <label asp-for="Alias"></label>
-                                                                        <input type="text" asp-for="Alias" class="form-control" placeholder="Username" value="@Model.Alias" />
-                                                                        <span asp-validation-for="Alias" class="text-danger"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6 pl-md-1">
-                                                                    <div class="form-group">
-                                                                        <label for="exampleInputEmail1">Email address</label>
-                                                                        <input type="email" class="form-control" placeholder="@Model.Email" readonly>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="row">
-                                                                <div class="col-md-4 pr-md-1">
-                                                                    <div class="form-group">
-                                                                        <label>Date Of Birth</label>
-                                                                        <input type="text" class="form-control" placeholder="dateOfBirth" value="@Model.DateOfBirth.ToShortDateString()" readonly>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4 px-md-1">
-                                                                    <div class="form-group">
-                                                                        <label>Created On</label>
-                                                                        <input type="text" class="form-control" placeholder="CreatedOn" value="@Model.CreatedOn" readonly>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4 pl-md-1">
-                                                                    <div class="form-group">
-                                                                        <label>Modified On</label>
-                                                                        <input type="text" class="form-control" placeholder="ModifiedOn" value="@Model.ModifiedOn" readonly>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-md-4 pr-md-1">
-                                                                    <div class="form-group">
-                                                                        <label>Locked</label>
-                                                                        <input type="text" class="form-control" placeholder="Locked" value="@Model.Locked.ToString()" readonly>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4 px-md-1">
-                                                                    <div class="form-group">
-                                                                        <label>Is Deleted</label>
-                                                                        <input type="text" class="form-control" placeholder="IsDeleted" value="@Model.IsDeleted.ToString()" readonly>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4 pl-md-1">
-                                                                    <div class="form-group">
-                                                                        <label>Deleted On</label>
-                                                                        <input type="text" class="form-control" placeholder="DeletedOn" value="@Model.DeletedOn.ToString()" readonly>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="card-footer">
-                                                                <button type="submit" class="btn btn-fill btn-primary">Save</button>
-                                                            </div>
-                                                        </form>
-
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-
-                                    </div>
+                                    @await Html.PartialAsync("UserForm/_UserSettingsForm")
                                 </div>
 
                                 <div class="tab-pane" id="linkb">
@@ -148,71 +38,8 @@
 
                                         <div class="card-body ">
                                             <div class="table tablesorter table-hover ">
+                                                @await Html.PartialAsync("AdminActions/_ChangeUserState")
 
-                                                <table class="table">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="col-md-3">
-                                                                <div class="">
-                                                                    <div class="form-group">
-                                                                        @{
-                                                                            if (Model.Locked)
-                                                                            {
-                                                                                <form asp-action="UnLockUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@Model.Id" method="post">
-                                                                                    <input type="hidden" />
-                                                                                    <button class=" form-control btn btn-default">UnLock</button>
-                                                                                </form>
-
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <form asp-action="LockUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@Model.Id" method="post">
-                                                                                    <input type="hidden" />
-                                                                                    <button class=" form-control btn btn-danger">Lock</button>
-                                                                                </form>
-                                                                            }
-                                                                        }
-
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            @{
-                                                                if (Model.Locked)
-                                                                {
-                                                                    <td>
-                                                                        <p class="title">UnLock User</p>
-                                                                        <p class="text-muted">With this action you are going to unlock user.</p>
-                                                                    </td>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <td>
-                                                                        <p class="title">Lock User</p>
-                                                                        <p class="text-muted">With this action you are going to lock user.</p>
-                                                                    </td>
-                                                                }
-                                                            }
-
-                                                        </tr>
-                                                        <tr>
-                                                            <!-- Change Display if User is locked, to unlock-->
-                                                            <td class="col-md-3">
-                                                                <div class="">
-                                                                    <div class="form-group">
-                                                                        <form asp-action="PromoteUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@Model.Id" method="post">
-                                                                            <input type="hidden" />
-                                                                            <button class=" form-control btn btn-danger">Promote</button>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <p class="title">Promoto User</p>
-                                                                <p class="text-muted">With this action you are going to promote user to Admin Role.</p>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
 
 
                                             </div>
