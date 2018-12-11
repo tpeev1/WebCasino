@@ -14,7 +14,8 @@
 </div>
 
 @section  Scripts{
-    <script src="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"></script>
+
+  
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 
     <script>
@@ -24,6 +25,19 @@
                 
             });
 
+            $('#table_filter > label > input').addClass('form-control');
+            $('#table_length > label > select').addClass('form-control');
+
+            $('#table_previous').removeClass('paginate_button previous disabled');
+            $('#table_next').removeClass('paginate_button next disabled');
+                  
+            $('#table_previous').addClass('tim-icons icon-double-left');
+            $('#table_next').addClass('tim-icons icon-double-right');
+            $('#paginate_button current').addClass('page-link');
+            $('#paginate_button').addClass('page-link');
+
+            $('#table_length').css('float','right');
+            $('#table_filter').css('float', 'left');
             });
 
     </script>
