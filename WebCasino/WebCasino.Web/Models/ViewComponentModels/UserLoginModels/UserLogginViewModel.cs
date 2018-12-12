@@ -8,11 +8,14 @@ namespace WebCasino.Web.Models.ViewComponentModels.UserLoginModels
 		public UserLogginViewModel(User user)
 		{
 			Alias = user.Alias;
-			Balance = Math.Floor(user.Wallet.DisplayBalance*100)/100;
+            Id = user.Id;
+            Balance = Math.Floor(user.Wallet.DisplayBalance*100)/100;
 			Currency = user.Wallet.Currency.Name;
 		}
 
-		public string Alias { get; set; }
+        public string Id { get; set; }
+
+        public string Alias { get; set; }
 
 		public double Balance { get; set; }
 

@@ -46,6 +46,10 @@
         </div>
     </nav>
     <div class="container body-content" id="main">
+        @if (User.IsInRole("Administrator"))
+        {
+            @await Component.InvokeAsync("AdminMenu")
+        }
         @RenderBody()
         <hr />
     </div>
