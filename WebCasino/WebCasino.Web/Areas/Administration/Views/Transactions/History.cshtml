@@ -1,4 +1,4 @@
-﻿@model WebCasino.Web.Areas.Administration.Models.TransactionHistoryViewModel
+﻿
 
 <link href="~/assets/css/" rel="stylesheet" />
 <h2>Transactions History</h2>
@@ -9,21 +9,31 @@
         <h4 class="card-title"> Transactions Table</h4>
     </div>
     <div class="card-body">
-        @await  Html.PartialAsync("TransactionsTable/_TransactionHistoryTable", Model)
+        @await  Html.PartialAsync("TransactionsTable/_TransactionHistoryTable")
     </div>
 </div>
 
 @section  Scripts{
 
-  
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 
     <script>
+
         $(document).ready(function () {
             $('#table').DataTable({
+                paging: true,
                 responsive: true,
-                
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "/Administration/Transactions/OnGet",
+                    type: "GET"
+                   
+                }
             });
+
+
 
             $('#table_filter > label > input').addClass('form-control');
             $('#table_length > label > select').addClass('form-control');

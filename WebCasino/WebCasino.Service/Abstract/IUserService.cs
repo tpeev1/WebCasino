@@ -11,10 +11,7 @@ namespace WebCasino.Service.Abstract
         Task<User> RetrieveUser(string id);
 
         Task<IEnumerable<User>> GetAllUsers();
-
-    
-
-       
+     
         Task<User> PromoteUser(string id);
         Task<User> LockUser(string id);
 
@@ -22,10 +19,6 @@ namespace WebCasino.Service.Abstract
 
         Task<User> EditUserAlias(string alias, string id);
 
-        int TotalContainingText(string searchText);
-
-        IEnumerable<User> ListByContainingText(string searchText, int page = 1, int pageSize = 10);
-
-        Task<int> Total();
+        
     }
 }

@@ -32,24 +32,9 @@ namespace WebCasino.Web.Areas.Administration.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(UserViewModel model)
         {
-            if (string.IsNullOrWhiteSpace(model.SearchText))
-            {
-                model.Transactions = await this.transactionService.RetrieveUserTransaction(model.Id, model.Page, 10);
-                model.TotalPages = (int)Math.Ceiling(await this.transactionService.Total() / (double)10);
-                model.User = model.Transactions.Select(u => u.User).First();
-                if (model.Transactions.Count() -1  == 0)
-                {
-                    model.Page = 0;
-                   
-                }
+            
+                model.Transactions = await this.transactionService.RetrieveAllUsersTransaction(model.Id);
               
-            }
-            else
-            {
-                model.Transactions = await this.transactionService.RetrieveUserSearchTransaction(model.SearchText,model.Id, model.Page, 10);
-                model.TotalPages = (int)Math.Ceiling(await this.transactionService.TotalContainingText(model.SearchText) / (double)10);
-
-            }
 
             return View(model);
         }

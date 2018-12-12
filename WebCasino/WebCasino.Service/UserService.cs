@@ -41,19 +41,9 @@ namespace WebCasino.Service
 
    
 
-		public IEnumerable<User> ListByContainingText(string searchText, int page = 1, int pageSize = 10)
-		{
-			return this.context.Users.Where(m => m.IsDeleted == false)
-                 .Include(t => t.Transactions)
-                .Where(m => m.Email.Contains(searchText, StringComparison.InvariantCultureIgnoreCase) ||
-                 m.Alias.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))              
-                .OrderByDescending(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-		}
+	
 
-		public int TotalContainingText(string searchText)
-		{
-			return this.context.Users.Where(m => m.Email.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)).ToList().Count();
-		}
+	
 
 		public async Task<User> LockUser(string id)
 		{
@@ -110,9 +100,6 @@ namespace WebCasino.Service
 			return user;
 		}
 
-		public async Task<int> Total()
-		{
-			return await this.context.Users.CountAsync();
-		}
+	
 	}
 }

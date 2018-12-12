@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using WebCasino.DataContext;
 using WebCasino.Entities;
 using WebCasino.Service;
@@ -60,6 +62,10 @@ namespace WebCasino.Web
             services.AddSingleton<ICurrencyRateApiService, CurrencyRateApiService>();
 
             // Add application services.
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
 
             services.AddMvc();
 
