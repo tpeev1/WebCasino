@@ -21,7 +21,8 @@ namespace WebCasino.Web.Controllers
         private readonly ICardService cardService;
         private readonly ITransactionService transactionService;
 
-        public WalletController(IWalletService walletService, IUserWrapper userWrapper, ICardService cardService, ITransactionService transactionService)
+        public WalletController
+            (IWalletService walletService, IUserWrapper userWrapper, ICardService cardService, ITransactionService transactionService)
         {
             this.walletService = walletService;
             this.userWrapper = userWrapper;
@@ -40,17 +41,32 @@ namespace WebCasino.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddCard(CardViewModel model)
         {
-            //TO DO: DA PITAM ZA VALIDACIITE TUK
             if (this.ModelState.IsValid)
             {
                 var userId = this.userWrapper.GetUserId(HttpContext.User);
 
-                var date = DateTime.ParseExact(model.ExpirationDate.Replace(" ", string.Empty), "MM/yyyy", CultureInfo.InvariantCulture);
-                await this.cardService.AddCard(model.RealNumber.Replace(" ", string.Empty), userId, date);
-                TempData["CardAdded"] = "Succesfulyy added new card";
-                return this.RedirectToAction("index", "wallet");
+                DateTime date; 
+                var validDate = DateTime.TryParseExact(model.ExpirationDate.Replace(" ", string.Empty), "MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date);
+                if (!validDate)
+                {
+                    TempData["CardAddedFail"] = "Invalid card date";
+                    return this.RedirectToAction("index", "wallet");
+                }
+                else if(date < DateTime.Now.Date)
+                {
+                    TempData["CardAddedFail"] = "Card is expired";
+                    return this.RedirectToAction("index", "wallet");
+                }
+                else
+                {
+                    await this.cardService.AddCard(model.RealNumber.Replace(" ", string.Empty), userId, date);
+                    TempData["CardAdded"] = "Succesfulyy added new card";
+                    return this.RedirectToAction("index", "wallet");
+                }
+
             }
 
             TempData["CardAddedFail"] = "Failed to add card. Please try again with a different card";
@@ -58,12 +74,14 @@ namespace WebCasino.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddFunds(CardTransactionViewModel model)
         {
             if (this.ModelState.IsValid)
             {
                 var userId = this.userWrapper.GetUserId(HttpContext.User);
                 var userWallet = await this.walletService.RetrieveWallet(userId);
+                //TO DO: OPTIMIZE!!!
                 var userCurrency = ((CurrencyOptions)userWallet.CurrencyId).ToString();
 
                 var card = await this.cardService.GetCard(model.CardId);
@@ -78,10 +96,12 @@ namespace WebCasino.Web.Controllers
             }
 
             TempData["FailedDeposit"] = "Failed to deposit. Please try again with a different card";
+            string pesho = "";
             return this.RedirectToAction("index", "wallet");
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> WithdrawFunds(CardTransactionViewModel model)
         {
             if (this.ModelState.IsValid)
@@ -108,10 +128,10 @@ namespace WebCasino.Web.Controllers
 
                 }
             }
-            else
+            if(TempData["FailedWithdraw"] == null)
             {
                 TempData["FailedWithdraw"] = "Failed to withdraw. Please try again with a different card";
-            }
+            }          
             return this.RedirectToAction("index", "wallet");
         }
     }

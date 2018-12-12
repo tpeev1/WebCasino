@@ -114,7 +114,7 @@
                 </div>
             </div>
 
-            @await Html.PartialAsync("_AddCardPartial", new CardViewModel())
+
         </div>
         <div class="col-lg-6 col-md-6 col-xs-6 panel">
             <div class="tab-content" id="pills-tabContent">
@@ -137,6 +137,11 @@
                 </div>
             </div>
         </div>
-</div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-xs-6 panel">
+            @await Html.PartialAsync("_AddCardPartial", new CardViewModel())
+            </div>
+        </div>
+    </div>
 
 

@@ -4,8 +4,8 @@
     $withdrawForm.on('submit', function (event) {
         event.preventDefault();
 
-        const value = $withdrawForm.find('input[name="Amount"]').val();
-        const balance = $('#balanceSpan').html();
+        const value = +($withdrawForm.find('input[name="Amount"]').val());
+        const balance = +($('#balanceSpan').html());
         if (value > balance || value < 1) {
             const spanValidation = $withdrawForm.find('*[data-valmsg-for="Amount"]');
             spanValidation.addClass('field-validation-error');

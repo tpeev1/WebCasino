@@ -1,4 +1,9 @@
-﻿body > nav {
+﻿
+
+body::-webkit-scrollbar {
+    display: none;
+}
+body > nav {
 	margin-bottom: 40px
 }
 
@@ -75,4 +80,10 @@ select option {
 .chart-container {
 	width: 10px;
 	height: 600px
+}
+
+@media screen and (max-width:768px){
+    .card-wrapper{
+        display: none;
+    }
 }

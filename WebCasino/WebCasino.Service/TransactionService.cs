@@ -65,7 +65,7 @@ namespace WebCasino.Service
 			};
 
             userWin.Wallet.NormalisedBalance += normalisedCurrency;
-            userWin.Wallet.DisplayBalance += amountInUserCurrency;
+            userWin.Wallet.DisplayBalance = userWin.Wallet.NormalisedBalance * bankRates[userCurrency];
 
 			await this.dbContext.Transactions.AddAsync(newTransaction);
 			await this.dbContext.SaveChangesAsync();
@@ -85,6 +85,7 @@ namespace WebCasino.Service
 
 			var userWin = await this.dbContext.Users
 				.Include(w => w.Wallet)
+                    .ThenInclude(w => w.Currency)
 				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
 
 			ServiceValidator.ObjectIsNotEqualNull(userWin);
@@ -113,17 +114,21 @@ namespace WebCasino.Service
 			};
 
 			userWin.Wallet.NormalisedBalance -= normalisedCurrency;
-            userWin.Wallet.DisplayBalance -= amountInUserCurrency;
+            userWin.Wallet.DisplayBalance = userWin.Wallet.NormalisedBalance * bankRates[userCurrency];
 
             if(userWin.Wallet.NormalisedBalance < 0)
             {
                 throw new InsufficientFundsException("Insufficient funds for the requested operation");
-            }           
+            }
+            else
+            {
+                await this.dbContext.Transactions.AddAsync(newTransaction);
+                await this.dbContext.SaveChangesAsync();
 
-			await this.dbContext.Transactions.AddAsync(newTransaction);
-			await this.dbContext.SaveChangesAsync();
+                return newTransaction;
+            }
 
-			return newTransaction;
+
 		}
 
 		public async Task<Transaction> AddWinTransaction(
@@ -138,6 +143,7 @@ namespace WebCasino.Service
 
 			var userWin = await this.dbContext.Users
 				.Include(w => w.Wallet)
+                    .ThenInclude(w => w.Currency)
 				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
 
 			ServiceValidator.ObjectIsNotEqualNull(userWin);
@@ -166,7 +172,7 @@ namespace WebCasino.Service
 			};
 
 			userWin.Wallet.NormalisedBalance += normalisedCurrency;
-            userWin.Wallet.DisplayBalance += amountInUserCurrency;
+            userWin.Wallet.DisplayBalance = userWin.Wallet.NormalisedBalance * bankRates[userCurrency];
 
 			await this.dbContext.Transactions.AddAsync(newTransaction);
 			await this.dbContext.SaveChangesAsync();
@@ -213,9 +219,9 @@ namespace WebCasino.Service
 				TransactionTypeId = 4,
 				NormalisedAmount = normalisedCurrency
 			};
-
+            
 			userWin.Wallet.NormalisedBalance -= normalisedCurrency;
-            userWin.Wallet.DisplayBalance -= amountInUserCurrency;
+            userWin.Wallet.DisplayBalance = userWin.Wallet.NormalisedBalance*bankRates[userCurrency];
 
             if (userWin.Wallet.NormalisedBalance < 0)
             {

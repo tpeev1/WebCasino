@@ -106,11 +106,9 @@ namespace WebCasino.Service
 			return amount;
 		}
 
-        //TO DO: TEST THIS
         public async Task<double> Deposit(string cardNumber, double amount)
         {
             ServiceValidator.IsInputStringEmptyOrNull(cardNumber);
-           // ServiceValidator.ValidateCardNumber(cardNumber);
             ServiceValidator.ValueIsBetween(amount, 0, double.MaxValue);
 
             var bankCardQuery = await this.dbContext.BankCards

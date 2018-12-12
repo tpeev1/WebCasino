@@ -12,6 +12,8 @@ using WebCasino.Entities;
 using WebCasino.Service;
 using WebCasino.Service.Abstract;
 using WebCasino.Service.Utility.APICurrencyConvertor.RequestManager;
+using WebCasino.Service.Utility.RandomGeneration;
+using WebCasino.Service.Utility.Wrappers;
 using WebCasino.Web.Utilities.Wrappers;
 
 namespace WebCasino.Web
@@ -54,12 +56,17 @@ namespace WebCasino.Web
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IAdminDashboard, AdminDashboardService>();
             services.AddScoped<ICardService, CardService>();
+            services.AddScoped<IGameService, GameService>();
 
+
+            services.AddScoped<IRandomGenerator, RandomGenerator>();
             services.AddHttpClient<IHttpWrapper, HttpWrapper>();
 
             services.AddSingleton<IAPIRequester, APIRequester>();
 
             services.AddSingleton<ICurrencyRateApiService, CurrencyRateApiService>();
+
+            services.AddSingleton<IDateWrapper, DateWrapper>();
 
             // Add application services.
             services.AddMvc().AddJsonOptions(options => {
