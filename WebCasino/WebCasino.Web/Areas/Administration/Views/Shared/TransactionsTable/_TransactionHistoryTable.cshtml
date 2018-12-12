@@ -20,16 +20,16 @@
                 <tr>
                     <td>@transaction.CreatedOn</td>
 
-                    <td>@transaction.TransactionType.Name</td>
+                    <td>@transaction.TransactionTypeName</td>
                     <td>@String.Format("{0:.##}", transaction.NormalisedAmount)</td>
                     <td>@transaction.Description</td>
-                    <td>@transaction.User.Email</td>
-                    <td>@transaction.User.Alias</td>
+                    <td>@transaction.Email</td>
+                    <td>@transaction.Alias</td>
                     <td>
-                        <a class="btn btn-info btn-link btn-icon btn-sm btn-tooltip " asp-action="UserAccountSettings" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@transaction.User.Id" data-toggle="tooltip" data-placement="bottom" title="" data-container="body" data-animation="true" data-original-title="Go to User Settings">
+                        <a class="btn btn-info btn-link btn-icon btn-sm btn-tooltip " asp-action="UserAccountSettings" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@transaction.UserId" data-toggle="tooltip" data-placement="bottom" title="" data-container="body" data-animation="true" data-original-title="Go to User Settings">
                             <i class="tim-icons icon-single-02"></i>
                         </a>
-                        <a class="btn btn-success btn-link btn-icon btn-sm" asp-action="Details" asp-controller="Transactions" asp-area="Administration" asp-route-id="@transaction.Id" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-animation="true" data-original-title="Go to Transaction Details">
+                        <a class="btn btn-success btn-link btn-icon btn-sm" asp-action="Details" asp-controller="Transactions" asp-area="Administration" asp-route-id="@transaction.TransactionId" data-toggle="tooltip" data-placement="top" title="" data-container="body" data-animation="true" data-original-title="Go to Transaction Details">
                             <i class="tim-icons icon-settings"></i>
                         </a>
                     </td>

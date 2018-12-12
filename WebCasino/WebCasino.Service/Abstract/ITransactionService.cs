@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WebCasino.Entities;
+using WebCasino.Web.Utilities.TableFilterUtilities;
 
 namespace WebCasino.Service.Abstract
 {
 	public interface ITransactionService
 	{
-		Task<IEnumerable<Transaction>> GetAllTransactionsTable();	
+        Task<IEnumerable<Transaction>> GetFiltered(DataTableModel model);
+
+        IQueryable<Transaction> GetAllTransactionsTable();	
         
 		Task<IEnumerable<Transaction>> GetUserTransactions(string userId);
 

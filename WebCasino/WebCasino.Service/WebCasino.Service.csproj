@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LinqKit.Core" Version="1.1.15" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WebCasino.DataContext\WebCasino.DataContext.csproj" />
     <ProjectReference Include="..\WebCasino.Entities\WebCasino.Entities.csproj" />
   </ItemGroup>

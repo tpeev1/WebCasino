@@ -12,15 +12,24 @@ namespace WebCasino.Web.Areas.Administration.Models
 
 		public TransactionViewModel(Transaction transaction)
 		{
-			this.User = transaction.User.Email;
-			this.Date = transaction.CreatedOn;
+			this.Alias = transaction.User.Alias;
+			this.CreatedOn = transaction.CreatedOn;
 			this.NormalisedAmount = transaction.NormalisedAmount;
 			this.Description = transaction.Description;
+            this.TransactionTypeName = transaction.TransactionType.Name;
+            this.Email = transaction.User.Email;
+            this.UserId = transaction.User.Id;
+            this.TransactionId = transaction.Id;
 		}
 
-		public string User { get; set; }
+		public string Alias { get; set; }
 
-		public DateTime? Date { get; set; }
+        public string UserId { get; set; }
+
+        public string TransactionId { get; set; }
+
+        public string Email { get; set; }
+		public DateTime? CreatedOn { get; set; }
 
 		[Range(0, double.MaxValue)]
 		public double NormalisedAmount { get; set; }
@@ -28,6 +37,6 @@ namespace WebCasino.Web.Areas.Administration.Models
 		[Range(10, 100)]
 		public string Description { get; set; }
 
-		public string TransactionType { get; set; }
+		public string TransactionTypeName { get; set; }
 	}
 }
