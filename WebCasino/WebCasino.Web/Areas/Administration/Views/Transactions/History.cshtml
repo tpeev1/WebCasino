@@ -1,27 +1,45 @@
 ﻿@model WebCasino.Web.Areas.Administration.Models.TransactionHistoryViewModel
-<div class="container">
-	<h1>TRANSACTIONS HISTORY</h1>
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Date</th>
-				<th>Type</th>
-				<th>Amount</th>
-				<th>Description</th>
-				<th>User</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var transaction in Model.transactionHistory)
-			{
-				<tr>
-					<td>@transaction.Date</td>
-					<td>@transaction.TransactionType</td>
-					<td>@transaction.NormalisedAmount</td>
-					<td>@transaction.Description</td>
-					<td>@transaction.User</td>
-				</tr>
-			}
-		</tbody>
-	</table>
+
+<link href="~/assets/css/" rel="stylesheet" />
+<h2>Transactions History</h2>
+
+<br />
+<div class="card ">
+    <div class="card-header">
+        <h4 class="card-title"> Transactions Table</h4>
+    </div>
+    <div class="card-body">
+        @await  Html.PartialAsync("TransactionsTable/_TransactionHistoryTable", Model)
+    </div>
 </div>
+
+@section  Scripts{
+
+  
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable({
+                responsive: true,
+                
+            });
+
+            $('#table_filter > label > input').addClass('form-control');
+            $('#table_length > label > select').addClass('form-control');
+
+            $('#table_previous').removeClass('paginate_button previous disabled');
+            $('#table_next').removeClass('paginate_button next disabled');
+                  
+            $('#table_previous').addClass('tim-icons icon-double-left');
+            $('#table_next').addClass('tim-icons icon-double-right');
+            $('#paginate_button current').addClass('page-link');
+            $('#paginate_button').addClass('page-link');
+
+            $('#table_length').css('float','right');
+            $('#table_filter').css('float', 'left');
+            });
+
+    </script>
+}
+

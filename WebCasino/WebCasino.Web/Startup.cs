@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,6 +46,8 @@ namespace WebCasino.Web
                 .AddEntityFrameworkStores<CasinoContext>()
                 .AddDefaultTokenProviders();
 
+           
+
             services.AddScoped<IWalletService, WalletService>();
             services.AddScoped<IUserWrapper, UserWrapper>();
             services.AddScoped<IUserService, UserService>();
@@ -66,6 +69,10 @@ namespace WebCasino.Web
             // Add application services.
 
             services.AddMvc();
+
+            //TempData 
+            services.AddSession();
+            services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,7 +89,10 @@ namespace WebCasino.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseAuthentication();
 

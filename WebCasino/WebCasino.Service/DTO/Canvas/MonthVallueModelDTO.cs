@@ -1,6 +1,6 @@
 ﻿namespace WebCasino.Service.DTO.Canvas
 {
-	public class MonthVallueModel
+	public class MonthVallueModelDTO
 	{
 		public string MonthValue { get; set; }
 

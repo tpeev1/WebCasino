@@ -46,19 +46,23 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 			var oneYearTransactions = await this.adminDashboardService.GetYearTransactions(DateTime.Now);
 
 			var sixMonthsWins = sixMonthsTotalWins.ValuesByMonth;
+            var sixMonthsStakes = sixMonthsTotalStakes.ValuesByMonth;
 
 			var viewModel = new DashboardViewModel()
 			{
 				TotalWins = totalWins,
 				TotalStakes = totalStakes,
 				TotalUsers = totalUsers,
-				SixMonthsTotalWins = sixMonthsTotalWins.ValuesByMonth.Where(v => v.Value > 0).Count(),
-				SixMonthsTotalStakes = sixMonthsTotalStakes.ValuesByMonth.Where(v => v.Value > 0).Count(),
-				SixMonthsWins = new MonthsModel(sixMonthsTotalWins.ValuesByMonth),
+
+				SixMonthsTotalWins = sixMonthsWins.Where(v => v.Value > 0).Sum(x => x.Value),
+				SixMonthsTotalStakes = sixMonthsStakes.Where(v => v.Value > 0).Sum(x => x.Value),
+                SixMonthsWins = new MonthsModel(sixMonthsTotalWins.ValuesByMonth),
 				SixMonthsStakes = new MonthsModel(sixMonthsTotalStakes.ValuesByMonth),
+
 				OneYearTransactions = new MonthsModel(oneYearTransactions.ValuesByMonth),
 				OneYearWins = new MonthsModel(oneYearWinsCount.ValuesByMonth),
 				OneYearStakes = new MonthsModel(oneYearStakeCount.ValuesByMonth),
+
 				DaylyWins = new DaylyWinsModel()
 				{
 					DaylyTotalUSD = allCurrencyDaylyWins.DaylyTotalUSD,

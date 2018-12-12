@@ -8,13 +8,13 @@ namespace WebCasino.Service.Abstract
 {
 	public interface IAdminDashboard
 	{
-		Task<CyrrencyDaylyWin> GetTransactionsCurrencyDaylyWins(int day);
+		Task<CyrrencyDaylyWinDTO> GetTransactionsCurrencyDaylyWins(int day);
 
-		Task<MonthsTransactionsModel> GetMonthsTransactions(DateTime timePeriod, string transactionType, int monthCount);
+		Task<MonthsTransactionsModelDTO> GetMonthsTransactions(DateTime timePeriod, string transactionType, int monthCount);
 
-		MonthsTransactionsModel FiltarByMonth(DateTime timePeriod, int monthCount, IList<Transaction> dbQuery);
+		MonthsTransactionsModelDTO FiltarByMonth(DateTime timePeriod, int monthCount, IList<Transaction> dbQuery);
 
-		Task<MonthsTransactionsModel> GetYearTransactions(DateTime timePeriod);
+		Task<MonthsTransactionsModelDTO> GetYearTransactions(DateTime timePeriod);
 
 		Task<int> GetTotaTransactionsByTypeCount(string transactionType);
 	}

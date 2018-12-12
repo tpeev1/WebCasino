@@ -7,7 +7,7 @@ namespace WebCasino.Web.Areas.Administration.Models.ChartModels
 	{
 		public Dictionary<string, int> monthValue = new Dictionary<string, int>();
 
-		public MonthsModel(IList<MonthVallueModel> sixMontsTransactions)
+		public MonthsModel(IList<MonthVallueModelDTO> sixMontsTransactions)
 		{
 			foreach (var item in sixMontsTransactions)
 			{
