@@ -8,8 +8,8 @@ namespace WebCasino.Web.Models.ViewComponentModels.UserLoginModels
 		{
 			Alias = user.Alias;
             Id = user.Id;
-			//Balance = user.Wallet.DisplayBalance;
-			//Currency = user.Wallet.Currency.Name;
+			Balance = user.Wallet.DisplayBalance;
+			Currency = user.Wallet.Currency.Name;
 		}
         public string Id { get; set; }
 
