@@ -35,15 +35,15 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 			var allCurrencyDaylyWins = await this.adminDashboardService
 				.GetTransactionsCurrencyDaylyWins(DateTime.Now.Day);
 
-			var sixMonthsTotalWins = await this.adminDashboardService.GetMonthsTransactions(DateTime.Now, "Win", 5);
-			var sixMonthsTotalStakes = await this.adminDashboardService.GetMonthsTransactions(DateTime.Now, "Stake", 5);
+			var sixMonthsTotalWins = await this.adminDashboardService.GetMonthsTransactions( "Win", 5);
+			var sixMonthsTotalStakes = await this.adminDashboardService.GetMonthsTransactions( "Stake", 5);
 
 			var oneYearUsersCount = await this.userService.GetAllUsers();
 
-			var oneYearWinsCount = await this.adminDashboardService.GetMonthsTransactions(DateTime.Now, "Win", 11);
-			var oneYearStakeCount = await this.adminDashboardService.GetMonthsTransactions(DateTime.Now, "Stake", 11);
+			var oneYearWinsCount = await this.adminDashboardService.GetMonthsTransactions( "Win", 11);
+			var oneYearStakeCount = await this.adminDashboardService.GetMonthsTransactions("Stake", 11);
 
-			var oneYearTransactions = await this.adminDashboardService.GetYearTransactions(DateTime.Now);
+			var oneYearTransactions = await this.adminDashboardService.GetYearTransactions();
 
 			var sixMonthsWins = sixMonthsTotalWins.ValuesByMonth;
             var sixMonthsStakes = sixMonthsTotalStakes.ValuesByMonth;

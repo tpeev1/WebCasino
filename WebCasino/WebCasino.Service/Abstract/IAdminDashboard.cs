@@ -10,11 +10,10 @@ namespace WebCasino.Service.Abstract
 	{
 		Task<CyrrencyDaylyWinDTO> GetTransactionsCurrencyDaylyWins(int day);
 
-		Task<MonthsTransactionsModelDTO> GetMonthsTransactions(DateTime timePeriod, string transactionType, int monthCount);
+		Task<MonthsTransactionsModelDTO> GetMonthsTransactions( string transactionType, int monthCount);
 
-		MonthsTransactionsModelDTO FiltarByMonth(DateTime timePeriod, int monthCount, IList<Transaction> dbQuery);
 
-		Task<MonthsTransactionsModelDTO> GetYearTransactions(DateTime timePeriod);
+		Task<MonthsTransactionsModelDTO> GetYearTransactions();
 
 		Task<int> GetTotaTransactionsByTypeCount(string transactionType);
 	}

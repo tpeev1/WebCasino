@@ -8,6 +8,7 @@ using WebCasino.DataContext;
 using WebCasino.Entities;
 using WebCasino.Service.Abstract;
 using WebCasino.Service.DTO.Canvas;
+using WebCasino.Service.Utility.Validator;
 
 namespace WebCasino.Service
 {
@@ -20,65 +21,78 @@ namespace WebCasino.Service
 			this.dbContext = dbContext ?? throw new NullReferenceException();
 		}
 
-		public async Task<MonthsTransactionsModelDTO> GetMonthsTransactions(DateTime timePeriod,
+		public async Task<MonthsTransactionsModelDTO> GetMonthsTransactions(
 			string transactionType,
 			int monthCount)
-		{
-			var dbQuery = await this.dbContext.Transactions
+		{            
+            ServiceValidator.IsInputStringEmptyOrNull(transactionType);
+            ServiceValidator.ValueIsBetween(monthCount, 1, 12);
+
+            var dbQuery = await this.dbContext.Transactions
 				.Include(tt => tt.TransactionType)
 				.Where(t => t.TransactionType.Name == transactionType)
 				.ToListAsync();
 
-			var resultModel = FiltarByMonth(timePeriod, monthCount, dbQuery);
+            var resultModel = new MonthsTransactionsModelDTO();
 
-			//CHECK FOR MONTH NUMBER !!
+            for (int i = DateTime.Now.Month - monthCount; i <= DateTime.Now.Month; i++)
+            {
+                var monthly = new MonthVallueModelDTO();
 
-			return resultModel;
+                var valueFilter = dbQuery
+                .Where(d => d.CreatedOn.Value.Month == i).Count();
+
+                monthly.MonthValue = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i).Substring(0, 3).ToUpper();
+                monthly.Value = valueFilter;
+
+                resultModel.ValuesByMonth.Add(monthly);
+            }
+
+            return resultModel;
 		}
 
-		public async Task<MonthsTransactionsModelDTO> GetYearTransactions(DateTime timePeriod)
+		public async Task<MonthsTransactionsModelDTO> GetYearTransactions()
 		{
 			var dbQuery = await this.dbContext.Transactions.ToListAsync();
 
-			var resultModel = FiltarByMonth(timePeriod, 11, dbQuery);
+            ServiceValidator.ObjectIsNotEqualNull(dbQuery);
 
-			//CHECK FOR MONTH NUMBER !!
+           var resultModel = new MonthsTransactionsModelDTO();
 
-			return resultModel;
-		}
-
-		public MonthsTransactionsModelDTO FiltarByMonth(DateTime timePeriod, int monthCount, IList<Transaction> dbQuery)
-		{
-			var resultModel = new MonthsTransactionsModelDTO();
-
-			for (int i = timePeriod.Month - monthCount; i <= timePeriod.Month; i++)
+			for (int i = DateTime.Now.Month - 11; i <= DateTime.Now.Month; i++)
 			{
 				var monthly = new MonthVallueModelDTO();
 
 				var valueFilter = dbQuery
 				.Where(d => d.CreatedOn.Value.Month == i).Count();
 
-				monthly.MonthValue = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i).Substring(0, 3).ToUpper();
+                monthly.MonthValue = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i).Substring(0, 3).ToUpper();
 				monthly.Value = valueFilter;
 
-				resultModel.ValuesByMonth.Add(monthly);
+                resultModel.ValuesByMonth.Add(monthly);
 			}
 
-			return resultModel;
+            ServiceValidator.ObjectIsNotEqualNull(resultModel);
+
+            return resultModel;
 		}
 
 		public async Task<int> GetTotaTransactionsByTypeCount(string transactionType)
 		{
-			var totalWins = await this.dbContext
+            ServiceValidator.IsInputStringEmptyOrNull(transactionType);
+
+            var totalWins = await this.dbContext
 				.Transactions.Include(tt => tt.TransactionType)
 				.Where(t => t.TransactionType.Name == transactionType)
 				.CountAsync();
 
-			return totalWins;
+            return totalWins;
 		}
 
 		public async Task<CyrrencyDaylyWinDTO> GetTransactionsCurrencyDaylyWins(int day)
 		{
+            ServiceValidator.DayIsInMonth(day);
+
 			var allTransactionsQuery = await this.dbContext
 				.Transactions
 				.Include(tt => tt.TransactionType)
