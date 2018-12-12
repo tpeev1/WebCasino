@@ -22,22 +22,14 @@ namespace WebCasino.Web.Areas.Administration.Controllers
         public async Task<IActionResult> History(TransactionHistoryViewModel model)
         {
            
-            model.Transactions = await this.service.GetAllTransactionsTable();
+                model.Transactions = await this.service.GetAllTransactionsTable();
               
+          
+
             return View(model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> OnGet()
-        {
-
-            var model = new TransactionHistoryViewModel();
-            model.Transactions = await this.service.GetAllTransactionsTable();
-
-            return Json(model);
-        }
-
-        public async Task<IActionResult> Details(string id)
+		public async Task<IActionResult> Details(string id)
 		{
 			var userTransaction = await this.service.RetrieveUserTransaction(id);
 
