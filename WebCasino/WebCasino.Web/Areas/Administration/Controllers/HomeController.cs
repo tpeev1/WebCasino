@@ -24,7 +24,8 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 			this.adminDashboardService = adminDashboardService ?? throw new ArgumentNullException(nameof(adminDashboardService));
 		}
 
-		public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> Index()
 		{
 			var totalWins = await adminDashboardService.GetTotaTransactionsByTypeCount("Win");
 			var totalStakes = await adminDashboardService.GetTotaTransactionsByTypeCount("Stake");

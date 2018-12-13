@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using WebCasino.Service.Abstract;
 using WebCasino.Web.Areas.Administration.Models;
@@ -20,7 +18,7 @@ namespace WebCasino.Web.Areas.Administration.Controllers
             this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
 
-      
+  
         public async Task<IActionResult> Index(string id)
         {
             var admin =await this.userService.RetrieveUser(id);
