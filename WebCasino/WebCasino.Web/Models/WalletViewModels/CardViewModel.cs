@@ -20,7 +20,7 @@ namespace WebCasino.Web.Models.WalletViewModels
             MaskedNumber = (card.CardNumber.Substring(12)).PadLeft(12,'*');
             MoneyAdded = card.MoneyAdded;
             MoneyRetrieved = card.MoneyRetrieved;
-            Transactions = card.Transcations.Select(tr => new TransactionViewModel(tr));
+
         }
 
 
@@ -38,6 +38,5 @@ namespace WebCasino.Web.Models.WalletViewModels
 
         public double MoneyRetrieved { get; set; }
 
-        public IEnumerable<TransactionViewModel> Transactions {get;set;}
     }
 }

@@ -1,0 +1,11 @@
+﻿@model IEnumerable<TransactionViewModel>
+@{
+    ViewData["Title"] = "_TransactionsPartial";
+}
+
+<h2>_TransactionsPartial</h2>
+
+@foreach(var trans in Model)
+{
+    <p>@trans.Amount - @trans.Description ||| @trans.TransactionTypeId</p>
+}

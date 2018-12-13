@@ -16,6 +16,7 @@ namespace WebCasino.Web.Models.WalletViewModels
             DisplayBalance = wallet.DisplayBalance;
             NormalizedBalance = wallet.NormalisedBalance;
             Cards = wallet.User.Cards.Select(card => new CardViewModel(card));
+            Transactions = wallet.User.Transactions.Select(tr => new TransactionViewModel(tr));
             
         }
 
@@ -25,7 +26,9 @@ namespace WebCasino.Web.Models.WalletViewModels
 
         public double DisplayBalance { get; set; }
         public double NormalizedBalance { get; private set; }
-        public IEnumerable<CardViewModel> Cards { get; set; }   
+        public IEnumerable<CardViewModel> Cards { get; set; }  
+        
+        public IEnumerable<TransactionViewModel> Transactions { get; set; }
 
     }
 }

@@ -12,10 +12,13 @@ namespace WebCasino.Web.Models.WalletViewModels
         {
             Amount = transaction.OriginalAmount;
             TransactionTypeId = transaction.TransactionTypeId;
+            Description = transaction.Description;
         }
 
         public double Amount { get; set; }
 
         public int TransactionTypeId { get; set; }
+
+        public string Description { get; set; }
     }
 }
