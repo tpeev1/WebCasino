@@ -12,23 +12,26 @@ namespace WebCasino.Web.Areas.Administration.Models
         {
 
         }
+        public UserViewModel(User user)
+        {
+            this.Id = user.Id;
+            this.CreatedOn = user.CreatedOn;
+            this.Email = user.Email;
+            this.Alias = user.Alias;
+            this.Transactions = user.Transactions.Select(tr => new TransactionViewModel(tr));
+            this.Locked = user.Locked;
+        }
 
         public string Id { get; set; }
   
-        public User User { get; set; }
+        public DateTime? CreatedOn { get; set; }
 
-		public IEnumerable<Transaction> Transactions { get; set; }
+        public string Email { get; set; }
+        public string Alias { get; set; }
 
-        public int TotalPages { get; set; }
+        public bool Locked { get; set; }
 
-        public int Page { get; set; } = 1;
+		public IEnumerable<TransactionViewModel> Transactions { get; set; }
 
-        public int PreviousPage => this.Page ==
-            1 ? 1 : this.Page - 1;
-
-        public int NextPage => this.Page ==
-            this.TotalPages ? this.TotalPages : this.Page + 1;
-
-        public string SearchText { get; set; } = string.Empty;
     }
 }

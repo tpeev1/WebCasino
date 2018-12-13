@@ -35,6 +35,7 @@ namespace WebCasino.Service
         {
             return await this.context.Users.Where(us => !us.IsDeleted)
                 .Include(t => t.Transactions)
+                    .ThenInclude(tr=>tr.TransactionType)
                 .OrderByDescending(x => x.Id)
                 .ToListAsync();
         }

@@ -20,37 +20,25 @@ namespace WebCasino.Web.Areas.Administration.Controllers
             this.transactionService = transactionService ?? throw new ArgumentNullException(nameof(transactionService));
         }
 
-		public async Task<IActionResult> Index(UsersIndexViewModel model)
+		public async Task<IActionResult> Index()
 		{
 			
-				model.Users = await this.userService.GetAllUsers();
-			
-
-			return View(model);
+			var users = await this.userService.GetAllUsers();
+            var userModels = users.Select(us => new UserViewModel(us));
+            var model = new UsersIndexViewModel()
+            {
+                Users = userModels
+            };
+            return View(model);
 		}
 
         [HttpGet]
         public async Task<IActionResult> Details(UserViewModel model)
         {
-            if (string.IsNullOrWhiteSpace(model.SearchText))
-            {
-                model.Transactions = await this.transactionService.RetrieveUserTransaction(model.Id, model.Page, 10);
-                model.TotalPages = (int)Math.Ceiling(await this.transactionService.Total() / (double)10);
-                model.User = model.Transactions.Select(u => u.User).First();
-                if (model.Transactions.Count() -1  == 0)
-                {
-                    model.Page = 0;
-                   
-                }
-              
-            }
-            else
-            {
-                model.Transactions = await this.transactionService.RetrieveUserSearchTransaction(model.SearchText,model.Id, model.Page, 10);
-                model.TotalPages = (int)Math.Ceiling(await this.transactionService.TotalContainingText(model.SearchText) / (double)10);
-
-            }
-
+            var user = await this.userService.RetrieveUser(model.Id);
+            var userTransactions = await this.transactionService.GetUserTransactions(user.Id);
+            user.Transactions = userTransactions;
+            model.Transactions = user.Transactions.Select(tr => new TransactionViewModel(tr));
             return View(model);
         }
 
@@ -77,7 +65,7 @@ namespace WebCasino.Web.Areas.Administration.Controllers
         public async Task<IActionResult> LockUser(UserSettingsViewModel model)
         {
 
-            var removedTransaction = await this.userService.LockUser(model.Id);
+            await this.userService.LockUser(model.Id);
 
             this.TempData["Locked"] = "You Lock this user";
 
@@ -90,7 +78,7 @@ namespace WebCasino.Web.Areas.Administration.Controllers
         public async Task<IActionResult> TableLockUser(UsersIndexViewModel model, string id)
         {
 
-            var removedTransaction = await this.userService.LockUser(id);
+            await this.userService.LockUser(id);
 
             this.TempData["Locked"] = "You Lock this user";
 
@@ -103,7 +91,7 @@ namespace WebCasino.Web.Areas.Administration.Controllers
         public async Task<IActionResult> UnLockUser(UserSettingsViewModel model)
         {
 
-            var removedTransaction = await this.userService.UnLockUser(model.Id);
+            await this.userService.UnLockUser(model.Id);
 
             this.TempData["UnLocked"] = "You Unlock this user";
 
@@ -116,7 +104,7 @@ namespace WebCasino.Web.Areas.Administration.Controllers
         public async Task<IActionResult> TableUnLockUser(UserSettingsViewModel model, string id)
         {
 
-            var removedTransaction = await this.userService.UnLockUser(id);
+            await this.userService.UnLockUser(id);
 
             this.TempData["UnLocked"] = "You Unlock this user";
 
@@ -129,7 +117,7 @@ namespace WebCasino.Web.Areas.Administration.Controllers
         public async Task<IActionResult> PromoteUser(UserSettingsViewModel model)
         {
 
-            var removedTransaction = await this.userService.PromoteUser(model.Id);
+            await this.userService.PromoteUser(model.Id);
 
             this.TempData["Promoted"] = "You promote to admin this user";
 

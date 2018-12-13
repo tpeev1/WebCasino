@@ -1,12 +1,8 @@
 ﻿@model WebCasino.Web.Areas.Administration.Models.UserViewModel
 
-@{
-    var previousDisabled = Model.Page == 1 ? "disabled" : string.Empty;
-    var nextDisabled = Model.Page == Model.TotalPages ? "disabled" : string.Empty;
-}
 
 <div class="wrapper">
-    <div class="page-header">
+    <div>
         <div class="container align-items-center">
             <div class="row">
 
@@ -33,7 +29,7 @@
                          </div>
                             <div class="tab-content tab-subcategories">
                                 <div class="tab-pane active" id="linka">
-                                    <div class="card-body">
+                                    <div class="card-body" style="max-height:100%">
                                         @await Html.PartialAsync("UsersTable/_UserTransactionsHistoryTable", Model)
                                     </div>
                                 </div>
@@ -52,19 +48,31 @@
             </div>
         </div>
     </div>
-</div>
+
 @section Scripts{
-    <script src="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
 
     <script>
         $(document).ready(function () {
             $('#table').DataTable({
                 responsive: true,
-            
-            });
 
             });
+
+            $('#table_filter > label > input').addClass('form-control');
+            $('#table_length > label > select').addClass('form-control');
+
+            $('#table_previous').removeClass('paginate_button previous disabled');
+            $('#table_next').removeClass('paginate_button next disabled');
+
+            $('#table_previous').addClass('tim-icons icon-double-left');
+            $('#table_next').addClass('tim-icons icon-double-right');
+            $('#paginate_button current').addClass('page-link');
+            $('#paginate_button').addClass('page-link');
+
+            $('#table_length').css('float', 'right');
+            $('#table_filter').css('float', 'left');
+        });
 
     </script>
 }

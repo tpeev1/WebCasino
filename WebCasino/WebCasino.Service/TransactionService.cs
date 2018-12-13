@@ -322,6 +322,7 @@ namespace WebCasino.Service
 
 			var transactionsQuery = await this.dbContext
 				.Transactions
+                .Include(tr => tr.TransactionType)
 				.Where(t => t.UserId == userId && t.IsDeleted != true)
 				.ToListAsync();
 
