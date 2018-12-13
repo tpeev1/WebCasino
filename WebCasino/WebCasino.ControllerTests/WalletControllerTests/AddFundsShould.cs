@@ -135,7 +135,7 @@ namespace WebCasino.ControllerTests.WalletControllerTests
 
             await controller.AddFunds(validModel);
             transService.Verify(ts 
-                => ts.AddDepositTransaction(AddFundsShould.userId, AddFundsShould.amount, It.IsAny<string>()), Times.Once);
+                => ts.AddDepositTransaction(AddFundsShould.userId, It.IsAny<string>(),AddFundsShould.amount, It.IsAny<string>()), Times.Once);
         }
 
         [TestMethod]

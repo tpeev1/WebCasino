@@ -136,7 +136,7 @@ namespace WebCasino.ControllerTests.WalletControllerTests
 
             await controller.WithdrawFunds(validModel);
             transService.Verify(ts
-                => ts.AddWithdrawTransaction(WithdrawFundsShould.userId, WithdrawFundsShould.amount, It.IsAny<string>()), Times.Once);
+                => ts.AddWithdrawTransaction(WithdrawFundsShould.userId, It.IsAny<string>(), WithdrawFundsShould.amount, It.IsAny<string>()), Times.Once);
         }
 
         [TestMethod]
@@ -210,7 +210,7 @@ namespace WebCasino.ControllerTests.WalletControllerTests
             var transService = new Mock<ITransactionService>();
 
             transService.Setup(ts
-                => ts.AddWithdrawTransaction(It.IsAny<string>(), It.IsAny<double>(), It.IsAny<string>()))
+                => ts.AddWithdrawTransaction(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<double>(), It.IsAny<string>()))
                 .Throws(new InsufficientFundsException("Insufficient funds"));
 
             var userWrapper = this.SetupUserWrapper();

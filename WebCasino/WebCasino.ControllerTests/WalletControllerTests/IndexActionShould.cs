@@ -46,6 +46,8 @@ namespace WebCasino.ControllerTests.WalletControllerTests
         public async Task CallUserWrapperOnce()
         {
             var cardService = new Mock<ICardService>();
+            cardService.Setup(cs => cs.GetCard(It.IsAny<string>())).ReturnsAsync(new BankCard() { Id = "user-card" });
+
             var transService = new Mock<ITransactionService>();
             var userWrapper = SetupUserWrapper();
 
@@ -107,7 +109,9 @@ namespace WebCasino.ControllerTests.WalletControllerTests
                 NormalisedBalance = 50,
                 User = new User()
                 {
-                    Cards = new List<BankCard>()
+                    Cards = new List<BankCard>(),
+                    Transactions = new List<Transaction>()
+                    
                 }
             };
 

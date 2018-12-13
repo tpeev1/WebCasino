@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebCasino.DataContext;
 using WebCasino.Entities;
@@ -23,27 +24,45 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
 
 			string userId = null;
+            string cardId = "cardId";
 			double amountInUserCurrency = 50;
 			string description = "1234567890";
 
 			var transactionService = new TransactionService(casinoContextMock.Object, currencyServiceMock.Object);
 
-			await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => transactionService.AddWithdrawTransaction(userId, amountInUserCurrency, description));
+			await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => transactionService.AddWithdrawTransaction(userId, cardId, amountInUserCurrency, description));
 		}
 
-		[TestMethod]
+        [TestMethod]
+        public async Task ThrowArgumentNullException_WhenCardIdIsNull()
+        {
+            var casinoContextMock = new Mock<CasinoContext>();
+            var currencyServiceMock = new Mock<ICurrencyRateApiService>();
+
+            string userId = "user-id";
+            string cardId = null;
+            double amountInUserCurrency = 50;
+            string description = "1234567890";
+
+            var transactionService = new TransactionService(casinoContextMock.Object, currencyServiceMock.Object);
+
+            await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => transactionService.AddWithdrawTransaction(userId, cardId, amountInUserCurrency, description));
+        }
+
+        [TestMethod]
 		public async Task ThrowArgumentNullException_WhenDesctiptionIsNull()
 		{
 			var casinoContextMock = new Mock<CasinoContext>();
 			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
 
 			string userId = "userId";
-			double amountInUserCurrency = 50;
+            string cardId = "cardId";
+            double amountInUserCurrency = 50;
 			string description = null;
 
 			var transactionService = new TransactionService(casinoContextMock.Object, currencyServiceMock.Object);
 
-			await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => transactionService.AddWithdrawTransaction(userId, amountInUserCurrency, description));
+			await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => transactionService.AddWithdrawTransaction(userId, cardId, amountInUserCurrency, description));
 		}
 
 		[TestMethod]
@@ -53,12 +72,13 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
 
 			string userId = "userId";
-			double amountInUserCurrency = 50;
+            string cardId = "cardId";
+            double amountInUserCurrency = 50;
 			string description = "123456789";
 
 			var transactionService = new TransactionService(casinoContextMock.Object, currencyServiceMock.Object);
 
-			await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => transactionService.AddWithdrawTransaction(userId, amountInUserCurrency, description));
+			await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => transactionService.AddWithdrawTransaction(userId, cardId, amountInUserCurrency, description));
 		}
 
 		[TestMethod]
@@ -68,12 +88,13 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
 
 			string userId = "userId";
-			double amountInUserCurrency = 50;
+            string cardId = "cardId";
+            double amountInUserCurrency = 50;
 			string description = new string('-', 101);
 
 			var transactionService = new TransactionService(casinoContextMock.Object, currencyServiceMock.Object);
 
-			await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => transactionService.AddWithdrawTransaction(userId, amountInUserCurrency, description));
+			await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => transactionService.AddWithdrawTransaction(userId, cardId, amountInUserCurrency, description));
 		}
 
 		[TestMethod]
@@ -83,12 +104,13 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
 
 			string userId = "userId";
-			double amountInUserCurrency = -1;
+            string cardId = "cardId";
+            double amountInUserCurrency = -1;
 			string description = "1234567890";
 
 			var transactionService = new TransactionService(casinoContextMock.Object, currencyServiceMock.Object);
 
-			await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => transactionService.AddWithdrawTransaction(userId, amountInUserCurrency, description));
+			await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => transactionService.AddWithdrawTransaction(userId, cardId, amountInUserCurrency, description));
 		}
 
 		//End of Method Parameters tests
@@ -103,18 +125,46 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 			var currencyServiceMock = new Mock<ICurrencyRateApiService>();
 
 			string userId = "userId";
-			double amountInUserCurrency = 50.05;
+            string cardId = "cardId";
+            double amountInUserCurrency = 50.05;
 			string description = "1234567890";
 
 			using (var context = new CasinoContext(contextOptions))
 			{
 				var transactionService = new TransactionService(context, currencyServiceMock.Object);
 
-				await Assert.ThrowsExceptionAsync<EntityNotFoundException>(() => transactionService.AddWithdrawTransaction(userId, amountInUserCurrency, description));
+				await Assert.ThrowsExceptionAsync<EntityNotFoundException>(() => transactionService.AddWithdrawTransaction(userId, cardId, amountInUserCurrency, description));
 			}
 		}
 
-		[TestMethod]
+        [TestMethod]
+        public async Task ThrowEntityNotFoundException_WhenCardWithGivenIdIsNotFoundInDatabase()
+        {
+            var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
+                .UseInMemoryDatabase(databaseName: "ThrowEntityNotFoundException_WhenCardWithGivenIdIsNotFoundInDatabase")
+                .Options;
+
+            var currencyServiceMock = new Mock<ICurrencyRateApiService>();
+
+            string userId = "userId";
+            string cardId = "cardId";
+            double amountInUserCurrency = 50.05;
+            string description = "1234567890";
+
+            using (var context = new CasinoContext(contextOptions))
+            {
+                var usre = new User()
+                {
+                    Id = userId
+                };
+                context.SaveChanges();
+                var transactionService = new TransactionService(context, currencyServiceMock.Object);
+
+                await Assert.ThrowsExceptionAsync<EntityNotFoundException>(() => transactionService.AddWithdrawTransaction(userId, cardId, amountInUserCurrency, description));
+            }
+        }
+
+        [TestMethod]
 		public async Task ThrowEntityCurrencyNotFoundException_WhenUserUseUnMaitainableCurrency()
 		{
 			var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
@@ -128,7 +178,8 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 			currencyServiceMock.Setup(s => s.GetRatesAsync()).Returns(Task.FromResult(serviceReturn));
 
 			string userId = "userId";
-			double amountInUserCurrency = 50.05;
+            string cardId = "cardId";
+            double amountInUserCurrency = 50.05;
 			string description = "1234567890";
 
 			var user = new User()
@@ -142,8 +193,12 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 						Id = 1,
 						Name = "GBP"
 					}
-				}
-			};
+				},
+                Cards = new List<BankCard>()
+                {
+                    new BankCard(){Id="cardId"}
+                }
+            };
 
 			using (var context = new CasinoContext(contextOptions))
 			{
@@ -152,7 +207,8 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 
 				var transactionService = new TransactionService(context, currencyServiceMock.Object);
 
-				await Assert.ThrowsExceptionAsync<EntityCurrencyNotFoundException>(() => transactionService.AddWithdrawTransaction(userId, amountInUserCurrency, description));
+				await Assert.ThrowsExceptionAsync<EntityCurrencyNotFoundException>(() 
+                    => transactionService.AddWithdrawTransaction(userId, cardId, amountInUserCurrency, description));
 			}
 		}
 
@@ -172,7 +228,8 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 			currencyServiceMock.Setup(s => s.GetRatesAsync()).Returns(Task.FromResult(serviceReturn));
 
 			string userId = "userId";
-			double amountInUserCurrency = 50;
+            string cardId = "cardId";
+            double amountInUserCurrency = 50;
 			string description = "1234567890";
 
 			var user = new User()
@@ -188,8 +245,12 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 					},
                     DisplayBalance = 750,
                     NormalisedBalance = 500
-				}
-			};
+				},
+                Cards = new List<BankCard>()
+                {
+                    new BankCard(){Id="cardId"}
+                }
+            };
 
 			using (var context = new CasinoContext(contextOptions))
 			{
@@ -198,7 +259,7 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 
 				var transactionService = new TransactionService(context, currencyServiceMock.Object);
 
-				var savedTransaction = await transactionService.AddWithdrawTransaction(userId, amountInUserCurrency, description);
+				var savedTransaction = await transactionService.AddWithdrawTransaction(userId, cardId, amountInUserCurrency, description);
 
 				var originalAmount = savedTransaction.OriginalAmount;
 				var normalisedAmount = savedTransaction.NormalisedAmount;
@@ -225,6 +286,7 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 
             var baseCurrency = "USD";
             var currency = 1.50;
+            string cardId = "cardId";
             var serviceReturn = new ConcurrentDictionary<string, double>();
             serviceReturn.TryAdd(baseCurrency, currency);
             currencyServiceMock.Setup(s => s.GetRatesAsync()).Returns(Task.FromResult(serviceReturn));
@@ -245,6 +307,10 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
                         Name = baseCurrency
                     },
 
+                },
+                Cards = new List<BankCard>()
+                {
+                    new BankCard(){Id="cardId"}
                 }
             };
 
@@ -256,7 +322,7 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
                 var transactionService = new TransactionService(context, currencyServiceMock.Object);
 
                 await Assert.ThrowsExceptionAsync<InsufficientFundsException>(
-                    () => transactionService.AddWithdrawTransaction(userId, amountInUserCurrency, description));
+                    () => transactionService.AddWithdrawTransaction(userId, cardId, amountInUserCurrency, description));
             }
         }
     }

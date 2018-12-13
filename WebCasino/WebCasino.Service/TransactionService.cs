@@ -26,11 +26,13 @@ namespace WebCasino.Service
 
 		public async Task<Transaction> AddDepositTransaction(
 			string userId,
+            string cardId,
 			double amountInUserCurrency,
 			string description)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(userId);
-			ServiceValidator.IsInputStringEmptyOrNull(description);
+            ServiceValidator.IsInputStringEmptyOrNull(cardId);
+            ServiceValidator.IsInputStringEmptyOrNull(description);
 			ServiceValidator.CheckStringLength(description, 10, 100);
 			ServiceValidator.ValueIsBetween(amountInUserCurrency, 0, double.MaxValue);
 
@@ -39,9 +41,12 @@ namespace WebCasino.Service
                     .ThenInclude(wall => wall.Currency)
 				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
 
-			ServiceValidator.ObjectIsNotEqualNull(userWin);
+            var bankCard = await this.dbContext.BankCards.FirstOrDefaultAsync(bc => bc.Id == cardId);
 
-			var userCurrency = userWin.Wallet.Currency.Name;
+			ServiceValidator.ObjectIsNotEqualNull(userWin);
+            ServiceValidator.ObjectIsNotEqualNull(bankCard);
+
+            var userCurrency = userWin.Wallet.Currency.Name;
 			var bankRates = await this.currencyService.GetRatesAsync();
 
 			double normalisedCurrency = 0;
@@ -61,11 +66,13 @@ namespace WebCasino.Service
 				OriginalAmount = amountInUserCurrency,
 				Description = description,
 				TransactionTypeId = 3,
-				NormalisedAmount = normalisedCurrency
+				NormalisedAmount = normalisedCurrency,
+                CardId = bankCard.Id
 			};
 
             userWin.Wallet.NormalisedBalance += normalisedCurrency;
             userWin.Wallet.DisplayBalance = userWin.Wallet.NormalisedBalance * bankRates[userCurrency];
+            bankCard.MoneyAdded += amountInUserCurrency;
 
 			await this.dbContext.Transactions.AddAsync(newTransaction);
 			await this.dbContext.SaveChangesAsync();
@@ -182,11 +189,13 @@ namespace WebCasino.Service
 
 		public async Task<Transaction> AddWithdrawTransaction(
 			string userId,
+            string cardId,
 			double amountInUserCurrency,
 			string description)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(userId);
-			ServiceValidator.IsInputStringEmptyOrNull(description);
+            ServiceValidator.IsInputStringEmptyOrNull(cardId);
+            ServiceValidator.IsInputStringEmptyOrNull(description);
 			ServiceValidator.CheckStringLength(description, 10, 100);
 			ServiceValidator.ValueIsBetween(amountInUserCurrency, 0, double.MaxValue);
 
@@ -195,9 +204,12 @@ namespace WebCasino.Service
                     .ThenInclude(w => w.Currency)
 				.FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
 
-			ServiceValidator.ObjectIsNotEqualNull(userWin);
+            var card = await this.dbContext.BankCards.FirstOrDefaultAsync(bc => bc.Id == cardId);
 
-			var userCurrency = userWin.Wallet.Currency.Name;
+			ServiceValidator.ObjectIsNotEqualNull(userWin);
+            ServiceValidator.ObjectIsNotEqualNull(card);
+
+            var userCurrency = userWin.Wallet.Currency.Name;
 			var bankRates = await this.currencyService.GetRatesAsync();
 
 			double normalisedCurrency = 0;
@@ -217,11 +229,13 @@ namespace WebCasino.Service
 				OriginalAmount = amountInUserCurrency,
 				Description = description,
 				TransactionTypeId = 4,
-				NormalisedAmount = normalisedCurrency
+				NormalisedAmount = normalisedCurrency,
+                CardId = card.Id
 			};
             
 			userWin.Wallet.NormalisedBalance -= normalisedCurrency;
             userWin.Wallet.DisplayBalance = userWin.Wallet.NormalisedBalance*bankRates[userCurrency];
+            card.MoneyRetrieved += amountInUserCurrency;
 
             if (userWin.Wallet.NormalisedBalance < 0)
             {
