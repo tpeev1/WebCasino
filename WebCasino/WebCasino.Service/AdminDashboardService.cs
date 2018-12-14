@@ -24,7 +24,19 @@ namespace WebCasino.Service
 			string transactionType,
 			int monthCount)
 		{
-			var dbQuery = await this.dbContext.Transactions
+            //
+            var byMonth = await dbContext.Transactions
+                .GroupBy(t => t.CreatedOn.Value.Month)
+                .Select(g => new
+                {
+                    Month = g.Key,
+                    Count = g.Count()
+                }).
+                ToListAsync();
+
+            Enumerable.Range(0, 12).Select(x => true);
+
+            var dbQuery = await this.dbContext.Transactions
 				.Include(tt => tt.TransactionType)
 				.Where(t => t.TransactionType.Name == transactionType)
 				.ToListAsync();

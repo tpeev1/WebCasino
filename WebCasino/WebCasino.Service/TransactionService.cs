@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using WebCasino.DataContext;
 using WebCasino.Entities;
@@ -259,9 +260,27 @@ namespace WebCasino.Service
             int filteredResultsCount;
             int totalResultsCount;
 
-            var searchBy = model.search != null ? model.search.value : string.Empty;
+            var searchBy = model.search?.value ?? string.Empty;
+
             var take = model.length;
             var skip = model.start;
+
+            if (take < 0)
+            {
+                take = 10;
+            }
+            if (skip < 0)
+            {
+                skip = 0;
+            }
+
+            var dic = new Dictionary<string, Expression<Func<Transaction, object>>>()
+            {
+                { "createdOn", tr => tr.CreatedOn },
+                {"alias", tr => tr.User.Alias },
+                {"transactionTypeName", tr => tr.TransactionType.Name },
+                {"normalisedAmount", tr => tr.NormalisedAmount }
+            };
 
             string sortBy = "";
             bool sortDir = true;
@@ -272,12 +291,37 @@ namespace WebCasino.Service
                 sortDir = model.order[0].dir.ToLower() == "asc";
             }
 
-            var collection = await this.GetAllTransactionsTable()
-                  // .Where(tr => tr.User.Alias.Contains(searchBy) || tr.TransactionType.Name.Contains(searchBy))
-                   //.OrderBy(sortBy,sortDir)
-                   .Skip(skip)
-                   .Take(take)
-                   .ToListAsync();
+            Expression<Func<Transaction, object>> exp;
+
+            if (!dic.ContainsKey(sortBy))
+            {
+                exp = dic["createdOn"];
+            }
+            else
+            {
+                exp = dic[sortBy];
+            }
+
+            var collection = new List<Transaction>();
+            if (sortDir)
+            {
+                 collection = await this.GetAllTransactionsTable()
+                    .Where(tr => tr.User.Alias.Contains(searchBy) || tr.TransactionType.Name.Contains(searchBy))
+                    .OrderBy(exp)
+                    .Skip(skip)
+                    .Take(take)
+                    .ToListAsync();
+            }
+
+            else
+            {
+                 collection = await this.GetAllTransactionsTable()
+                    .Where(tr => tr.User.Alias.Contains(searchBy) || tr.TransactionType.Name.Contains(searchBy) || tr.CreatedOn.ToString().Contains(searchBy))
+                    .OrderByDescending(exp)
+                    .Skip(skip)
+                    .Take(take)
+                    .ToListAsync();
+            }
 
             return collection;
 

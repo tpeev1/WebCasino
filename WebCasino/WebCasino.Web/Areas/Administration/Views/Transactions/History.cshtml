@@ -16,21 +16,26 @@
 @section Scripts{
 
 
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-
     <script>
         $(document).ready(function () {
             $('#table').DataTable({
                 responsive: true,
                 processing: true,
                 serverSide: true,
+                paging: true,
+                pagingType: "full_numbers",
                 ajax: {
                     "url": "/Administration/Transactions/FilterTable",
                     "type": "POST"
-                }
-
-                
-
+                },
+                "columns": [
+                    { "data": "createdOn" },
+                    { "data": "transactionTypeName" },
+                    { "data": "normalisedAmount" },
+                    { "data": "description", "orderable": false },
+                    { "data": "email", "orderable": false },
+                    { "data": "alias" }
+                ]
             });
 
 

@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace WebCasino.Web.Utilities.TableFilterUtilities
 {
     public class DataTableModel
     {
+        public DataTableModel()
+        {
+
+        }
+
         // properties are not capital due to json mapping
         public int draw { get; set; }
         public int start { get; set; }
