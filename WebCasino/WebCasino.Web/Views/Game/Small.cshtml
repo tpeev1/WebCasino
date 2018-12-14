@@ -3,6 +3,8 @@
     ViewData["Title"] = "Small";
 }
 
+
+
 <div id="gameBoard">
     @await Html.PartialAsync("_GameBoardPartial", Model)
 </div>
@@ -15,10 +17,16 @@
     </div>
     <input type="hidden" asp-for="GameBoardRows" value="@Model.Board.GetLength(0)" />
     <input type="hidden" asp-for="GameBoardCols" value="@Model.Board.GetLength(1)" />
-    <button type="submit" class="btn btn-primary">Play</button>
+
+    <button id="gogogo2" type="submit" class="btn btn-primary">Play</button>
 </form>
+
 
 @section Scripts{
     <script src="~/js/betForm.js"></script>
+
 }
+
+
+
 

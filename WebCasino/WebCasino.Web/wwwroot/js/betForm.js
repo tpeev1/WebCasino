@@ -25,7 +25,7 @@
                 let winAmount = +($('#winningAmount').html());
                 newBalance = +($('#balanceSpan').html()) + winAmount;
                 $('#balanceSpan').html(Math.round(newBalance*100)/100);
-                console.log(data);
+                //console.log(data);
             });
     }
 

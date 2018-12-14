@@ -106,7 +106,9 @@ namespace WebCasino.Web.Controllers
                 WinCoef = 0,
                 BetAmount = 0
             };
+
             TempData["Invalid bet"] = "We couldn't place your bet";
+
             return PartialView("_GameBoardPartial", dtoError);
         }
 

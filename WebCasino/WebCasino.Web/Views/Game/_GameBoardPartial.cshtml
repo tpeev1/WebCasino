@@ -3,6 +3,9 @@
     ViewData["Title"] = "_GameBoardPartial";
 }
 
+
+<link href="~/css/ezslots.css" rel="stylesheet" type="text/css" />
+
 @if (TempData["Invalid bet"] != null)
 {
     <div class="alert alert-success alert-with-icon">
@@ -15,18 +18,78 @@
         </span>
     </div>
 }
+
 <div id="winningAmount">@(Model.WinCoef * Model.BetAmount)</div>
 <table class="table table-bordered">
     <thead>WIN: @Model.WinCoef</thead>
-    @for (int i = 0; i < Model.Board.GetLength(0); i++)
-    {
-        <tr>
-            @for (int j = 0; j < Model.Board.GetLength(1); j++)
-            {
-                <td>@Model.Board[i, j].SymbolName = @Model.Board[i, j].RolledNumber</td>
-            }
-        </tr>
-    }
 
 </table>
+<div id="slot_div" class="container-fluid">
+
+
+</div>
+
+<button id="gogogo2" type="submit" class="btn btn-primary">Play</button>
+
+<script src="~/js/gameAnimation/ezslots.js"></script>
+<script src="~/js/gameAnimation/jquery-1.11.3.js"></script>
+<script>
+    $(function () {
+        var images = [
+            '<img src="../images/games/seven.png">',
+            '<img src="../images/games/banana.png">',
+            '<img src="../images/games/cherries.png">',
+            '<img src="../images/games/lemon.png">',
+            '<img src="../images/games/orange.png">',
+            '<img src="../images/games/plum.png">',
+            '<img src="../images/games/watermelon.png">'];
+
+        var callbackFunction = function (result) {
+            alert(JSON.stringify(result));
+        }
+
+        let totalRows = @Html.Raw(Json.Serialize(Model.GameBoardRows)); //total rows
+        let totalCols = @Html.Raw(Json.Serialize(Model.GameBoardCols));; //total cols
+
+        let inputSet = [1, 1, 1, 1, 1]; // wining comp
+        let winingRow = 2;
+        let slots = [];
+
+        for (var i = 0; i < totalRows; i += 1) {
+            $('#slot_div').append(`<div class="row" id="ezslots${i + 1}"></div>`);
+        };
+
+        for (var i = 1; i <= totalRows + 1; i += 1) {
+
+            slots.push(new EZSlots(`ezslots${i}`,
+                {
+                    "reelCount": totalCols,
+                    "winningSet": inputSet,
+                    "symbols": images,
+                    "height": 126,
+                    "width": 126
+                }))
+        };
+
+        $("#gogogo2").click(function (e) {
+            e.preventDefault();
+
+            for (var i = 0; i <= totalRows; i += 1) {
+                if (i == winingRow) {
+                    slots[i].win();
+                }
+                else {
+                    slots[i].spin();
+                }
+            };
+        });
+
+        if ($('#slot_div').is('animated')){
+            console.log('DONE');
+        };
+    });
+
+</script>
+
+
 
