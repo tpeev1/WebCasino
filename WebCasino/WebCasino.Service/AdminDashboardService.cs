@@ -24,12 +24,13 @@ namespace WebCasino.Service
 			string transactionType,
 			int monthCount)
 		{
-            var dbQuery = this.dbContext.Transactions
+            var dbQuery = await this.dbContext.Transactions
                 .Include(tt => tt.TransactionType)
-                .Where(t => t.TransactionType.Name == transactionType);
+                .Where(t => t.TransactionType.Name == transactionType)
+                .ToListAsync();
 				
 
-			var resultModel = await FiltarByMonth(timePeriod, monthCount, dbQuery);
+			var resultModel = FiltarByMonth(timePeriod, monthCount, dbQuery);
 
 			//CHECK FOR MONTH NUMBER !!
 
@@ -38,16 +39,16 @@ namespace WebCasino.Service
 
 		public async Task<MonthsTransactionsModelDTO> GetYearTransactions(DateTime timePeriod)
 		{
-            var dbQuery = this.dbContext.Transactions;
+            var dbQuery = await this.dbContext.Transactions.ToListAsync();
 
-			var resultModel = await FiltarByMonth(timePeriod, 11, dbQuery);
+			var resultModel = FiltarByMonth(timePeriod, 11, dbQuery);
 
 			//CHECK FOR MONTH NUMBER !!
 
 			return resultModel;
 		}
 
-		public async Task<MonthsTransactionsModelDTO> FiltarByMonth(DateTime timePeriod, int monthCount, IQueryable<Transaction> dbQuery)
+		public MonthsTransactionsModelDTO FiltarByMonth(DateTime timePeriod, int monthCount, IEnumerable<Transaction> dbQuery)
 		{
 			var resultModel = new MonthsTransactionsModelDTO();
 
@@ -55,8 +56,8 @@ namespace WebCasino.Service
 			{
 				var monthly = new MonthVallueModelDTO();
 
-				var valueFilter = await dbQuery
-				.Where(d => d.CreatedOn.Value.Month == i).CountAsync();
+				var valueFilter = dbQuery
+				.Where(d => d.CreatedOn.Value.Month == i).Count();
 
 				monthly.MonthValue = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i).Substring(0, 3).ToUpper();
 				monthly.Value = valueFilter;

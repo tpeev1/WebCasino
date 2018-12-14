@@ -13,7 +13,7 @@ namespace WebCasino.Service.Abstract
 
 		Task<MonthsTransactionsModelDTO> GetMonthsTransactions(DateTime timePeriod, string transactionType, int monthCount);
 
-		Task<MonthsTransactionsModelDTO> FiltarByMonth(DateTime timePeriod, int monthCount, IQueryable<Transaction> dbQuery);
+		MonthsTransactionsModelDTO FiltarByMonth(DateTime timePeriod, int monthCount, IEnumerable<Transaction> dbQuery);
 
 		Task<MonthsTransactionsModelDTO> GetYearTransactions(DateTime timePeriod);
 
