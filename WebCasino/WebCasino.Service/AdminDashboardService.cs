@@ -8,6 +8,7 @@ using WebCasino.DataContext;
 using WebCasino.Entities;
 using WebCasino.Service.Abstract;
 using WebCasino.Service.DTO.Canvas;
+using WebCasino.Service.Utility.Validator;
 
 namespace WebCasino.Service
 {
@@ -24,6 +25,9 @@ namespace WebCasino.Service
 			string transactionType,
 			int monthCount)
 		{
+            ServiceValidator.IsInputStringEmptyOrNull(transactionType);
+            ServiceValidator.ValueIsBetween(monthCount, 1, 12);
+
             var dbQuery = await this.dbContext.Transactions
                 .Include(tt => tt.TransactionType)
                 .Where(t => t.TransactionType.Name == transactionType)
@@ -80,7 +84,9 @@ namespace WebCasino.Service
 
 		public async Task<CyrrencyDaylyWinDTO> GetTransactionsCurrencyDaylyWins(int day)
 		{
-			var allTransactionsQuery = await this.dbContext
+            ServiceValidator.DayIsInMonth(day);
+
+            var allTransactionsQuery = await this.dbContext
 				.Transactions
 				.Include(tt => tt.TransactionType)
 				.Include(u => u.User.Wallet.Currency)

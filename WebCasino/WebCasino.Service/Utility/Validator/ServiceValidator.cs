@@ -79,5 +79,15 @@ namespace WebCasino.Service.Utility.Validator
 				throw new CardNumberException("Invalid card number");
 			}
 		}
-	}
+
+        public static void DayIsInMonth(int day)
+        {
+            var currentMonthsTotalDays = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            if (day < 1 || day > currentMonthsTotalDays)
+            {
+                throw new NotValidDayInMonthException("Invalid day in month.");
+            }
+
+        }
+    }
 }
