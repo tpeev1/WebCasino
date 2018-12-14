@@ -45,8 +45,8 @@ namespace WebCasino.Web.Areas.Administration.Controllers
 
 			var oneYearTransactions = await this.adminDashboardService.GetYearTransactions(DateTime.Now);
 
-			var sixMonthsWins = sixMonthsTotalWins.ValuesByMonth;
-            var sixMonthsStakes = sixMonthsTotalStakes.ValuesByMonth;
+			var sixMonthsWins =  sixMonthsTotalWins.ValuesByMonth;
+            var sixMonthsStakes =  sixMonthsTotalStakes.ValuesByMonth;
 
 			var viewModel = new DashboardViewModel()
 			{

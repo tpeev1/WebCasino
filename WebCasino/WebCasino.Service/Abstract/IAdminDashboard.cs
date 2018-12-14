@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WebCasino.Entities;
 using WebCasino.Service.DTO.Canvas;
@@ -12,7 +13,7 @@ namespace WebCasino.Service.Abstract
 
 		Task<MonthsTransactionsModelDTO> GetMonthsTransactions(DateTime timePeriod, string transactionType, int monthCount);
 
-		MonthsTransactionsModelDTO FiltarByMonth(DateTime timePeriod, int monthCount, IList<Transaction> dbQuery);
+		Task<MonthsTransactionsModelDTO> FiltarByMonth(DateTime timePeriod, int monthCount, IQueryable<Transaction> dbQuery);
 
 		Task<MonthsTransactionsModelDTO> GetYearTransactions(DateTime timePeriod);
 

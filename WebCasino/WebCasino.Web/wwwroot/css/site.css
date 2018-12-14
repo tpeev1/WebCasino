@@ -87,3 +87,7 @@ select option {
         display: none;
     }
 }
+
+.admin-sidenav{
+    z-index: 9999;
+}
