@@ -28,7 +28,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="DateOfBirth">Date of birth</label>
-                <input asp-for="DateOfBirth" type="date" class="form-control"/>
+                <input asp-for="DateOfBirth" value ="@DateTime.Now.Date" type="date" class="form-control"/>
                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
             </div>
             <div class="form-group">

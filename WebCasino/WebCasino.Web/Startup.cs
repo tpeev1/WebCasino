@@ -12,6 +12,7 @@ using WebCasino.Service.Abstract;
 using WebCasino.Service.Utility.APICurrencyConvertor.RequestManager;
 using WebCasino.Service.Utility.RandomGeneration;
 using WebCasino.Service.Utility.Wrappers;
+using WebCasino.Web.Utilities;
 using WebCasino.Web.Utilities.Wrappers;
 
 namespace WebCasino.Web
@@ -46,7 +47,7 @@ namespace WebCasino.Web
                 .AddEntityFrameworkStores<CasinoContext>()
                 .AddDefaultTokenProviders();
 
-           
+
 
             services.AddScoped<IWalletService, WalletService>();
             services.AddScoped<IUserWrapper, UserWrapper>();
@@ -89,7 +90,8 @@ namespace WebCasino.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            
+            app.ImportantExceptionHandling();
+
             app.UseStaticFiles();
 
             app.UseSession();
