@@ -13,6 +13,7 @@ namespace WebCasino.Web.Areas.Administration.Models
 		public TransactionViewModel(Transaction transaction)
 		{
             this.Id = transaction.Id;
+            this.UserAlias = transaction.User.Alias;
             this.UserId = transaction.User.Id;
 			this.User = transaction.User.Email;
 			this.CreatedOn = transaction.CreatedOn;
@@ -23,6 +24,8 @@ namespace WebCasino.Web.Areas.Administration.Models
 		}
 
         public string Id { get; set; }
+
+        public string UserAlias { get; set; }
 
 		public string User { get; set; }
 
