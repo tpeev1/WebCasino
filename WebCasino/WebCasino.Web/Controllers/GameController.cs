@@ -26,15 +26,7 @@ namespace WebCasino.Web.Controllers
 
         public IActionResult Index()
         {
-            var board = this.gameService.GenerateBoard(4, 3);
-            var model = this.gameService.GameResults(board);
-            var dto = new GameViewModel()
-            {
-                Board = board,
-                WinCoef = model.WinCoefficient
-            };
-
-            return View(dto);
+            return View();
         }
 
         public IActionResult Small()
