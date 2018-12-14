@@ -51,8 +51,9 @@ namespace WebCasino.Service
             var wallet = await this.context.Wallets
                 .Include(wa => wa.User)
                     .ThenInclude(us => us.Cards)
-                 .Include(wa=> wa.User)
-                    .ThenInclude(us=> us.Transactions)
+                 .Include(wa => wa.User)
+                    .ThenInclude(us => us.Transactions)
+                        .ThenInclude(tr => tr.TransactionType)
                 .FirstOrDefaultAsync(wa => wa.UserId == userId);
 
             ServiceValidator.ObjectIsNotEqualNull(wallet);

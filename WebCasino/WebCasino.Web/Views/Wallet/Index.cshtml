@@ -42,6 +42,28 @@
             });
         });
     </script>
+    <script>       
+        $(document).ready(function () {
+            $('#table').DataTable({
+                responsive: true,
+
+            });
+
+            $('#table_filter > label > input').addClass('form-control');
+            $('#table_length > label > select').addClass('form-control');
+
+            $('#table_previous').removeClass('paginate_button previous disabled');
+            $('#table_next').removeClass('paginate_button next disabled');
+
+            $('#table_previous').addClass('tim-icons icon-double-left');
+            $('#table_next').addClass('tim-icons icon-double-right');
+            $('#paginate_button current').addClass('page-link');
+            $('#paginate_button').addClass('page-link');
+
+            $('#table_length').css('float', 'right');
+            $('#table_filter').css('float', 'left');
+        });
+    </script>
     <script src="~/js/expirationDate.js"></script>
     <script src="~/js/balanceOnWithdraw.js"></script>
 }

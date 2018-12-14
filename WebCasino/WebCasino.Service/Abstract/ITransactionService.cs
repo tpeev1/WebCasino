@@ -1,26 +1,25 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WebCasino.Entities;
+using WebCasino.Service.DTO.Filtering;
+using WebCasino.Service.Utility.TableFilterUtilities;
 
 namespace WebCasino.Service.Abstract
 {
 	public interface ITransactionService
 	{
-		Task<IEnumerable<Transaction>> GetAllTransactionsTable();
+        Task<TableFilteringDTO> GetFiltered(DataTableModel model);
 
-        Task<IEnumerable<Transaction>> ListByContainingText(string searchText, int page = 1, int pageSize = 10);
+        IQueryable<Transaction> GetAllTransactionsTable();
 
-		Task<int> TotalContainingText(string searchText);
-
-		Task<int> Total();
-
-		Task<IEnumerable<Transaction>> GetUserTransactions(string userId);
+        Task<IEnumerable<Transaction>> GetUserTransactions(string userId);
 
         Task<Transaction> RetrieveUserTransaction(string id);
 
         Task<IEnumerable<Transaction>> GetTransactionByType(string transactionTypeName);
 
-		Task<Transaction> AddWinTransaction(string userId, double originalAmount, string description);
+        Task<Transaction> AddWinTransaction(string userId, double originalAmount, string description);
 
 		Task<Transaction> AddStakeTransaction(string userId, double originalAmount, string description);
 
@@ -28,11 +27,9 @@ namespace WebCasino.Service.Abstract
 
 		Task<Transaction> AddDepositTransaction(string userId, string cardId, double originalAmount, string description);
 
-        Task<IEnumerable<Transaction>> RetrieveUserTransaction(string id, int page = 1, int pageSize = 10);
+        Task<IEnumerable<Transaction>> RetrieveAllUsersTransaction(string id);
 
-        Task<IEnumerable<Transaction>> RetrieveUserSearchTransaction(string searchText, string id, int page = 1, int pageSize = 10);
 
-       
 
     }
 }

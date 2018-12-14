@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using WebCasino.Service.Abstract;
+using WebCasino.Service.Utility.TableFilterUtilities;
 using WebCasino.Web.Areas.Administration.Models;
 
 namespace WebCasino.Web.Areas.Administration.Controllers
@@ -18,31 +20,11 @@ namespace WebCasino.Web.Areas.Administration.Controllers
             this.service = service ?? throw new System.ArgumentNullException(nameof(service));
         }
 
-        //TEST
-        public async Task<IActionResult> History(TransactionHistoryViewModel model)
+        public IActionResult History()
         {
-            var transactions = await this.service.GetAllTransactionsTable();
-            model.Transactions = transactions.Select(tr => new TransactionViewModel(tr));
-
-            return View(model);
+            return View();
         }
 
-        //      public async Task<IActionResult> History(TransactionHistoryViewModel model)
-        //{
-        //	if (string.IsNullOrWhiteSpace(model.SearchText))
-        //	{
-        //		model.Transactions = await this.service.GetAllTransactionsTable(model.Page, 10);
-        //		model.TotalPages = (int)Math.Ceiling(await this.service.Total() / (double)10);
-        //	}
-        //	else
-        //	{
-        //		model.Transactions = await this.service.ListByContainingText(model.SearchText, model.Page, 10);
-        //		model.TotalPages = (int)Math.Ceiling(await this.service.TotalContainingText(model.SearchText) / (double)10);
-
-        //          }
-
-        //	return View(model);
-        //}
 
         public async Task<IActionResult> Details(string id)
         {
@@ -53,6 +35,20 @@ namespace WebCasino.Web.Areas.Administration.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> FilterTable(DataTableModel model)
+        {
+            var result = await this.service.GetFiltered(model);
+            var tableModel = new TransactionTableViewModel()
+            {
+                Transactions = result.Transactions.Select(tr => new TransactionViewModel(tr)),
+                Draw = model.draw,
+                RecordsTotal = result.RecordsTotal,
+                RecordsFiltered = result.RecordsFiltered
+            };
+
+            return Json(tableModel);
+        }
 
     }
 }

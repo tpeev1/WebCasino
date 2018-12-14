@@ -26,7 +26,7 @@
         <tr>
             <td>
                 <p>
-                    Win Transactions: @Model.Transactions.Where(t => t.TransactionType == "Win").Count()
+                    Win Transactions: @Model.Transactions.Where(t => t.TransactionTypeName == "Win").Count()
                 </p>
 
             </td>
@@ -34,14 +34,14 @@
         <tr>
             <td>
                 <p>
-                    Stake Transactions:  @Model.Transactions.Where(t => t.TransactionType == "Stake").Count()
+                    Stake Transactions:  @Model.Transactions.Where(t => t.TransactionTypeName == "Stake").Count()
                 </p>
             </td>
         </tr>
         <tr>
             <td>
                 <p>
-                    Deposits: @Model.Transactions.Where(t => t.TransactionType == "Deposit").Count()
+                    Deposits: @Model.Transactions.Where(t => t.TransactionTypeName == "Deposit").Count()
                 </p>
 
             </td>
@@ -49,7 +49,7 @@
         <tr>
             <td>
                 <p>
-                    Widthdraws: @Model.Transactions.Where(t => t.TransactionType == "Widthdraw").Count()
+                    Widthdraws: @Model.Transactions.Where(t => t.TransactionTypeName == "Widthdraw").Count()
                 </p>
 
             </td>

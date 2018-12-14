@@ -11,13 +11,15 @@ namespace WebCasino.Web.Models.WalletViewModels
         public TransactionViewModel(Transaction transaction)
         {
             Amount = transaction.OriginalAmount;
-            TransactionTypeId = transaction.TransactionTypeId;
+            TransactionTypeName = transaction.TransactionType.Name;
+            CreatedOn = ((DateTime)transaction.CreatedOn).ToShortTimeString();
             Description = transaction.Description;
         }
 
+        public string CreatedOn { get; set; }
         public double Amount { get; set; }
 
-        public int TransactionTypeId { get; set; }
+        public string TransactionTypeName { get; set; }
 
         public string Description { get; set; }
     }
