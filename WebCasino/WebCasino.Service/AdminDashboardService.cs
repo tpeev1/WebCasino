@@ -54,7 +54,10 @@ namespace WebCasino.Service
 
 		public MonthsTransactionsModelDTO FiltarByMonth(DateTime timePeriod, int monthCount, IEnumerable<Transaction> dbQuery)
 		{
-			var resultModel = new MonthsTransactionsModelDTO();
+            ServiceValidator.ValueIsBetween(monthCount, 1, 12);
+            ServiceValidator.ObjectIsEqualNull(dbQuery);
+
+            var resultModel = new MonthsTransactionsModelDTO();
 
 			for (int i = timePeriod.Month - monthCount; i <= timePeriod.Month; i++)
 			{
