@@ -95,3 +95,31 @@ select option {
 .section-coins{
     margin-top: 0px !important;
 }
+
+
+.game-name {
+    margin-bottom: 0px;
+}
+
+.game-board-container {
+    margin-top: 0px;
+}
+
+#animatedWinBox {
+    width: 250px;
+    animation: glow 1s infinite alternate;
+    margin: auto;
+    font-size: 18px;
+    height: 45px;
+    text-align:center;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 10px -10px #c8362e;
+    }
+
+    to {
+        box-shadow: 0 0 10px 10px #c8362e;
+    }
+}

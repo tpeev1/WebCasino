@@ -25,5 +25,9 @@ namespace WebCasino.Web.Models.GameViewModels
         [Range(3,5)]
         public int GameBoardCols { get; set; }
 
+        public string GameName { get; set; }
+
+        public string ImagePrefix { get; set; }
+
     }
 }

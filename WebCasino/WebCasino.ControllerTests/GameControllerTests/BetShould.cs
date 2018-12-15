@@ -58,11 +58,8 @@ namespace WebCasino.ControllerTests.GameControllerTests
 
             var result = await controller.Bet(model);
 
-            Assert.IsInstanceOfType(result, typeof(PartialViewResult));
+            Assert.IsInstanceOfType(result, typeof(JsonResult));
 
-            var partialResult = (PartialViewResult)result;
-
-            Assert.IsInstanceOfType(partialResult.Model, typeof(GameViewModel));
         }
 
         [TestMethod]
@@ -160,11 +157,8 @@ namespace WebCasino.ControllerTests.GameControllerTests
 
             var result = await controller.Bet(model);
 
-            Assert.IsInstanceOfType(result, typeof(PartialViewResult));
+            Assert.IsInstanceOfType(result, typeof(JsonResult));
 
-            var partialResult = (PartialViewResult)result;
-
-            Assert.IsInstanceOfType(partialResult.Model, typeof(GameViewModel));
         }
         //Utility starts here
 

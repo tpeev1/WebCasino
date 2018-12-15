@@ -4,21 +4,6 @@
 }
 
 <div id="gameBoard">
-    @await Html.PartialAsync("_GameBoardPartial", Model)
-</div>
-
-<form id="betForm" asp-area="" asp-controller="game" asp-action="bet">
-    <div class="form-group">
-        <label asp-for="BetAmount">Bet</label>
-        <input class="form-control" asp-for="BetAmount" />
-        <span asp-validation-for="BetAmount" class="text-danger"></span>
+        @await Html.PartialAsync("_GameBoardPartial", Model)
     </div>
-    <input type="hidden" asp-for="GameBoardRows" value="@Model.Board.GetLength(0)" />
-    <input type="hidden" asp-for="GameBoardCols" value="@Model.Board.GetLength(1)" />
-    <button type="submit" class="btn btn-primary">Play</button>
-</form>
-
-@section Scripts{
-    <script src="~/js/betForm.js"></script>
-}
 

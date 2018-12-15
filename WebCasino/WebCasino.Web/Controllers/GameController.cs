@@ -36,7 +36,9 @@ namespace WebCasino.Web.Controllers
             {
                 Board = board,
                 GameBoardRows = 4,
-                GameBoardCols = 3
+                GameBoardCols = 3,
+                GameName = "Secrets of Cleopatra",
+                ImagePrefix = "cleopatra"
             };
 
             return View(dto);
@@ -49,7 +51,9 @@ namespace WebCasino.Web.Controllers
             {
                 Board = board,
                 GameBoardRows = 5,
-                GameBoardCols = 5
+                GameBoardCols = 5,
+                GameName= "Sir Cash a Lot",
+                ImagePrefix = "cash"
             };
 
             return View(dto);
@@ -62,7 +66,9 @@ namespace WebCasino.Web.Controllers
             {
                 Board = board,
                 GameBoardRows = 8,
-                GameBoardCols = 5
+                GameBoardCols = 5,
+                GameName = "Gold Diggers",
+                ImagePrefix = "diggers"
             };
 
             return View(dto);
@@ -78,7 +84,7 @@ namespace WebCasino.Web.Controllers
                 await this.transactionService.AddStakeTransaction(userId, model.BetAmount, $"Stake at slot game {model.GameBoardRows} x {model.GameBoardCols}");
                 var board = this.gameService.GenerateBoard(model.GameBoardRows, model.GameBoardCols);
                 var gameModel = this.gameService.GameResults(board);
-                if(gameModel.WinCoefficient > 0)
+                if (gameModel.WinCoefficient > 0)
                 {
                     await this.transactionService.AddWinTransaction(userId, gameModel.WinCoefficient * model.BetAmount, $"Win at slot game {model.GameBoardRows} x {model.GameBoardCols}");
                 }
@@ -89,7 +95,7 @@ namespace WebCasino.Web.Controllers
                     BetAmount = model.BetAmount
                 };
 
-                return PartialView("_GameBoardPartial", dto);
+                return Json(dto);
 
             }
             var dtoError = new GameViewModel()
@@ -99,7 +105,7 @@ namespace WebCasino.Web.Controllers
                 BetAmount = 0
             };
             TempData["Invalid bet"] = "We couldn't place your bet";
-            return PartialView("_GameBoardPartial", dtoError);
+            return Json(dtoError);
         }
 
     }
