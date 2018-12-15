@@ -3,29 +3,64 @@
     ViewData["Title"] = "Small";
 }
 
-
-
 <div id="gameBoard">
     @await Html.PartialAsync("_GameBoardPartial", Model)
 </div>
 
-<form id="betForm" asp-area="" asp-controller="game" asp-action="bet">
-    <div class="form-group">
-        <label asp-for="BetAmount">Bet</label>
-        <input class="form-control" asp-for="BetAmount" />
-        <span asp-validation-for="BetAmount" class="text-danger"></span>
-    </div>
-    <input type="hidden" asp-for="GameBoardRows" value="@Model.Board.GetLength(0)" />
-    <input type="hidden" asp-for="GameBoardCols" value="@Model.Board.GetLength(1)" />
+<div class="card card-coin card-plain">
+    <div class="card-body">
+        <div class="justify-content-center">
+            <form id="betForm" asp-area="" asp-controller="game" asp-action="bet">
+                <ul class="nav nav-tabs nav-tabs-primary justify-content-center">
+                    <li class="nav-item">
+                        <p class="nav-link ">
+                            COEF: @(Model.WinCoef * Model.BetAmount)
+                        </p>
+                    </li>
+                    <li class="nav-item">
+                        <p class="nav-link ">
+                            WIN: @Model.WinCoef
+                        </p>
+                    </li>
+                  
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#">
+                            BET ONE
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <button id="gogogo2" type="submit" class="btn btn-primary">SPIN Fake</button>
+                    </li>
 
-    <button id="gogogo2" type="submit" class="btn btn-primary">Play</button>
-</form>
+                </ul>
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-4">
+                       
+                    </div>
+                    <div class="col-md-2 ">
+
+                        <div class="form-group ">
+                            <label asp-for="BetAmount">Bet</label>
+                            <input class="form-control " asp-for="BetAmount" />
+                            <span asp-validation-for="BetAmount" class="text-danger"></span>
+                        </div>
 
 
-@section Scripts{
-    <script src="~/js/betForm.js"></script>
+                        <input type="hidden" asp-for="GameBoardRows" value="@Model.Board.GetLength(0)" />
+                        <input type="hidden" asp-for="GameBoardCols" value="@Model.Board.GetLength(1)" />
 
-}
+
+                        <!-- <button id="gogogo2" type="submit" class="btn btn-primary">Play</button>-->
+                    </div>
+                </div>
+            </form>
+        </div>
+     </div>
+</div>
+        @section Scripts{
+            <script src="~/js/betForm.js"></script>
+
+        }
 
 
 

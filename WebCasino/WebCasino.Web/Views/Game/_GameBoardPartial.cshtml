@@ -6,36 +6,59 @@
 
 <link href="~/css/ezslots.css" rel="stylesheet" type="text/css" />
 
-@if (TempData["Invalid bet"] != null)
-{
-    <div class="alert alert-success alert-with-icon">
-        <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
-            <i class="tim-icons icon-simple-remove"></i>
-        </button>
-        <span data-notify="icon" class="tim-icons icon-bell-55"></span>
-        <span>
-            @TempData["Invalid bet"]
-        </span>
+<div class="wrapper">
+    <div class="page-header">
+
+        <div class="container align-items-center">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-coin card-plain">
+                        <div class="card-body">
+                            <h3 class="text-center">Game Name</h3>
+                            <div class="row justify-content-center">
+
+
+                            </div>
+
+                            <div class="tab-content tab-subcategories">
+                                <div class="tab-pane active" id="linka">
+                                    <div class=" row justify-content-center">
+                                        @if (TempData["Invalid bet"] != null)
+                                        {
+                                            <div class="alert alert-success alert-with-icon">
+                                                <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <i class="tim-icons icon-simple-remove"></i>
+                                                </button>
+                                                <span data-notify="icon" class="tim-icons icon-bell-55"></span>
+                                                <span>
+                                                    @TempData["Invalid bet"]
+                                                </span>
+                                            </div>
+                                        }
+                                        <div id="slot_div" class="slot-machine">
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
-}
-
-<div id="winningAmount">@(Model.WinCoef * Model.BetAmount)</div>
-<table class="table table-bordered">
-    <thead>WIN: @Model.WinCoef</thead>
-
-</table>
-<div id="slot_div" class="container-fluid">
-
-
 </div>
 
-<button id="gogogo2" type="submit" class="btn btn-primary">Play</button>
 
 <script src="~/js/gameAnimation/ezslots.js"></script>
 <script src="~/js/gameAnimation/jquery-1.11.3.js"></script>
+<script src="~/js/gameAnimation/gameStart.js"></script>
 <script>
     $(function () {
-        //Small game images
+        //Game settings
         var images = [
             '<img src="../images/games/orange.png">',
             '<img src="../images/games/banana.png">',
@@ -49,83 +72,12 @@
 
         let board = @Html.Raw(Json.Serialize(Model.Board)); //total rows
 
-        let fullBoardNumbers = [];
-
-        board.map(function (inArrays) {
-
-            let objArr = [];
-
-            inArrays.map(function (objects) {
-
-                objArr.push(objects);             
-
-            });
-
-            let final = [];
-            objArr.map(function (elements) {
-
-               let stringValue = Object.values(elements)[0];
-
-                if (stringValue === "low") {
-                    final.push(1);
-                }
-                else if (stringValue === "medium") {
-                    final.push(2);
-                }
-                else if (stringValue === "high") {
-                    final.push(3);
-                }
-                else if (stringValue === "wild") {
-                    final.push(4);
-                }
-                else {
-                    final.push(0);
-                };
-
-            });
-
-            fullBoardNumbers.push(final);
-        });
-
-       
-        
-
         let totalRows = @Html.Raw(Json.Serialize(Model.GameBoardRows)); //total rows
         let totalCols = @Html.Raw(Json.Serialize(Model.GameBoardCols));; //total cols
 
-      
-        let slots = [];
-
-        for (var i = 0; i <= totalRows; i += 1) {
-            $('#slot_div').append(`<div class="row" id="ezslots${i}"></div>`);
-        };
-
-        for (var i = 0; i < totalRows; i += 1) {
-
-            let rowElements = fullBoardNumbers[i];
-
-            console.log(rowElements);
-            slots.push(new EZSlots(`ezslots${i}`,
-                {
-                    "reelCount": totalCols,
-                    "winningSet": rowElements,
-                    "symbols": images,
-                    "height": 126,
-                    "width": 126
-                }))
-        };
-
-        $("#gogogo2").click(function (e) {
-            e.preventDefault();
-
-            for (var i = 0; i < totalRows; i += 1) {              
-                   slots[i].win();              
-            };
-        });
-
-       
+        //Initialte game
+        intSlotGameApp(images, board, totalRows, totalCols);
     });
-
 </script>
 
 
