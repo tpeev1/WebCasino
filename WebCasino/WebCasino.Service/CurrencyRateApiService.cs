@@ -2,12 +2,9 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using WebCasino.DataContext;
 using WebCasino.Service.Abstract;
 using WebCasino.Service.Utility.APICurrencyConvertor.Exceptions;
-using WebCasino.Service.Utility.APICurrencyConvertor.RequestConverter;
 using WebCasino.Service.Utility.APICurrencyConvertor.RequestConverter.Models;
 using WebCasino.Service.Utility.APICurrencyConvertor.RequestManager;
 using WebCasino.Service.Utility.Wrappers;

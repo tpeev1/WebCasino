@@ -12,7 +12,7 @@ namespace WebCasino.Web.Models.WalletViewModels
         {
             Amount = transaction.OriginalAmount;
             TransactionTypeName = transaction.TransactionType.Name;
-            CreatedOn = ((DateTime)transaction.CreatedOn).ToShortTimeString();
+            CreatedOn = ((DateTime)transaction.CreatedOn).ToShortDateString();
             Description = transaction.Description;
         }
 
