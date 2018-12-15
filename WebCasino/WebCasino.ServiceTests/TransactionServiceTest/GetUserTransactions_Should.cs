@@ -3,9 +3,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
 using WebCasino.DataContext;
+using WebCasino.Entities;
 using WebCasino.Service;
 using WebCasino.Service.Abstract;
+using System.Collections.Generic;
 
 namespace WebCasino.ServiceTests.TransactionServiceTest
 {
@@ -51,5 +54,38 @@ namespace WebCasino.ServiceTests.TransactionServiceTest
 				);
 			}
 		}
-	}
+
+        [TestMethod]
+        public async Task ReturnUserWhenCorrectParametersArePassed_AndUserIdIsInDb()
+        {
+            var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
+            .UseInMemoryDatabase(databaseName: "ReturnUserWhenCorrectParametersArePassed_AndUserIdIsInDb")
+            .Options;
+
+            var currencyServiceMock = new Mock<ICurrencyRateApiService>();
+
+            var userId = "user-id";
+          
+            var transactionsData = new Transaction()
+            {
+                UserId = userId,       
+                TransactionType = new TransactionType()
+            };
+
+
+            using (var context = new CasinoContext(contextOptions))
+            {
+                var transactionService = new TransactionService(context, currencyServiceMock.Object);              
+                context.Transactions.Add(transactionsData);
+
+                await context.SaveChangesAsync();
+
+                var result = await transactionService.GetUserTransactions(userId);
+
+                Assert.AreEqual(1 , result.Count());
+                Assert.IsInstanceOfType(result, typeof(IEnumerable<Transaction>));
+                
+            }
+        }
+    }
 }

@@ -15,7 +15,7 @@ using WebCasino.Service.Exceptions;
 namespace WebCasino.ServiceTests.UserServiceTests
 {
     [TestClass]
-    public class PromoteUserShould
+    public class UnLockUserShould
     {
         [TestMethod]
         [DataRow("")]
@@ -27,30 +27,30 @@ namespace WebCasino.ServiceTests.UserServiceTests
             var userService = new UserService(context.Object);
 
             await Assert.ThrowsExceptionAsync<ArgumentNullException>
-                (async () => await userService.PromoteUser(id));
+                (async () => await userService.UnLockUser(id));
         }
 
         [TestMethod]
-        public async Task ThrowIfUserNotFound()
+        public async Task ThrowToUnlockIfUserNotFound()
         {
             var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-                .UseInMemoryDatabase(databaseName: "ThrowIfUserNotFound")
+                .UseInMemoryDatabase(databaseName: "ThrowToUnlockIfUserNotFound")
                 .Options;
 
 
-            using(var context = new CasinoContext(contextOptions))
+            using (var context = new CasinoContext(contextOptions))
             {
                 var userService = new UserService(context);
                 await Assert.ThrowsExceptionAsync<EntityNotFoundException>
-                    (async () => await userService.PromoteUser("invalid-user"));
+                    (async () => await userService.UnLockUser("invalid-user"));
             }
         }
 
         [TestMethod]
-        public async Task ThrowIfRoleNotFound()
+        public async Task ThrowIfRoleNotFoundToUnlockUser()
         {
             var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-                .UseInMemoryDatabase(databaseName: "ThrowIfRoleNotFound")
+                .UseInMemoryDatabase(databaseName: "ThrowIfRoleNotFoundToUnlockUser")
                 .Options;
 
             var user = new User() { Id = "valid-user" };
@@ -61,19 +61,20 @@ namespace WebCasino.ServiceTests.UserServiceTests
 
                 var userService = new UserService(context);
                 await Assert.ThrowsExceptionAsync<EntityNotFoundException>
-                    (async () => await userService.PromoteUser("valid-user"));
+                    (async () => await userService.UnLockUser("valid-user"));
             }
         }
 
         [TestMethod]
-        public async Task CorrectlyAddRoleWithValidId()
+        public async Task CorrectlyUnLockWithValidParameters()
         {
             var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-                .UseInMemoryDatabase(databaseName: "CorrectlyAddRoleWithValidId")
+                .UseInMemoryDatabase(databaseName: "CorrectlyUnLockWithValidParameters")
                 .Options;
 
-            var user = new User() { Id = "valid-user" };
-            var role = new IdentityUserRole<string>() { UserId = "valid-user", RoleId = "2" };
+            var user = new User() { Id = "test-user-id", Locked = true };
+            var role = new IdentityUserRole<string>() { RoleId = "2", UserId = "test-user-id" };
+
             using (var context = new CasinoContext(contextOptions))
             {
                 context.Users.Add(user);
@@ -81,32 +82,10 @@ namespace WebCasino.ServiceTests.UserServiceTests
                 context.SaveChanges();
 
                 var userService = new UserService(context);
-                var result = await userService.PromoteUser("valid-user");
+                var result = await userService.UnLockUser("test-user-id");
 
-                Assert.IsNotNull(context.UserRoles.FirstOrDefault(ur => ur.UserId == result.Id && ur.RoleId == "1"));
-            }
-        }
-
-        [TestMethod]
-        public async Task CorrectlyRemoveOldRoleWithValidId()
-        {
-            var contextOptions = new DbContextOptionsBuilder<CasinoContext>()
-                .UseInMemoryDatabase(databaseName: "CorrectlyRemoveOldRoleWithValidId")
-                .Options;
-
-            var user = new User() { Id = "valid-user" };
-            var role = new IdentityUserRole<string>() { UserId = "valid-user", RoleId = "2" };
-            using (var context = new CasinoContext(contextOptions))
-            {
-                context.Users.Add(user);
-                context.UserRoles.Add(role);
-                context.SaveChanges();
-
-                var userService = new UserService(context);
-                var result = await userService.PromoteUser("valid-user");
-
-                Assert.IsNull(context.UserRoles.FirstOrDefault(ur => ur.UserId == result.Id && ur.RoleId == "2"));
-                Assert.AreEqual(1, context.UserRoles.Count());
+                Assert.IsFalse(result.Locked);
+                Assert.IsNotNull(context.Users.FirstOrDefault(us => !us.Locked && us.Id == "test-user-id"));
             }
         }
     }

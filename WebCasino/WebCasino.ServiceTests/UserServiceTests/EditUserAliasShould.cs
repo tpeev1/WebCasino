@@ -64,6 +64,19 @@ namespace WebCasino.ServiceTests.UserServiceTests
         }
 
         [TestMethod]
+        [DataRow("")]
+        [DataRow(null)]
+        public async Task ThrowIfIdIsNull(string id)
+        {
+            var context = new Mock<CasinoContext>();
+
+            var userService = new UserService(context.Object);
+
+            await Assert.ThrowsExceptionAsync<ArgumentNullException>
+                (async () => await userService.EditUserAlias("test-alias", id));
+        }
+
+        [TestMethod]
         public async Task CorrectlyEditAlias()
         {
             var contextOptions = new DbContextOptionsBuilder<CasinoContext>()

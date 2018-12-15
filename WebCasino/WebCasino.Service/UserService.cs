@@ -24,9 +24,13 @@ namespace WebCasino.Service
 		public async Task<User> EditUserAlias(string alias, string id)
 		{
 			ServiceValidator.IsInputStringEmptyOrNull(alias);
+            ServiceValidator.IsInputStringEmptyOrNull(id);
+
 			var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.IsDeleted);
-			ServiceValidator.ObjectIsNotEqualNull(user);
-			user.Alias = alias;
+
+            ServiceValidator.ObjectIsNotEqualNull(user);
+
+            user.Alias = alias;
 			await this.context.SaveChangesAsync();
 			return user;
 		}
@@ -42,26 +46,19 @@ namespace WebCasino.Service
 
    
 
-		public IEnumerable<User> ListByContainingText(string searchText, int page = 1, int pageSize = 10)
-		{
-			return this.context.Users.Where(m => m.IsDeleted == false)
-                 .Include(t => t.Transactions)
-                .Where(m => m.Email.Contains(searchText, StringComparison.InvariantCultureIgnoreCase) ||
-                 m.Alias.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))              
-                .OrderByDescending(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-		}
-
-		public int TotalContainingText(string searchText)
-		{
-			return this.context.Users.Where(m => m.Email.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)).ToList().Count();
-		}
+		
 
 		public async Task<User> LockUser(string id)
 		{
-			var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.IsDeleted);
-			ServiceValidator.ObjectIsNotEqualNull(user);
-			var role = context.UserRoles.FirstOrDefault(ur => ur.UserId == id);
-			ServiceValidator.ObjectIsNotEqualNull(role);
+            ServiceValidator.IsInputStringEmptyOrNull(id);
+
+            var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.IsDeleted);
+
+            ServiceValidator.ObjectIsNotEqualNull(user);
+
+            var role = context.UserRoles.FirstOrDefault(ur => ur.UserId == id);
+
+            ServiceValidator.ObjectIsNotEqualNull(role);
 			if (role.RoleId == "1")
 			{
 				throw new InvalidAdministratorOperationException("You cannot lock other administrators");
@@ -73,9 +70,14 @@ namespace WebCasino.Service
 
         public async Task<User> UnLockUser(string id)
         {
+            ServiceValidator.IsInputStringEmptyOrNull(id);
+
             var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.IsDeleted);
+
             ServiceValidator.ObjectIsNotEqualNull(user);
+
             var role = context.UserRoles.FirstOrDefault(ur => ur.UserId == id);
+
             ServiceValidator.ObjectIsNotEqualNull(role);
            
             user.Locked = false;
@@ -86,10 +88,14 @@ namespace WebCasino.Service
 
         public async Task<User> PromoteUser(string id)
 		{
-			var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.IsDeleted);
-			var userRole = await this.context.UserRoles.FirstOrDefaultAsync(ur => ur.UserId == id);
+            ServiceValidator.IsInputStringEmptyOrNull(id);
 
-			ServiceValidator.ObjectIsNotEqualNull(user);
+            var user = await this.context.Users.FirstOrDefaultAsync(us => us.Id == id && !us.IsDeleted);
+
+            ServiceValidator.ObjectIsNotEqualNull(user);
+
+            var userRole = await this.context.UserRoles.FirstOrDefaultAsync(ur => ur.UserId == id);
+			
 			ServiceValidator.ObjectIsNotEqualNull(userRole);
 
 			this.context.UserRoles.Remove(userRole);
@@ -102,18 +108,18 @@ namespace WebCasino.Service
    
 		public async Task<User> RetrieveUser(string id)
 		{
-			var user = await this.context.Users
+            ServiceValidator.IsInputStringEmptyOrNull(id);
+
+            var user = await this.context.Users
 				.Include(us => us.Wallet)
 				.ThenInclude(wa => wa.Currency)
                 .FirstOrDefaultAsync(us => us.Id == id );
 
 			ServiceValidator.ObjectIsNotEqualNull(user);
+
 			return user;
 		}
 
-		public async Task<int> Total()
-		{
-			return await this.context.Users.CountAsync();
-		}
+	
 	}
 }
