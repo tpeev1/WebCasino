@@ -12,7 +12,7 @@ using WebCasino.Service.Exceptions;
 namespace WebCasino.ServiceTests.WalletServiceTests
 {
     [TestClass]
-    public class RetrieveWalletShould
+    public class RetrieveWallet_Should
     {
         [TestMethod]
         public async Task ThrowIfWalletNotFound()

@@ -92,7 +92,8 @@ namespace WebCasino.Web.Controllers
                 {
                     Board = board,
                     WinCoef = gameModel.WinCoefficient,
-                    BetAmount = model.BetAmount
+                    BetAmount = model.BetAmount,
+                    WinningRows = gameModel.WinningRows
                 };
 
                 return Json(dto);

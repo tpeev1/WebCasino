@@ -123,6 +123,21 @@ select option {
         box-shadow: 0 0 10px 10px #c8362e;
     }
 }
+
+.winningRows {
+    animation: win 1s infinite alternate;
+}
+
+@keyframes win {
+    from {
+        box-shadow: 0 0 10px -10px #c8362e;
+    }
+
+    to {
+        box-shadow: 0 0 10px 10px #c8362e;
+    }
+}
+
 .adminActionTableCol{
     max-width: 50% !important;
 }

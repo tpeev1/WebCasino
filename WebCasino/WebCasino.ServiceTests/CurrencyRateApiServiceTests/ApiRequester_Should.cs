@@ -9,7 +9,7 @@ using WebCasino.Service.Utility.APICurrencyConvertor.RequestManager;
 namespace WebCasino.ServiceTests.CurrencyRateApiServiceTests
 {
     [TestClass]
-    public class ApiRequesterShould
+    public class ApiRequester_Should
     {
         [TestMethod]
         [DataRow("")]

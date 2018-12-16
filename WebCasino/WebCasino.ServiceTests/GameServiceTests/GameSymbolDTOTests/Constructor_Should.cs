@@ -7,7 +7,7 @@ using WebCasino.Service.DTO.Game;
 namespace WebCasino.ServiceTests.GameServiceTests.GameSymbolDTOTests
 {
     [TestClass]
-    public class ConstructorShould
+    public class Constructor_Should
     {
         [TestMethod]
         [DataRow(101, 0, 100)]

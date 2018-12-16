@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ using WebCasino.Service.Exceptions;
 namespace WebCasino.ServiceTests.UserServiceTests
 {
     [TestClass]
-    public class PromoteUserShould
+    public class PromoteUser_Should
     {
         [TestMethod]
         public async Task ThrowIfUserNotFound()
@@ -94,6 +95,19 @@ namespace WebCasino.ServiceTests.UserServiceTests
                 Assert.IsNull(context.UserRoles.FirstOrDefault(ur => ur.UserId == result.Id && ur.RoleId == "2"));
                 Assert.AreEqual(1, context.UserRoles.Count());
             }
+        }
+
+        [TestMethod]
+        [DataRow("")]
+        [DataRow(null)]
+        public async Task ThrowIfAliasInvalid(string id)
+        {
+            var context = new Mock<CasinoContext>();
+
+            var userService = new UserService(context.Object);
+
+            await Assert.ThrowsExceptionAsync<ArgumentNullException>
+                (async () => await userService.PromoteUser(id));
         }
     }
 }

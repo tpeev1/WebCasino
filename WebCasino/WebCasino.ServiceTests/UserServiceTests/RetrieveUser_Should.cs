@@ -9,7 +9,7 @@ using WebCasino.Service.Exceptions;
 namespace WebCasino.ServiceTests.UserServiceTests
 {
     [TestClass]
-    public class RetrieveUserShould
+    public class RetrieveUser_Should
     {
         [TestMethod]
         public async Task ThrowIfUserNotFound()

@@ -11,7 +11,7 @@ using WebCasino.Service.Utility.RandomGeneration;
 namespace WebCasino.ServiceTests.GameServiceTests
 {
     [TestClass]
-    public class GenerateBoardShould
+    public class GenerateBoard_Should
     {
         [TestMethod]
         [DataRow(-1, 1)]

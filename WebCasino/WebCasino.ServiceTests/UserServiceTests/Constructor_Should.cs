@@ -9,7 +9,7 @@ using WebCasino.Service;
 namespace WebCasino.ServiceTests.UserServiceTests
 {
     [TestClass]
-    public class ConstructorShould
+    public class Constructor_Should
     {
         [TestMethod]
         public void ThrowIfContextNull()

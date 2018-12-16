@@ -8,7 +8,7 @@ using WebCasino.Service.Utility.RandomGeneration;
 namespace WebCasino.ServiceTests.GameServiceTests.RandomGeneratorTests
 {
     [TestClass]
-    public class GenerateNumberShould
+    public class GenerateNumber_Should
     {
         [TestMethod]
         public void ThrowIfInvalidParamsPassed()

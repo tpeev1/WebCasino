@@ -14,7 +14,7 @@ using WebCasino.Service.Exceptions;
 namespace WebCasino.ServiceTests.UserServiceTests
 {
     [TestClass]
-    public class EditUserAliasShould
+    public class EditUserAlias_Should
     {
         [TestMethod]
         public async Task ThrowIfUserNotFound()
@@ -83,6 +83,19 @@ namespace WebCasino.ServiceTests.UserServiceTests
                 Assert.AreEqual("after", result.Alias);
                 Assert.IsTrue(context.Users.Where(u => u.Alias == "after").Count() == 1);
             }
+        }
+
+        [TestMethod]
+        [DataRow("")]
+        [DataRow(null)]
+        public async Task ThrowIfIdIsNull(string id)
+        {
+            var context = new Mock<CasinoContext>();
+
+            var userService = new UserService(context.Object);
+
+            await Assert.ThrowsExceptionAsync<ArgumentNullException>
+                (async () => await userService.EditUserAlias("test-alias", id));
         }
     }
 }

@@ -12,7 +12,7 @@ using WebCasino.Service;
 namespace WebCasino.ServiceTests.UserServiceTests
 {
     [TestClass]
-    public class GetAllUsersShould
+    public class GetAllUsers_Should
     {
         [TestMethod]
         public async Task ReturnListOfAllUsersThatAreNotDeleted()

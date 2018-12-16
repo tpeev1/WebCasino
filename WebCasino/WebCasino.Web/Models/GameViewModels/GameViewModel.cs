@@ -29,5 +29,7 @@ namespace WebCasino.Web.Models.GameViewModels
 
         public string ImagePrefix { get; set; }
 
+        public IList<int> WinningRows { get; set; }
+
     }
 }

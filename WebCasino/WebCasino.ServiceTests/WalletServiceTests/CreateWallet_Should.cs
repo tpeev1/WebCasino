@@ -12,7 +12,7 @@ using WebCasino.Service.Exceptions;
 namespace WebCasino.ServiceTests.WalletServiceTests
 {
     [TestClass]
-    public class CreateWalletShould
+    public class CreateWallet_Should
     {
         [TestMethod]
         public async Task ThrowIfWalletAlreadyExists()

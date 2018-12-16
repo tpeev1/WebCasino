@@ -13,7 +13,7 @@ using WebCasino.Service.Utility.Wrappers;
 namespace WebCasino.ServiceTests.CurrencyRateApiServiceTests
 {
     [TestClass]
-    public class GetRatesAsyncShould
+    public class GetRatesAsync_Should
     {
         [TestMethod]
         public async Task ReturnSavedRatesIfCacheNotExpired()

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ using WebCasino.Service.Exceptions;
 namespace WebCasino.ServiceTests.UserServiceTests
 {
     [TestClass]
-    public class LockUserShould
+    public class LockUser_Should
     {
         [TestMethod]
         public async Task ThrowIfUserNotFound()
@@ -81,6 +82,19 @@ namespace WebCasino.ServiceTests.UserServiceTests
                 Assert.IsTrue(result.Locked);
                 Assert.IsNotNull(context.Users.FirstOrDefault(us => us.Locked && us.Id == "test-user-id"));
             }
+        }
+
+        [TestMethod]
+        [DataRow("")]
+        [DataRow(null)]
+        public async Task ThrowIfAliasInvalid(string id)
+        {
+            var context = new Mock<CasinoContext>();
+
+            var userService = new UserService(context.Object);
+
+            await Assert.ThrowsExceptionAsync<ArgumentNullException>
+                (async () => await userService.LockUser(id));
         }
     }
 }

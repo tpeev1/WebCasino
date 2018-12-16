@@ -271,6 +271,7 @@ namespace WebCasino.Service
 
         public async Task<TableFilteringDTO> GetFiltered(DataTableModel model)
         {
+            ServiceValidator.ObjectIsEqualNull(model);
             var allTransactions = this.GetAllTransactionsTable();
             int totalResultsCount = await allTransactions.CountAsync();
             int filteredResultsCount = totalResultsCount;
@@ -376,6 +377,8 @@ namespace WebCasino.Service
 
         public async Task<Transaction> RetrieveUserTransaction(string id)
         {
+            ServiceValidator.IsInputStringEmptyOrNull(id);
+
             var user = await this.dbContext.Transactions
                 .Include(u => u.User)
                 .Include(tt => tt.TransactionType)
@@ -389,6 +392,7 @@ namespace WebCasino.Service
 
         public async Task<IEnumerable<Transaction>> RetrieveAllUsersTransaction(string id)
         {
+            ServiceValidator.IsInputStringEmptyOrNull(id);
             var transactionsQuery = await this.dbContext
                  .Transactions
                  .Where(t => t.UserId == id && t.IsDeleted != true)

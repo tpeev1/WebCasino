@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WebCasino.Service.Abstract;
 using WebCasino.Service.DTO.Game;
@@ -40,6 +41,7 @@ namespace WebCasino.Service
 
         public GameResultsDTO GameResults(GameSymbolDTO[,] board)
         {
+            var winningRows = new List<int>();
             double winCoeff = 0;
             for (int i = 0; i < board.GetLength(0); i++)
             {
@@ -60,12 +62,18 @@ namespace WebCasino.Service
                         rowWin += board[i, f].Coefficient;
                     
                 }
+                if(rowWin > 0)
+                {
+                    winningRows.Add(i);
+                }
                 winCoeff += rowWin;
+
             }
             return new GameResultsDTO()
             {
                 GameBoard = board,
-                WinCoefficient = Math.Round(winCoeff, 2)
+                WinCoefficient = Math.Round(winCoeff, 2),
+                WinningRows = winningRows
             };
         }
     }
