@@ -18,12 +18,14 @@ The topic of the project is an online casino. The casino consists of several dif
 
 # Pages and Functionality
 - User Pages
+
 Page  | Function
 ------------- | -------------
 Wallet  | Page for any transaction and card related functionalities. Content distributed in 3 tabs for easier access
 Game  | Pages for the 3 different games - small, medium and big
 
 - Administrator Pages
+
 Page  | Function
 ------------- | -------------
 Dashboard | Page for displaying graphs showing the performance of the casino with wins, stakes and transactions by months and for the current day
