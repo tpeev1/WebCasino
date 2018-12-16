@@ -123,3 +123,6 @@ select option {
         box-shadow: 0 0 10px 10px #c8362e;
     }
 }
+.adminActionTableCol{
+    max-width: 50% !important;
+}

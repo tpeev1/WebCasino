@@ -3,8 +3,8 @@
 <table class="table">
     <tbody>
         <tr>
-            <td class="col-md-3">
-                <div class="">
+            <td class="adminActionTableCol">
+                <div>
                     <div class="form-group">
                         @{
                             if (Model.Locked)
@@ -17,11 +17,11 @@
                             }
                             else
                             {
-                               <form asp-action="LockUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@Model.Id" method="post">
-                                        <input type="hidden" />
-                                        <button class=" form-control btn btn-danger">Lock</button>
-                                    </form>
-                                
+                                <form asp-action="LockUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@Model.Id" method="post">
+                                    <input type="hidden" />
+                                    <button class=" form-control btn btn-danger">Lock</button>
+                                </form>
+
                             }
                         }
 
@@ -31,14 +31,15 @@
             @{
                 if (Model.Locked)
                 {
-                    <td>
+
+                    <td class="adminActionTableCol">
                         <p class="title">UnLock User</p>
                         <p class="text-muted">With this action you are going to unlock user.</p>
                     </td>
                 }
                 else
                 {
-                    <td>
+                    <td class="adminActionTableCol">
                         <p class="title">Lock User</p>
                         <p class="text-muted">With this action you are going to lock user.</p>
                     </td>
@@ -48,23 +49,23 @@
         </tr>
         <tr>
             <!-- Change Display if User is locked, to unlock-->
-            <td class="col-md-3">
+            <td class="adminActionTableCol">
                 <div class="">
                     <div class="form-group">
                         @if (!Model.Locked)
                         {
 
-                          
-                                <form asp-action="PromoteUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@Model.Id" method="post">
-                                    <input type="hidden" />
-                                    <button class=" form-control btn btn-danger">Promote</button>
-                                </form>
+
+                            <form asp-action="PromoteUser" asp-controller="UserAdministration" asp-area="Administration" asp-route-id="@Model.Id" method="post">
+                                <input type="hidden" />
+                                <button class=" form-control btn btn-danger">Promote</button>
+                            </form>
                         }
 
                     </div>
                 </div>
             </td>
-            <td>
+            <td class="adminActionTableCol">
                 @if (!Model.Locked)
                 {
                     <p class="title">Promoto User</p>
