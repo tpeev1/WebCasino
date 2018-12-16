@@ -45,3 +45,14 @@ The high symbol adds 0.8 to the coefficient and has 15% occurency rate. Finally,
 
 - In order to win, a player should roll a row of identical symbols. The wild symbol counts as any other symbol in the game.
 
+# Screenshots
+
+![Dashboard](dashboard-page.png)
+![Game](game-page.png)
+![Home](home-page.png)
+![Transactions](transaction-page.png)
+![Wallet](wallet-page.png)
+
+# Design Patterns and Architecture
+
+The whole applications is designed in a way that it follows the Inversion of Control philosophy. ASP.NET Core is responsible for the flow of the application, so the control is inverted to it. Dependancy Inversion is achieved by using the Dependancy Injection Container provided by the ASP.NET Core. In that way, the creation of dependancies is a task that the application is not battling itself - the control of the creation and lifetime of objects comes from the outside. Adapter pattern is used in several places in order to make the program testable and to provide an easy way to switch out components in case such a change is needed later in time. Service pattern is used in the bussiness layer in order to make the data layer detached from the presentation layer. By using the service pattern the presentation layer can be easily changed, because the bussiness logic is abstracted into the services and they can be used with any other form of presentational layer.
