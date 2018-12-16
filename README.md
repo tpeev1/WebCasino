@@ -47,11 +47,11 @@ The high symbol adds 0.8 to the coefficient and has 15% occurency rate. Finally,
 
 # Screenshots
 
-![Dashboard](DocumentationImages/dashboard-page.png)
-![Game](DocumentationImages/game-page.png)
-![Home](DocumentationImages/home-page.png)
-![Transactions](DocumentationImages/transaction-page.png)
-![Wallet](DocumentationImages/wallet-page.png)
+![Dashboard](dashboard-page.png)
+![Game](game-page.png)
+![Home](home-page.png)
+![Transactions](transaction-page.png)
+![Wallet](wallet-page.png)
 
 # Design Patterns and Architecture
 
