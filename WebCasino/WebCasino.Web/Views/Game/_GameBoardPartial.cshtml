@@ -94,13 +94,16 @@ $(function () {
         const $withdrawForm = $('#betForm');
         let value = +($withdrawForm.find('input[name="BetAmount"]').val());
         let balance = +($('#balanceSpan').html());
+        const spanValidation = $withdrawForm.find('*[data-valmsg-for="BetAmount"]');
         if (value > balance || value < 1) {
-            const spanValidation = $withdrawForm.find('*[data-valmsg-for="BetAmount"]');
+            spanValidation.show();
             spanValidation.addClass('field-validation-error');
             spanValidation.removeClass('field-validation-valid');
             spanValidation.html("Insufficient funds");
         }
         else {
+            let spanToHide = $('#betForm').find('*[data-valmsg-for="BetAmount"]');
+            spanToHide.hide();      
             $('#wonDiv').addClass('d-none');
             const data = $(this).serialize();
             const url = $(this).attr("action");
