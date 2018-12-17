@@ -99,14 +99,9 @@ namespace WebCasino.Web.Controllers
                 return Json(dto);
 
             }
-            var dtoError = new GameViewModel()
-            {
-                Board = model.Board,
-                WinCoef = 0,
-                BetAmount = 0
-            };
+
             TempData["Invalid bet"] = "We couldn't place your bet";
-            return Json(dtoError);
+            return RedirectToAction("index", "game");
         }
 
     }

@@ -1,8 +1,4 @@
 ﻿
-
-body::-webkit-scrollbar {
-    display: none;
-}
 body > nav {
 	margin-bottom: 40px
 }

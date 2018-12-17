@@ -58,7 +58,7 @@ namespace WebCasino.ControllerTests.GameControllerTests
 
             var result = await controller.Bet(model);
 
-            Assert.IsInstanceOfType(result, typeof(JsonResult));
+            Assert.IsInstanceOfType(result, typeof(RedirectToActionResult));
 
         }
 
