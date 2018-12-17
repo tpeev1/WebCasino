@@ -33,7 +33,7 @@ namespace WebCasino.Web.Models.AccountViewModels
         public int Currency { get; set; }
 
         [Required]
-        [StringLength(60, MinimumLength =3)]
+        [StringLength(10, MinimumLength =3)]
         public string Alias { get; set; }
 
         [Required]

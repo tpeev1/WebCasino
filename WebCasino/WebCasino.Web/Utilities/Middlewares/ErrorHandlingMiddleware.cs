@@ -30,10 +30,10 @@ namespace WebCasino.Web.Utilities.Middlewares
             {
                 context.Response.Redirect("/home/invalid");
             }
-            catch (Exception)
-            {
-                context.Response.Redirect("/home/servererror");
-            }
+            //catch (Exception)
+            //{
+            //    context.Response.Redirect("/home/servererror");
+            //}
         }
     }
 }
